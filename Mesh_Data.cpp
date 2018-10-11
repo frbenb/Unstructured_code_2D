@@ -139,12 +139,9 @@ void Mesh_Data::read_SU2(string filename){
     Nodes_y_ = new double[NNodes_];
 
     //To fill the vectors of x and y coordinates of the nodes
-    double x, y;
     for (unsigned int i=0; i<NNodes_; i++)
     {
-        meshfile >> x >> y;
-        Nodes_x_[i] = x;
-        Nodes_y_[i] = y;
+        meshfile >> Nodes_x_[i] >> Nodes_y_[i];
     }
 
     //To get the number of cells of the mesh
