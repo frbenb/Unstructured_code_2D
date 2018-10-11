@@ -27,20 +27,14 @@ Mesh_Data::~Mesh_Data()
     //Destruction of Nodes_y_
     if (Nodes_y_ != nullptr)
     {
-        for (unsigned int i=0; i<NNodes_; i++)
-        {
-            delete[] Nodes_y_[i];
-        }
+        delete[] Nodes_y_;
         Nodes_y_ = nullptr;
     }
 
     //Destruction of CellNFaces_
     if (CellNfaces_!= nullptr)
     {
-        for (unsigned int i=0; i<NCells_; i++)
-        {
-            delete[] CellNfaces_[i];
-        }
+        delete[] CellNfaces_;
         CellNfaces_ = nullptr;
     }
 
