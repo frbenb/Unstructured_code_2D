@@ -20,10 +20,7 @@ Mesh_Data::~Mesh_Data()
     //Destruction of Nodes_x_
     if (Nodes_x_ != nullptr)
     {
-        for (unsigned int i=0; i<NNodes_; i++)
-        {
-            delete[] Nodes_x_[i];
-        }
+        delete[] Nodes_x_;
         Nodes_x_ = nullptr;
     }
 
