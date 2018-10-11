@@ -68,7 +68,7 @@ Mesh_Data::~Mesh_Data()
 
 
 /*****************************************READ MESH**********************************************/
-Mesh_Data::read_SU2(string filename){
+void Mesh_Data::read_SU2(string filename){
 
     //Making sure that the array Nodes_x_ is empty
     if (Nodes_x_ != nullptr)
@@ -125,6 +125,7 @@ Mesh_Data::read_SU2(string filename){
     if(!meshfile.is_open())
     {
         cout << "Error: " << filename << " could not open." << endl;
+        return;
     }
     else
     {
@@ -161,7 +162,7 @@ Mesh_Data::read_SU2(string filename){
     //Array of the number of faces for each cell (CellNFaces_)
     //and array of nodes for each cell (Cell2Nodes_)
     unsigned int shape; //Type of shape for each cell
-    unsigned int Node1, Node2, Node 3, Node4;
+    unsigned int Node1, Node2, Node3, Node4;
 
     NFaces_ = 0;
     for (unsigned int i=0; i<NCells_; i++)
