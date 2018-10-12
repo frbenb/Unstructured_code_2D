@@ -67,10 +67,7 @@ void Mesh_Data::read_SU2(string filename){
     //Making sure that the array Nodes_x_ is empty
     if (Nodes_x_ != nullptr)
     {
-        for (unsigned int i=0; i<NNodes_; i++)
-        {
-            delete[] Nodes_x_[i];
-        }
+        delete[] Nodes_x_;
         Nodes_x_ = nullptr;
         NNodes_ = 0;
     }
@@ -78,10 +75,7 @@ void Mesh_Data::read_SU2(string filename){
     //Making sure that the array Nodes_y_ is empty
     if (Nodes_y_ != nullptr)
     {
-        for (unsigned int i=0; i<NNodes_; i++)
-        {
-            delete[] Nodes_y_[i];
-        }
+        delete[] Nodes_y_;
         Nodes_y_ = nullptr;
         NNodes_ = 0;
     }
@@ -89,10 +83,7 @@ void Mesh_Data::read_SU2(string filename){
     //Making sure that the array CellNFaces_ is empty
     if (CellNfaces_!= nullptr)
     {
-        for (unsigned int i=0; i<NCells_; i++)
-        {
-            delete[] CellNfaces_[i];
-        }
+        delete[] CellNfaces_;
         CellNfaces_ = nullptr;
         NCells_ = 0;
         NFaces_ = 0;
