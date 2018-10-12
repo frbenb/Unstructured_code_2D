@@ -69,7 +69,6 @@ void Mesh_Data::read_SU2(string filename){
     {
         delete[] Nodes_x_;
         Nodes_x_ = nullptr;
-        NNodes_ = 0;
     }
 
     //Making sure that the array Nodes_y_ is empty
@@ -77,7 +76,6 @@ void Mesh_Data::read_SU2(string filename){
     {
         delete[] Nodes_y_;
         Nodes_y_ = nullptr;
-        NNodes_ = 0;
     }
 
     //Making sure that the array CellNFaces_ is empty
@@ -85,8 +83,6 @@ void Mesh_Data::read_SU2(string filename){
     {
         delete[] CellNfaces_;
         CellNfaces_ = nullptr;
-        NCells_ = 0;
-        NFaces_ = 0;
     }
 
     //Making sure that the DOUBLE array Cell2Node_ is empty
@@ -98,6 +94,10 @@ void Mesh_Data::read_SU2(string filename){
         }
         Cell2Node_ = nullptr;
     }
+
+    NNodes_ = 0;
+    NCells_ = 0;
+        NFaces_ = 0;
     
     //Display of the file name
     cout << "File name: " << filename << endl;
