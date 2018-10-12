@@ -9,6 +9,7 @@ using namespace std;
 class Mesh_Data{
     public:
     Mesh_Data();    //Constructor
+    Mesh_Data(unsigned int ncells, unsigned int nghost, unsigned int nfaces, unsigned int nnodes);
     ~Mesh_Data();   //Desctructor
 
     void read_SU2(string filename); //Reading the mesh file + connectivity?
