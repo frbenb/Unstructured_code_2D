@@ -97,7 +97,7 @@ void Mesh_Data::read_SU2(string filename){
 
     NNodes_ = 0;
     NCells_ = 0;
-        NFaces_ = 0;
+    NFaces_ = 0;
     
     //Display of the file name
     cout << "File name: " << filename << endl;
