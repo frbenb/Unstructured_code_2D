@@ -12,6 +12,12 @@ Cell2Node_(nullptr), Cell2Face_(nullptr), Face2Node_(nullptr), Face2Cell_(nullpt
 CellNfaces_(nullptr), NCells_(0), NCellsGhost_(0), NFaces_(0), NFacesGhost_(0), NNodes_(0), Volume_(nullptr), Residu_(nullptr),
 rho_(nullptr), u_(nullptr), v_(nullptr), p_(nullptr){}
 
+Mesh_Data::Mesh_Data(unsigned int ncells, unsigned int nghost, unsigned int nfaces, unsigned int nnodes): 
+Nodes_x_(nullptr), Nodes_y_(nullptr), 
+Cell2Node_(nullptr), Cell2Face_(nullptr), Face2Node_(nullptr), Face2Cell_(nullptr), Cell2Cell_(nullptr), Node2Cell_(nullptr),
+CellNfaces_(nullptr), NCells_(0), NCellsGhost_(0), NFaces_(0), NFacesGhost_(0), NNodes_(0), Volume_(nullptr), Residu_(nullptr),
+rho_(nullptr), u_(nullptr), v_(nullptr), p_(nullptr){}
+
 
 
 /************************************DESTRUCTOR BY DEFAULT****************************************/
@@ -69,7 +75,6 @@ void Mesh_Data::read_SU2(string filename){
     {
         delete[] Nodes_x_;
         Nodes_x_ = nullptr;
-        NNodes_ = 0;
     }
 
     //Making sure that the array Nodes_y_ is empty
@@ -77,7 +82,6 @@ void Mesh_Data::read_SU2(string filename){
     {
         delete[] Nodes_y_;
         Nodes_y_ = nullptr;
-        NNodes_ = 0;
     }
 
     //Making sure that the array CellNFaces_ is empty
@@ -85,8 +89,6 @@ void Mesh_Data::read_SU2(string filename){
     {
         delete[] CellNfaces_;
         CellNfaces_ = nullptr;
-        NCells_ = 0;
-        NFaces_ = 0;
     }
 
     //Making sure that the DOUBLE array Cell2Node_ is empty
@@ -98,6 +100,10 @@ void Mesh_Data::read_SU2(string filename){
         }
         Cell2Node_ = nullptr;
     }
+
+    NNodes_ = 0;
+    NCells_ = 0;
+    NFaces_ = 0;
     
     //Display of the file name
     cout << "File name: " << filename << endl;
@@ -155,24 +161,23 @@ void Mesh_Data::read_SU2(string filename){
         {
             //Quadrilaterals
             case 9:
-            CellNfaces_[i] = 4; //4 faces for a quadrilateral
-            meshfile >> Node1 >> Node2 >> Node3 >> Node4; //4 nodes for a quadrilateral
-            Cell2Node_[i] = new int(Node1, Node2, Node3, Node4); //2nd dim. of Cell2Node_ (with the 4 nodes)
-            break;
+                CellNfaces_[i] = 4; //4 faces for a quadrilateral
+                break;
 
             //Triangles
             case 5:
-            CellNfaces_[i] = 3; //3 faces for a triangle
-            meshfile >> Node1 >> Node2 >> Node3; //3 nodes for a line
-            Cell2Node_[i] = new int(Node1, Node2, Node3); //2nd dim. of Cell2Node_ (with the 3 nodes)
-            break;
+                CellNfaces_[i] = 3; //3 faces for a triangle
+                break;
             
             //Lines
             case 3:
-            CellNfaces_[i] = 1; //1 face for a line
-            meshfile >> Node1 >> Node2; //2 nodes for a line
-            Cell2Node_[i] = new int(Node1, Node2); //2nd dim. of Cell2Node_ (with the 2 nodes)
-            break;
+                CellNfaces_[i] = 2; //2 faces for a line
+                break;
+        }
+
+        Cell2Node_[i] = new int[CellNfaces_[i]];
+        for (unsigned int j = 0; j < CellNfaces_[i]; j++){
+            meshfile >> Cell2Node_[i][j];
         }
 
         NFaces_ += CellNfaces_[i]; //Counting the number of faces (here, faces will be count 2 times, see further away in the code)
@@ -183,7 +188,7 @@ void Mesh_Data::read_SU2(string filename){
     meshfile >> token >> nboundarytypes; //Here, token = "NMARK="
 
     string boundarytype;
-    unsigned int nelements
+    unsigned int nelements;
     for (unsigned int i=0; i<nboundarytypes; i++)
     {
         meshfile >> token >> boundarytype; //Here, token = "MARKER_TAG="
