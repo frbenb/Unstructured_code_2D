@@ -72,6 +72,7 @@ void InputDataManager::manageEntryFileName(std::string iPath)
 
 }
 
+
 void InputDataManager::doInitProcess()
 {
     //Here is the general routine to initialize all data.
@@ -88,17 +89,44 @@ void InputDataManager::doInitProcess()
 
 void InputDataManager::readInputFile()
 {   
-    
-    ifstream inputFile;
-    inputFile.open(nscData_->ctrlfilename_);
+    //Open input file in reading mode.
+    ifstream inputFile(nscData_->ctrlfilename_, ios::in);
 
+    string title;
+    string str, str1, str2;
+    string meshFileName;
 
+    int topo;
+    int imax;
+    int jmax;
+    int itl;
+    int itu;
 
 
     if(inputFile)
     {
+        inputFile >> title;
+
+        inputFile >> str;
+        inputFile >> topo;
+        inputFile >> str1;
+
+        inputFile >> imax;
+        inputFile >> str;
+        inputFile >> jmax;
+        inputFile >> str1;
+        inputFile >> itl;
+        inputFile >> str2;
+        inputFile >> itu;
+
+        inputFile >> meshFileName;
+
         
 
+        //Mapping.
+        
+
+        inputFile.close();
     }
     else
     {

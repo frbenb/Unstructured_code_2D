@@ -23,6 +23,11 @@ void EventManager::enterInputFile(std::string iPath)
     inputDataManager_->manageInputFile(iPath);
 }
 
+void EventManager::printData()
+{
+    
+
+}
 
 
 
