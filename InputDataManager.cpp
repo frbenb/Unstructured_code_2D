@@ -4,14 +4,13 @@
 
 using namespace std;
 
-InputDataManager::InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData, OutputDataManager *iOutputDataManager):
+InputDataManager::InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData):
                                 nscInit_(iNSCInit),
                                 solverInit_(iSolverInit),
                                 meshInit_(iMeshInit),
                                 dataUpdater_(iDataUpdater),
                                 meshData_(iMeshData),
-                                nscData_(iNSCData),
-                                outputDataManager_(iOutputDataManager)
+                                nscData_(iNSCData)
 {
 
 }

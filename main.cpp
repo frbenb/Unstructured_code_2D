@@ -40,7 +40,7 @@ int main()
     InputDataManager inputDataManager(&nscInit, &solverInit, &meshInit, &dataUpdater, &meshData, &nscData);
 
     //Attach inputManager to event manager
-    EventManager eventManager(&inputDataManager, &outputDataManager);
+    EventManager eventManager(&inputDataManager);
 
 
     //User operations here:
