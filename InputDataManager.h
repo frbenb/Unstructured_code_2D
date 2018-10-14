@@ -14,7 +14,7 @@
 //Standard lib.
 #include <iostream>
 #include <string>
-
+#include <fstream>
 
 // This class allows to handle and manage the events given from the userinterface.
 // Takes the roles of the following functions:
@@ -58,14 +58,14 @@ class InputDataManager
 
     private:
 
-        NSCInitializer      *_nscInit;
-        SolverInitializer   *_solverInit;
-        MeshInitializer     *_meshInit;
+        NSCInitializer      *nscInit_;
+        SolverInitializer   *solverInit_;
+        MeshInitializer     *meshInit_;
 
-        DataUpdater         *_dataUpdater;
+        DataUpdater         *dataUpdater_;
 
-        Mesh_Data           *_meshData;
-        NSCData             *_nscData;
+        Mesh_Data           *meshData_;
+        NSCData             *nscData_;
 
 };
 

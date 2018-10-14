@@ -2,14 +2,15 @@
 
 #include "InputDataManager.h"
 
+using namespace std;
 
 InputDataManager::InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData):
-                                _nscInit(iNSCInit),
-                                _solverInit(iSolverInit),
-                                _meshInit(iMeshInit),
-                                _dataUpdater(iDataUpdater),
-                                _meshData(iMeshData),
-                                _nscData(iNSCData)
+                                nscInit_(iNSCInit),
+                                solverInit_(iSolverInit),
+                                meshInit_(iMeshInit),
+                                dataUpdater_(iDataUpdater),
+                                meshData_(iMeshData),
+                                nscData_(iNSCData)
 {
 
 }
@@ -21,41 +22,41 @@ InputDataManager::~InputDataManager()
 
 void InputDataManager::destroyDesignObjects()
 {
-     if (_nscInit !=nullptr)
+     if (nscInit_ !=nullptr)
     {
-        delete _nscInit;
+        delete nscInit_;
     }
-    _nscInit = nullptr;
+    nscInit_ = nullptr;
 
-    if (_solverInit !=nullptr)
+    if (solverInit_ !=nullptr)
     {
-        delete _solverInit;
+        delete solverInit_;
     }
-    _solverInit = nullptr;
+    solverInit_ = nullptr;
 
-    if (_meshInit !=nullptr)
+    if (meshInit_ !=nullptr)
     {
-        delete _meshInit;
+        delete meshInit_;
     }
-    _meshInit = nullptr;
+    meshInit_ = nullptr;
 
-    if (_dataUpdater !=nullptr)
+    if (dataUpdater_ !=nullptr)
     {
-        delete _dataUpdater;
+        delete dataUpdater_;
     }
-    _dataUpdater = nullptr;
+    dataUpdater_ = nullptr;
 
-    if (_meshData !=nullptr)
+    if (meshData_ !=nullptr)
     {
-        delete _meshData;
+        delete meshData_;
     }
-    _meshData = nullptr;
+    meshData_ = nullptr;
 
-    if (_nscData !=nullptr)
+    if (nscData_ !=nullptr)
     {
-        delete _nscData;
+        delete nscData_;
     }
-    _nscData = nullptr;
+    nscData_ = nullptr;
 
 }
 
@@ -63,15 +64,13 @@ void InputDataManager::destroyDesignObjects()
 void InputDataManager::manageEntryFileName(std::string iPath)
 {
     //Set ctrlfilename in data base
-    _nscData->ctrlfilename_ = iPath;
+    nscData_->ctrlfilename_ = iPath;
 
     //Call of Do init.
     doInitProcess();
 
 
 }
-
-
 
 void InputDataManager::doInitProcess()
 {
@@ -87,6 +86,32 @@ void InputDataManager::doInitProcess()
 
 }
 
+void InputDataManager::readInputFile()
+{   
+    
+    ifstream inputFile;
+    inputFile.open(nscData_->ctrlfilename_);
+
+
+
+
+    if(inputFile)
+    {
+        
+
+    }
+    else
+    {
+        cout << "ERROR: Cannot open " << nscData_->ctrlfilename_ << "." << endl;
+    }
+    
+
+    // Get the readmesh filename.
+
+
+
+
+}
 
 
 
