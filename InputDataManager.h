@@ -11,6 +11,8 @@
 
 #include "DataUpdater.h"
 
+#include "OutputDataManager.h"
+
 //Standard lib.
 #include <iostream>
 #include <string>
@@ -31,7 +33,7 @@ class InputDataManager
 
     public:
         //Default Constructor
-        InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData);
+        InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData, OutputDataManager *iOutputDataManager);
 
         //Default Destructor
         virtual ~InputDataManager();
@@ -55,6 +57,10 @@ class InputDataManager
         // the input are presented as a text file.
         void readInputFile();
 
+        // This method allows to print some data. For now, it calls a function to test
+        // the SU2 reading method in Mesh_Data.
+        void printDataSU2();
+
 
     private:
 
@@ -66,6 +72,8 @@ class InputDataManager
 
         Mesh_Data           *meshData_;
         NSCData             *nscData_;
+
+        OutputDataManager   *outputDataManager_;
 
 };
 

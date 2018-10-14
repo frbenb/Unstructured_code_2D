@@ -4,13 +4,14 @@
 
 using namespace std;
 
-InputDataManager::InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData):
+InputDataManager::InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData, OutputDataManager *iOutputDataManager):
                                 nscInit_(iNSCInit),
                                 solverInit_(iSolverInit),
                                 meshInit_(iMeshInit),
                                 dataUpdater_(iDataUpdater),
                                 meshData_(iMeshData),
-                                nscData_(iNSCData)
+                                nscData_(iNSCData),
+                                outputDataManager_(iOutputDataManager)
 {
 
 }
@@ -75,15 +76,11 @@ void InputDataManager::manageEntryFileName(std::string iPath)
 
 void InputDataManager::doInitProcess()
 {
-    //Here is the general routine to initialize all data.
-
-
     //1. Read input file.
     readInputFile();
 
-
     //2. Read mesh file.
-
+    meshData_->read_SU2(nscData_->meshfilename_);
 
 }
 
@@ -105,6 +102,7 @@ void InputDataManager::readInputFile()
 
     if(inputFile)
     {
+        //Reading input.
         inputFile >> title;
 
         inputFile >> str;
@@ -121,24 +119,25 @@ void InputDataManager::readInputFile()
 
         inputFile >> meshFileName;
 
-        
-
         //Mapping.
-        
+        nscData_->meshfilename_ = meshFileName;
 
+
+        //Close file.
         inputFile.close();
     }
     else
     {
         cout << "ERROR: Cannot open " << nscData_->ctrlfilename_ << "." << endl;
+        return;
     }
     
 
-    // Get the readmesh filename.
+}
 
-
-
-
+void InputDataManager::printDataSU2()
+{
+    outputDataManager_->showSU2ReadingData();
 }
 
 

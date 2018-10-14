@@ -2,7 +2,7 @@
 
 
 EventManager::EventManager(InputDataManager *iInputDataManager) :
-                                    inputDataManager_(iInputDataManager)
+                            inputDataManager_(iInputDataManager)                                                                  
 {
 
 }
@@ -23,8 +23,11 @@ void EventManager::enterInputFile(std::string iPath)
     inputDataManager_->manageInputFile(iPath);
 }
 
-void EventManager::printData()
-{
+void EventManager::testSU2Function()
+{   
+    // General function to allow user to print some data.
+
+    inputDataManager_->printDataSU2();
     
 
 }

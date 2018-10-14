@@ -1,5 +1,8 @@
 #include "OutputDataManager.h"
 
+
+using namespace std;
+
 OutputDataManager::OutputDataManager(NSCData *iNSCData, Mesh_Data *iMeshData):
                                     nscData_(iNSCData), meshData_(iMeshData)
 {
@@ -21,6 +24,18 @@ OutputDataManager::~OutputDataManager()
     meshData_ = nullptr;
 
 }
+
+void OutputDataManager::showSU2ReadingData()
+{
+    cout << "Hello world!" << endl;
+}
+
+
+
+
+
+
+
 
 
 

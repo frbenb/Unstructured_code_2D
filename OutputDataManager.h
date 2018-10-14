@@ -23,6 +23,10 @@ class OutputDataManager
         //Default Destructor
         virtual ~OutputDataManager();
 
+        // This methos allows to show the results of storing the Mesh_Data
+        // and NSCData by reading the SU2 file. Testing function read_SU2.
+        void showSU2ReadingData();
+    
 
     private:
 

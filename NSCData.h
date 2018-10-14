@@ -21,6 +21,7 @@ class NSCData
         //Data.
         //TBD.
         std::string ctrlfilename_;
+        std::string meshfilename_;
 
 
 };

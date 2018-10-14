@@ -3,6 +3,7 @@
 
 //Project files
 #include "InputDataManager.h"
+#include "OutputDataManager.h"
 
 //Standard lib.
 #include <iostream>
@@ -16,6 +17,7 @@ class EventManager
 {
 
     public:
+
         //Default Constructor
         EventManager(InputDataManager *iInputDataManager);
 
@@ -27,11 +29,14 @@ class EventManager
         // it contains all the routine to run when is called
         void enterInputFile(std::string iPath);
 
+        //This method allows the user to trigger the event of printing data.
+        void printData();
+
         
     private:
 
         InputDataManager    *inputDataManager_;
-
+        
 
 };
 
