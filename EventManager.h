@@ -27,10 +27,10 @@ class EventManager
         // it contains all the routine to run when is called
         void enterInputFile(std::string iPath);
 
-
+        
     private:
 
-        InputDataManager    *_inputDataManager;
+        InputDataManager    *inputDataManager_;
 
 
 };

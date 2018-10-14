@@ -39,7 +39,7 @@ int main()
 
 
     //User operations here:
-    eventManager.enterInputFile("input.txt");
+    eventManager.enterInputFile("input");
 
     cout << "Done!" << endl;
     return 0;

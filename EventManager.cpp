@@ -2,7 +2,7 @@
 
 
 EventManager::EventManager(InputDataManager *iInputDataManager) :
-                                    _inputDataManager(iInputDataManager)
+                                    inputDataManager_(iInputDataManager)
 {
 
 }
@@ -10,17 +10,20 @@ EventManager::EventManager(InputDataManager *iInputDataManager) :
 EventManager::~EventManager()
 {
 
-    if (_inputDataManager != nullptr)
+    if (inputDataManager_ != nullptr)
     {
-        delete _inputDataManager;
+        delete inputDataManager_;
     }
-    _inputDataManager = nullptr;
+    inputDataManager_ = nullptr;
 }
 
 void EventManager::enterInputFile(std::string iPath)
 {
-
+    //Manage the command of user in an input file.
+    inputDataManager_->manageInputFile(iPath);
 }
+
+
 
 
 

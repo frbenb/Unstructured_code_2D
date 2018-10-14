@@ -20,7 +20,7 @@ class NSCData
 
         //Data.
         //TBD.
-        std::string _ctrlfilename;
+        std::string ctrlfilename_;
 
 
 };

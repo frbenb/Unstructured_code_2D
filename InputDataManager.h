@@ -51,6 +51,10 @@ class InputDataManager
         // Considered as the main routine calling the private object initializer.
         void doInitProcess();
 
+        // This method allows to read the input commands of the user. 
+        // the input are presented as a text file.
+        void readInputFile();
+
 
     private:
 

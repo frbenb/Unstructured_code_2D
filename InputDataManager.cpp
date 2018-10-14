@@ -63,10 +63,11 @@ void InputDataManager::destroyDesignObjects()
 void InputDataManager::manageEntryFileName(std::string iPath)
 {
     //Set ctrlfilename in data base
-    _nscData->_ctrlfilename = iPath;
+    _nscData->ctrlfilename_ = iPath;
 
     //Call of Do init.
     doInitProcess();
+
 
 }
 
@@ -76,6 +77,12 @@ void InputDataManager::doInitProcess()
 {
     //Here is the general routine to initialize all data.
 
+
+    //1. Read input file.
+    readInputFile();
+
+
+    //2. Read mesh file.
 
 
 }
