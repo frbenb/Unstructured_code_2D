@@ -16,10 +16,10 @@ InputDataManager::InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *
 
 InputDataManager::~InputDataManager()
 {
-   destroyDesignObjects();
+   //destroyDesignObjects(); // why does this exist?
 }
 
-void InputDataManager::destroyDesignObjects()
+/*void InputDataManager::destroyDesignObjects()
 {
      if (_nscInit !=nullptr)
     {
@@ -57,7 +57,7 @@ void InputDataManager::destroyDesignObjects()
     }
     _nscData = nullptr;
 
-}
+}*/
 
 
 void InputDataManager::manageEntryFileName(std::string iPath)
