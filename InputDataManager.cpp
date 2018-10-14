@@ -4,13 +4,14 @@
 
 using namespace std;
 
-InputDataManager::InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData):
+InputDataManager::InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData, OutputDataManager *iOutputDataManager):
                                 nscInit_(iNSCInit),
                                 solverInit_(iSolverInit),
                                 meshInit_(iMeshInit),
                                 dataUpdater_(iDataUpdater),
                                 meshData_(iMeshData),
-                                nscData_(iNSCData)
+                                nscData_(iNSCData),
+                                outputDataManager_(iOutputDataManager)
 {
 
 }
@@ -58,6 +59,11 @@ void InputDataManager::destroyDesignObjects()
     }
     nscData_ = nullptr;
 
+    if(outputDataManager_ != nullptr)
+    {
+        delete outputDataManager_;
+    }
+    outputDataManager_ = nullptr;
 }
 
 

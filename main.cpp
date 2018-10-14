@@ -37,7 +37,7 @@ int main()
     OutputDataManager outputDataManager(&nscData, &meshData);
 
     //Attach computers and data objects to inputManager
-    InputDataManager inputDataManager(&nscInit, &solverInit, &meshInit, &dataUpdater, &meshData, &nscData);
+    InputDataManager inputDataManager(&nscInit, &solverInit, &meshInit, &dataUpdater, &meshData, &nscData, &outputDataManager);
 
     //Attach inputManager to event manager
     EventManager eventManager(&inputDataManager);

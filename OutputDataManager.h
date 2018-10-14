@@ -4,6 +4,8 @@
 
 //Standard lib.
 #include <iostream>
+#include <fstream>
+#include <string>
 
 //Projet files
 #include "NSCData.h"
