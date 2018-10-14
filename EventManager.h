@@ -30,7 +30,7 @@ class EventManager
         void enterInputFile(std::string iPath);
 
         //This method allows the user to trigger the event of printing data.
-        void printData();
+        void testSU2Function();
 
         
     private:
