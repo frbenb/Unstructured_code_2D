@@ -124,29 +124,34 @@ void Mesh_Data::read_SU2(string filename){
     }
 
     string token; //This token will be used to get different information from the SU2
-
+    
     //To get the dimension of the mesh
     unsigned int ndim;
     meshfile >> token >> ndim; //Here, token = "NDIME="
 
+
     //To get the number of nodes of the mesh
     meshfile >> token >> NNodes_; //Here, token = "NPOIN="
 
+    
     Nodes_x_ = new double[NNodes_];
     Nodes_y_ = new double[NNodes_];
 
+    
     //To fill the vectors of x and y coordinates of the nodes
     for (unsigned int i=0; i<NNodes_; i++)
     {
         meshfile >> Nodes_x_[i] >> Nodes_y_[i];
     }
-
+    
     //To get the number of cells of the mesh
     meshfile >> token >> NCells_; //Here, token = "NELEM="
 
     CellNfaces_ = new int[NCells_];
     Cell2Node_ = new int*[NCells_]; //1st dimension of the array Cell2Node_
-
+    
+    cout << NCells_ << endl;
+    
     //Array of the number of faces for each cell (CellNFaces_)
     //and array of nodes for each cell (Cell2Nodes_)
     unsigned int shape; //Type of shape for each cell
@@ -175,7 +180,10 @@ void Mesh_Data::read_SU2(string filename){
                 break;
         }
 
-        Cell2Node_[i] = new int[CellNfaces_[i]];
+
+        Cell2Node_[i] = new int[CellNfaces_[i]]; // Bug here
+
+
         for (unsigned int j = 0; j < CellNfaces_[i]; j++){
             meshfile >> Cell2Node_[i][j];
         }

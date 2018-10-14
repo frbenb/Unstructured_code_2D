@@ -116,6 +116,7 @@ void InputDataManager::readInputFile()
         inputFile >> str2;
         inputFile >> itu;
 
+        inputFile >> str;
         inputFile >> meshFileName;
 
         //Mapping.

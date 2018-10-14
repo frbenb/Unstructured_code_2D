@@ -38,9 +38,6 @@ class InputDataManager
         //Default Destructor
         virtual ~InputDataManager();
 
-        //TO DO: function of reading input file. Will be called by
-        void manageInputFile(std::string iPath);
-
         //This method allows to destroy the initializers, the updater and the data.
         // organizing destructions of objects variable part of design.
         void destroyDesignObjects();

@@ -42,9 +42,10 @@ int main()
     //Attach inputManager to event manager
     EventManager eventManager(&inputDataManager);
 
-
     //User operations here:
     eventManager.enterInputFile("input");
+
+    eventManager.testSU2Function();
 
     cout << "Done!" << endl;
     return 0;
