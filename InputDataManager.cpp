@@ -18,52 +18,7 @@ InputDataManager::InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *
 
 InputDataManager::~InputDataManager()
 {
-   destroyDesignObjects();
-}
-
-void InputDataManager::destroyDesignObjects()
-{
-     if (nscInit_ !=nullptr)
-    {
-        delete nscInit_;
-    }
-    nscInit_ = nullptr;
-
-    if (solverInit_ !=nullptr)
-    {
-        delete solverInit_;
-    }
-    solverInit_ = nullptr;
-
-    if (meshInit_ !=nullptr)
-    {
-        delete meshInit_;
-    }
-    meshInit_ = nullptr;
-
-    if (dataUpdater_ !=nullptr)
-    {
-        delete dataUpdater_;
-    }
-    dataUpdater_ = nullptr;
-
-    if (meshData_ !=nullptr)
-    {
-        delete meshData_;
-    }
-    meshData_ = nullptr;
-
-    if (nscData_ !=nullptr)
-    {
-        delete nscData_;
-    }
-    nscData_ = nullptr;
-
-    if(outputDataManager_ != nullptr)
-    {
-        delete outputDataManager_;
-    }
-    outputDataManager_ = nullptr;
+   
 }
 
 
