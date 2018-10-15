@@ -31,6 +31,7 @@ class Mesh_Data{
     int* CellNfaces_;               //Done
     unsigned int NCells_;           //Done
     unsigned int NCellsGhost_;      //lui
+    unsigned int NCellsTotal_;      // ?
     unsigned int NFaces_;           //Done
     unsigned int NFacesGhost_;      //Done
     unsigned int NFacesTotal_;      //Done
