@@ -28,7 +28,7 @@ void OutputDataManager::showSU2ReadingData()
         outputTecplot << "ZONE T=\"Element0\"\n";
 
         outputTecplot << "Nodes=";
-        outputTecplot << meshData_->NCells_;
+        outputTecplot << meshData_->NNodes_;
         outputTecplot << ",";
         outputTecplot << "Elements=";
         outputTecplot << meshData_->NCells_;
@@ -49,7 +49,9 @@ void OutputDataManager::showSU2ReadingData()
         for (unsigned int i=0; i < meshData_->NNodes_; i++)
         {
             outputTecplot <<  meshData_->Nodes_y_[i];
-        }   
+        } 
+
+      
         
         outputTecplot.close();
     }

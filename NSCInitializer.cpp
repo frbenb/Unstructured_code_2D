@@ -14,6 +14,13 @@ NSCInitializer::~NSCInitializer()
 
 }
 
+void NSCInitializer::initial_system()
+{
+    nscData_->pi_=4.*atan(1.);
+    nscData_->gamma_=1.4;
+    nscData_->epsilon_=1.0e-28;
+}
+
 void NSCInitializer::initial_flow_parameters()
 {
     double alpha,mach,g;
@@ -33,23 +40,22 @@ void NSCInitializer::initial_flow_parameters()
 
 void NSCInitializer::initial_field()
 {
-    unsigned int i,j;
-    double *ro,*uu,*vv,*pp;
-  
-    ro=meshData_->rho_;
-    uu=meshData_->u_;
-    vv=meshData_->v_;
-    pp=meshData_->p_;
+
 
     //Loop on every cells
-    for (i=0;i<=meshData_->NCells_;i++)
+    for (unsigned i=0;i<=meshData_->NCells_;i++)
     {
-        ro[i]=nscData_->rhoInfini_;
-        uu[i]=nscData_->uInfini_;
-        vv[i]=nscData_->vInfini_;
-        pp[i]=nscData_->pInfini_;
+        meshData_->rho_[i] = nscData_->rhoInfini_;
+        meshData_->u_[i] = nscData_->uInfini_;
+        meshData_->v_[i] = nscData_->vInfini_;
+        meshData_->p_[i] = nscData_->pInfini_;
 
     }
 
 
+}
+
+void NSCInitializer::initial_rk_scheme()
+{
+    //TBD.
 }

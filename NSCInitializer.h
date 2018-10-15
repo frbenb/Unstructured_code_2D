@@ -34,7 +34,11 @@ class NSCInitializer
         // This method allows to initialize all cells with initial infinity values.
         void initial_field();
 
+        // This method allows to initialize some general parameters of the system.
+        void initial_system();
 
+        // This method allows to set the right alpha and beta constant for the solver.
+        void initial_rk_scheme();
 
     private:
 

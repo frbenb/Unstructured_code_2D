@@ -19,7 +19,6 @@ class NSCData
         virtual ~NSCData();
 
         //Data.
-        //TBD.
         std::string ctrlfilename_;
         std::string meshfilename_;
 
@@ -32,6 +31,8 @@ class NSCData
         double uInfini_;
         double vInfini_;
         double pInfini_;
+
+        double epsilon_;
 
 };
 

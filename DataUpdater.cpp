@@ -15,3 +15,7 @@ DataUpdater::~DataUpdater()
 
 }
 
+void DataUpdater::update_boundary()
+{
+    //TBD
+}

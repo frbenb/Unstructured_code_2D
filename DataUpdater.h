@@ -25,6 +25,10 @@ class DataUpdater
         //Default Destructor
         virtual ~DataUpdater();
 
+
+        //This method allows to update the boundary mesh on the primitive variables.
+        // Update wall and far field.
+        void update_boundary();
         
 
     private:

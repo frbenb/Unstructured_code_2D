@@ -36,11 +36,26 @@ void InputDataManager::manageEntryFileName(std::string iPath)
 
 void InputDataManager::doInitProcess()
 {
-    //1. Read input file.
+    // initial system
+    nscInit_->initial_system();
+
+    //1. Read input file. Equivalent as readtrcl()
     readInputFile();
 
-    //2. Read mesh file.
+    //2. Read mesh file. Equivalent as readmesh()
     meshData_->read_SU2(nscData_->meshfilename_);
+
+    // Initial_flow_parameters
+    nscInit_->initial_flow_parameters();
+
+    // Initial rk scheme
+    nscInit_->initial_rk_scheme();
+
+    //Initial field
+    nscInit_->initial_field();
+
+    //Update Boundary
+    dataUpdater_->update_boundary();
 
 }
 
