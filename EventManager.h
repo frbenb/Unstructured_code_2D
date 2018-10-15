@@ -3,6 +3,7 @@
 
 //Project files
 #include "InputDataManager.h"
+#include "OutputDataManager.h"
 
 //Standard lib.
 #include <iostream>
@@ -26,11 +27,15 @@ class EventManager
         //This method allows to send the input path from user entry.
         // it contains all the routine to run when is called
         void enterInputFile(std::string iPath);
+    
+        //This method allows the user to trigger the event of printing data.
+        void testSU2Function();
 
-
+        
     private:
 
-        InputDataManager    *_inputDataManager;
+        InputDataManager    *inputDataManager_;
+        
 
 
 };
