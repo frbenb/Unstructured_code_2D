@@ -11,10 +11,12 @@
 
 #include "DataUpdater.h"
 
+#include "OutputDataManager.h"
+
 //Standard lib.
 #include <iostream>
 #include <string>
-
+#include <fstream>
 
 // This class allows to handle and manage the events given from the userinterface.
 // Takes the roles of the following functions:
@@ -31,13 +33,10 @@ class InputDataManager
 
     public:
         //Default Constructor
-        InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData);
+        InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData, OutputDataManager *iOutputDataManager);
 
         //Default Destructor
         virtual ~InputDataManager();
-
-        //TO DO: function of reading input file. Will be called by
-        void manageInputFile(std::string iPath);
 
         //This method allows to destroy the initializers, the updater and the data.
         // organizing destructions of objects variable part of design.
@@ -51,17 +50,27 @@ class InputDataManager
         // Considered as the main routine calling the private object initializer.
         void doInitProcess();
 
+        // This method allows to read the input commands of the user. 
+        // the input are presented as a text file.
+        void readInputFile();
+
+        // This method allows to print some data. For now, it calls a function to test
+        // the SU2 reading method in Mesh_Data.
+        void printDataSU2();
+
 
     private:
 
-        NSCInitializer      *_nscInit;
-        SolverInitializer   *_solverInit;
-        MeshInitializer     *_meshInit;
+        NSCInitializer      *nscInit_;
+        SolverInitializer   *solverInit_;
+        MeshInitializer     *meshInit_;
 
-        DataUpdater         *_dataUpdater;
+        DataUpdater         *dataUpdater_;
 
-        Mesh_Data           *_meshData;
-        NSCData             *_nscData;
+        Mesh_Data           *meshData_;
+        NSCData             *nscData_;
+
+        OutputDataManager   *outputDataManager_;
 
 };
 
