@@ -4,10 +4,13 @@
 
 //Standard lib.
 #include <iostream>
+#include <math.h>
 
 //Projet files
 #include "NSCData.h"
 #include "Mesh_Data.h"
+
+
 
 
 // This class allows to
@@ -25,11 +28,22 @@ class NSCInitializer
         //Default Destructor
         virtual ~NSCInitializer();
 
+        //This method allows to initial the flow (primitive variable with infinity)
+        void initial_flow_parameters();
+
+        // This method allows to initialize all cells with initial infinity values.
+        void initial_field();
+
+        // This method allows to initialize some general parameters of the system.
+        void initial_system();
+
+        // This method allows to set the right alpha and beta constant for the solver.
+        void initial_rk_scheme();
 
     private:
 
-        NSCData     *_nscData;
-        Mesh_Data   *_meshData;
+        NSCData     *nscData_;
+        Mesh_Data   *meshData_;
 
 };
 

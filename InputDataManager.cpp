@@ -2,83 +2,120 @@
 
 #include "InputDataManager.h"
 
+using namespace std;
 
-InputDataManager::InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData):
-                                _nscInit(iNSCInit),
-                                _solverInit(iSolverInit),
-                                _meshInit(iMeshInit),
-                                _dataUpdater(iDataUpdater),
-                                _meshData(iMeshData),
-                                _nscData(iNSCData)
+InputDataManager::InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData, OutputDataManager *iOutputDataManager):
+                                nscInit_(iNSCInit),
+                                solverInit_(iSolverInit),
+                                meshInit_(iMeshInit),
+                                dataUpdater_(iDataUpdater),
+                                meshData_(iMeshData),
+                                nscData_(iNSCData),
+                                outputDataManager_(iOutputDataManager)
 {
 
 }
 
 InputDataManager::~InputDataManager()
 {
-   //destroyDesignObjects(); // why does this exist?
+   
 }
-
-/*void InputDataManager::destroyDesignObjects()
-{
-     if (_nscInit !=nullptr)
-    {
-        delete _nscInit;
-    }
-    _nscInit = nullptr;
-
-    if (_solverInit !=nullptr)
-    {
-        delete _solverInit;
-    }
-    _solverInit = nullptr;
-
-    if (_meshInit !=nullptr)
-    {
-        delete _meshInit;
-    }
-    _meshInit = nullptr;
-
-    if (_dataUpdater !=nullptr)
-    {
-        delete _dataUpdater;
-    }
-    _dataUpdater = nullptr;
-
-    if (_meshData !=nullptr)
-    {
-        delete _meshData;
-    }
-    _meshData = nullptr;
-
-    if (_nscData !=nullptr)
-    {
-        delete _nscData;
-    }
-    _nscData = nullptr;
-
-}*/
 
 
 void InputDataManager::manageEntryFileName(std::string iPath)
 {
     //Set ctrlfilename in data base
-    _nscData->_ctrlfilename = iPath;
+    nscData_->ctrlfilename_ = iPath;
 
     //Call of Do init.
     doInitProcess();
 
-}
 
+}
 
 
 void InputDataManager::doInitProcess()
 {
-    //Here is the general routine to initialize all data.
+    // initial system
+    nscInit_->initial_system();
 
+    //1. Read input file. Equivalent as readtrcl()
+    readInputFile();
 
+    //2. Read mesh file. Equivalent as readmesh()
+    meshData_->read_SU2(nscData_->meshfilename_);
+
+    // Initial_flow_parameters
+    nscInit_->initial_flow_parameters();
+
+    // Initial rk scheme (is Empty)
+    nscInit_->initial_rk_scheme();
+
+    //Initial field: Put here. Implemented but need to allocate memory.
+   
+
+    //Update Boundary
+    dataUpdater_->update_boundary();
 
 }
+
+void InputDataManager::readInputFile()
+{   
+    //Open input file in reading mode.
+    ifstream inputFile(nscData_->ctrlfilename_, ios::in);
+
+    string title;
+    string str, str1, str2;
+    string meshFileName;
+
+    int topo;
+    int imax;
+    int jmax;
+    int itl;
+    int itu;
+
+
+    if(inputFile)
+    {
+        //Reading input.
+        inputFile >> title;
+
+        inputFile >> str;
+        inputFile >> topo;
+        inputFile >> str1;
+
+        inputFile >> imax;
+        inputFile >> str;
+        inputFile >> jmax;
+        inputFile >> str1;
+        inputFile >> itl;
+        inputFile >> str2;
+        inputFile >> itu;
+
+        inputFile >> str;
+        inputFile >> meshFileName;
+
+        //Mapping.
+        nscData_->meshfilename_ = meshFileName;
+
+
+        //Close file.
+        inputFile.close();
+    }
+    else
+    {
+        cout << "ERROR: Cannot open " << nscData_->ctrlfilename_ << "." << endl;
+        return;
+    }
+    
+
+}
+
+void InputDataManager::printDataSU2()
+{
+    outputDataManager_->showSU2ReadingData();
+}
+
 
 
 

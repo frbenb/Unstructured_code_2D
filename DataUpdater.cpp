@@ -3,8 +3,8 @@
 
 
 DataUpdater::DataUpdater(NSCData *iNSCData, Mesh_Data *iMeshData) :
-                                _nscData(iNSCData),
-                                _meshData(iMeshData)
+                                nscData_(iNSCData),
+                                meshData_(iMeshData)
 {
 
 }
@@ -13,4 +13,7 @@ DataUpdater::~DataUpdater()
 {
     
 }
-
+void DataUpdater::update_boundary()
+{
+    //TBD
+}

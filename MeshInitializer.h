@@ -30,7 +30,7 @@ class MeshInitializer
 
     private:
 
-        NSCData     *_nscData;
+        NSCData     *nscData_;
         Mesh_Data   *meshData_;
 
         void deallocateMesh();

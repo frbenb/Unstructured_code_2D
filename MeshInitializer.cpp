@@ -5,7 +5,8 @@
 
 
 MeshInitializer::MeshInitializer(NSCData *iNSCData, Mesh_Data *iMeshData) :
-                                    _nscData(iNSCData),
+
+                                    nscData_(iNSCData),
                                     meshData_(iMeshData)
 {
 
