@@ -281,6 +281,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
              } 
              else { 
                 meshData_->Cell2Cell_[i][j] = meshData_->Face2Cell_[i][1];
+             } 
         }
     }
 
