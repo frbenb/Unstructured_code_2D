@@ -1,8 +1,8 @@
 
 #include "Mesh_Data.h"
-#include <string>
 #include <iostream>
 #include <fstream>
+#include "arrayMemory.h"
 using namespace std;
 
 /***********************************CONSTRUCTOR BY DEFAULT****************************************/
@@ -23,46 +23,30 @@ rho_(nullptr), u_(nullptr), v_(nullptr), p_(nullptr){}
 /************************************DESTRUCTOR BY DEFAULT****************************************/
 Mesh_Data::~Mesh_Data()
 {
-    //Destruction of Nodes_x_
-    if (Nodes_x_ != nullptr)
-    {
-        delete[] Nodes_x_;
-        Nodes_x_ = nullptr;
-    }
+    Nodes_x_ = deallocate1D(Nodes_x_);
+    Nodes_y_ = deallocate1D(Nodes_y_);
+    CellNfaces_ = deallocate1D(CellNfaces_);
+    Volume_ = deallocate1D(Volume_);
+    Residu_ = deallocate1D(Residu_);
+    rho_ = deallocate1D(rho_);
+    u_ = deallocate1D(u_);
+    v_ = deallocate1D(v_);
+    p_ = deallocate1D(p_);
 
-    //Destruction of Nodes_y_
-    if (Nodes_y_ != nullptr)
-    {
-        delete[] Nodes_y_;
-        Nodes_y_ = nullptr;
-    }
+    Cell2Node_ = deallocate2D(Cell2Node_, NCellsTotal_);
+    Cell2Face_ = deallocate2D(Cell2Face_, NCellsTotal_);
+    Face2Node_ = deallocate2D(Face2Node_, NFaces_);
+    Face2Cell_ = deallocate2D(Face2Cell_, NFaces_);
+    Cell2Cell_ = deallocate2D(Cell2Cell_, NCellsTotal_);
+    Node2Cell_ = deallocate2D(Node2Cell_, NNodes_);
 
-    //Destruction of CellNFaces_
-    if (CellNfaces_!= nullptr)
-    {
-        delete[] CellNfaces_;
-        CellNfaces_ = nullptr;
-    }
-
-    //Destruction of Cell2Node_
-    if (Cell2Node_ != nullptr)
-    {
-        for (unsigned int i=0; i<NCells_; i++)
-        {
-            delete[] Cell2Node_[i];
-        }
-        Cell2Node_ = nullptr;
-    }
-
-    //Destruction of Cell2Face_
-    
-    //Destruction of Face2Node_
-    
-    //Destruction of Face2Cell_
-
-    //Destruction of Cell2Cell_
-
-    //Destruction of Node2Cell_
+    NCells_ = 0;
+    NCellsGhost_ = 0;
+    NCellsTotal_ = 0;
+    NFaces_ = 0;
+    NFacesGhost_ = 0;
+    NFacesTotal_ = 0;
+    NNodes_ = 0;
 }
 
 
