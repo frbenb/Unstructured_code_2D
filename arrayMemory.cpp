@@ -17,15 +17,21 @@ T** allocate2D(unsigned int dim1, unsigned int dim2){
 
 template <class T>
 T* deallocate1D(T* vec){
-    delete [] vec;
+    if (vec != nullptr){
+        delete [] vec;
+    }
     return nullptr;
 }
 
 template <class T>
 T** deallocate2D(T** vec, unsigned int dim1){
-    for (unsigned int i = 0; i < dim1){
-        delete [] vec[i];
+    if (vec != nullptr){
+        for (unsigned int i = 0; i < dim1){
+            if (vec[i] != nullptr){
+                delete [] vec[i];
+            }
+        }
+        delete [] vec;
     }
-    delete [] vec;
     return nullptr;
 }
