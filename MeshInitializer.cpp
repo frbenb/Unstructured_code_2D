@@ -36,7 +36,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     // These are filled later
     meshData_->Cell2Face_ = allocate1D<int*>(ncellstot);
     meshData_->Cell2Cell_ = allocate1D<int*>(ncellstot);
-    meshData_->Node2Cell_ = allocate1D<int*>(npoints);
+    meshData_->Node2Cell_ = allocate1D<int*>(npoints); // 2nd level not allocated yet
 
     meshData_->Volume_ = allocate1D<double>(ncellstot);
     meshData_->Residu_ = allocate1D<double>(ncellstot);
@@ -120,6 +120,8 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         }
 
         meshData_->Cell2Node_[i] = allocate1D<int>(meshData_->CellNfaces_[i]);
+        meshData_->Cell2Face_[i] = allocate1D<int>(meshData_->CellNfaces_[i]);
+        meshData_->Cell2Cell_[i] = allocate1D<int>(meshData_->CellNfaces_[i]);
         for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){
             meshfile >> meshData_->Cell2Node_[i][j];
         }
@@ -177,15 +179,97 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->Face2Node_ = allocate2D<int>(meshData_->NFaces_, 2);
     meshData_->Face2Cell_ = allocate2D<int>(meshData_->NFaces_, 2);
 
-    for (unsigned int i = 0; i < meshData_->NCells_; i++){
+    unsigned int nFacesDone = 0;
+    unsigned int node1, node2, min, max, found;
 
+
+    for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++){
+        for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){
+            found = -1;
+            node1 = meshData_->Cell2Node_[i][j];
+            if (j+1 >= meshData_->CellNfaces_[i]){
+                node2 = meshData_->Cell2Node_[i][0];
+            }
+            else{
+                node2 = meshData_->Cell2Node_[i][j+1];
+            } 
+
+            min = node1 * (node1 <= node2) + node2 * (node2 < node1);
+            max = node1 * (node1 >= node2) + node2 * (node2 > node1);
+
+            for (unsigned int k = 0; k < nFacesDone; k++){
+                if ((meshData_->Face2Node_[k][0] == min) && (meshData_->Face2Node_[k][1] == max)){
+                    found = k;
+                    break;
+                }
+            }
+
+            if (found == -1){
+                meshData_->Face2Node_[nFacesDone][0] = min;
+                meshData_->Face2Node_[nFacesDone][1] = max;
+                found = nFacesDone;
+                nFacesDone++;  
+            }
+
+            meshData_->Cell2Face_[i][j] = found;
+        }
+    }
+
+    // Face2Cell_
+    unsigned int ncellsdone, face1, face2;
+    unsigned int facedone;
+    for (unsigned int i = 0; i < meshData_->NFaces_ ; i++){
+        ncellsdone = 0;
+        facedone = -1;
+        for (unsigned int j = 0; j < meshData_->NCellsTotal_; j++){
+            ncellsdone++;
+            for (unsigned int k = 0; k < meshData_->CellNfaces_[i]; k++){
+                if (meshData_->Cell2Face_[j][k] == i){
+                    facedone = j;
+                    break;
+                }  
+            }
+            if (facedone != -1){
+                break;
+            }
+        }
+
+        if (facedone == -1){
+            cout << "Face " << i << " not found." << endl;
+            return;
+        }
+
+        face1 = facedone;
+
+        facedone = -1;
+        for (unsigned int j = ncellsdone; j < meshData_->NCellsTotal_; j++){
+            for (unsigned int k = 0; k < meshData_->CellNfaces_[i]; k++){
+                if (meshData_->Cell2Face_[j][k] == i){
+                    facedone = j;
+                    break;
+                }  
+            }
+            if (facedone != -1){
+                break;
+            }
+        }
+
+        if (facedone == -1){
+            cout << "Face " << i << " not found." << endl;
+            return;
+        }
+
+        face2 = facedone;
+
+        // Check here for order.
+        min = face1 * (face1 <= face2) + face2* (face2 < face1);
+        max = face1 * (face1 >= face2) + face2 * (face2 > face1);
+    
+        meshData_->Face2Cell_[i][0] = min;
+        meshData_->Face2Cell_[i][1] = max;
     }
 
     /*TODO:
-        - Cell2Face_
-        - Face2Node_
-        - Face2Cell_
-
         - Cell2Cell_
         - Node2Cell_
     */
