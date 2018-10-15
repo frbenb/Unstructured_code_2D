@@ -22,15 +22,29 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     // pre-pass should give the following results
     unsigned int npoints = 16512;
-    unsigned int ncellstot = 16384;
+    unsigned int ncells = 16384;
     unsigned int nghosts = 128 + 128; // far field and airfoil
+    unsigned int ncellstot = ncells + nghosts;
     //calculate nfaces to allocate these vectors. 
 
     meshData_->Nodes_x_ = allocate1D<double>(npoints);
     meshData_->Nodes_y_ = allocate1D<double>(npoints);
 
     meshData_->Cell2Node_ = allocate1D<int*>(ncellstot);
+    meshData_->CellNfaces_ = allocate1D<int>(ncellstot);
+
+    // These are filled later
     meshData_->Cell2Face_ = allocate1D<int*>(ncellstot);
+    meshData_->Cell2Cell_ = allocate1D<int*>(ncellstot);
+    meshData_->Node2Cell_ = allocate1D<int*>(npoints);
+
+    meshData_->Volume_ = allocate1D<double>(ncellstot);
+    meshData_->Residu_ = allocate1D<double>(ncellstot);
+
+    meshData_->rho_ = allocate1D<double>(ncellstot);
+    meshData_->u_ = allocate1D<double>(ncellstot);
+    meshData_->v_ = allocate1D<double>(ncellstot);
+    meshData_->p_ = allocate1D<double>(ncellstot);
     
     //Display of the file name
     cout << "File name: " << meshFilename << endl;
@@ -65,24 +79,25 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     }
 
     //To fill the vectors of x and y coordinates of the nodes
-    for (unsigned int i=0; i<NNodes_; i++)
+    for (unsigned int i=0; i<meshData_->NNodes_; i++)
     {
-        meshfile >> Nodes_x_[i] >> Nodes_y_[i];
+        meshfile >> meshData_->Nodes_x_[i] >> meshData_->Nodes_y_[i];
     }
 
     //To get the number of cells of the mesh
-    meshfile >> token >> NCells_; //Here, token = "NELEM="
+    meshfile >> token >> meshData_->NCells_; //Here, token = "NELEM="
+    if (meshData_->NCells_ != ncells){
+        cout << "Pre-pass and full read nCells differ." << endl;
+        return;
+    }
 
-    CellNfaces_ = new int[NCells_];
-    Cell2Node_ = new int*[NCells_]; //1st dimension of the array Cell2Node_
 
     //Array of the number of faces for each cell (CellNFaces_)
     //and array of nodes for each cell (Cell2Nodes_)
     unsigned int shape; //Type of shape for each cell
-    unsigned int Node1, Node2, Node3, Node4;
+    unsigned int nFaces_double = 0; // Is not the number of faces, because will count all faces twice.
 
-    NFaces_ = 0;
-    for (unsigned int i=0; i<NCells_; i++)
+    for (unsigned int i=0; i<meshData_->NCells_; i++)
     {
         meshfile >> shape;
 
@@ -90,26 +105,26 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         {
             //Quadrilaterals
             case 9:
-                CellNfaces_[i] = 4; //4 faces for a quadrilateral
+                meshData_->CellNfaces_[i] = 4; //4 faces for a quadrilateral
                 break;
 
             //Triangles
             case 5:
-                CellNfaces_[i] = 3; //3 faces for a triangle
+                meshData_->CellNfaces_[i] = 3; //3 faces for a triangle
                 break;
             
             //Lines
             case 3:
-                CellNfaces_[i] = 2; //2 faces for a line
+                meshData_->CellNfaces_[i] = 2; //2 faces for a line
                 break;
         }
 
-        Cell2Node_[i] = new int[CellNfaces_[i]];
-        for (unsigned int j = 0; j < CellNfaces_[i]; j++){
-            meshfile >> Cell2Node_[i][j];
+        meshData_->Cell2Node_[i] = allocate1D<int>(meshData_->CellNfaces_[i]);
+        for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){
+            meshfile >> meshData_->Cell2Node_[i][j];
         }
 
-        NFaces_ += CellNfaces_[i]; //Counting the number of faces (here, faces will be count 2 times, see further away in the code)
+        nFaces_double += meshData_->CellNfaces_[i]; //Counting the number of faces (here, faces will be count 2 times, see further away in the code)
     }
     
     //To read all the boundary conditions, we need a "for" with the number of boundary conditions
@@ -118,6 +133,9 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     string boundarytype;
     unsigned int nelements;
+    unsigned int boundary_counter = 0;
+
+
     for (unsigned int i=0; i<nboundarytypes; i++)
     {
         meshfile >> token >> boundarytype; //Here, token = "MARKER_TAG="
@@ -126,23 +144,48 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         meshfile >> token >> nelements; //Here, token = "MARKER_ELEMS="
         for (unsigned int j=0; j<nelements; j++)
         {
-            //TODO!!!
+            meshfile >> shape;
+            if (shape != 3){
+                cout << "Boundaries can only be line elements." << endl;
+                return;
+            }
+
+            meshData_->CellNfaces_[meshData_->NCells_ + boundary_counter] = 2;
+            meshData_->Cell2Node_[meshData_->NCells_ + boundary_counter] = allocate1D<int>(2);
+            meshfile >> meshData_->Cell2Node_[meshData_->NCells_ + boundary_counter][0] >> meshData_->Cell2Node_[meshData_->NCells_ + boundary_counter][1];
+            
+            boundary_counter++;
         }
 
         //For every bc, adding the number of elem. to the number of ghost faces (every element is a line in 2D)
-        NFacesGhost_ += nelements; 
+        meshData_->NCellsGhost_ += nelements; 
+    }
+
+    meshData_->NCellsTotal_ = meshData_->NCellsGhost_ + meshData_->NCells_;
+
+    if (meshData_->NCellsGhost_ != nghosts){
+        cout << "Pre-pass and full read nCellsGhost differ." << endl;
+        return;
     }
 
     //Counting the thotal number of faces
-    NFacesTotal_ = (NFaces_ + NFacesGhost_)/2;
+    meshData_->NFaces_ = (nFaces_double + meshData_->NCellsGhost_)/2;
 
     //Closing the mesh file
     meshfile.close();
+
+    meshData_->Face2Node_ = allocate2D<int>(meshData_->NFaces_, 2);
+    meshData_->Face2Cell_ = allocate2D<int>(meshData_->NFaces_, 2);
+
+    for (unsigned int i = 0; i < meshData_->NCells_; i++){
+
+    }
 
     /*TODO:
         - Cell2Face_
         - Face2Node_
         - Face2Cell_
+
         - Cell2Cell_
         - Node2Cell_
     */

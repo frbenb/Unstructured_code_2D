@@ -9,7 +9,6 @@ using namespace std;
 class Mesh_Data{
     public:
     Mesh_Data();    //Constructor
-    Mesh_Data(unsigned int ncells, unsigned int nghost, unsigned int nfaces, unsigned int nnodes);
     ~Mesh_Data();   //Desctructor
 
     void read_SU2(string filename); //Reading the mesh file + connectivity?
@@ -33,8 +32,8 @@ class Mesh_Data{
     unsigned int NCellsGhost_;      //lui
     unsigned int NCellsTotal_;      // ?
     unsigned int NFaces_;           //Done
-    unsigned int NFacesGhost_;      //Done
-    unsigned int NFacesTotal_;      //Done
+    unsigned int NFacesGhost_;      //Done // should not exist I think
+    unsigned int NFacesTotal_;      //Done // should not exist I think
     unsigned int NNodes_;           //Done
     double* Volume_;
     double* Residu_;

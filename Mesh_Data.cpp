@@ -12,13 +12,6 @@ Cell2Node_(nullptr), Cell2Face_(nullptr), Face2Node_(nullptr), Face2Cell_(nullpt
 CellNfaces_(nullptr), NCells_(0), NCellsGhost_(0), NFaces_(0), NFacesGhost_(0), NNodes_(0), Volume_(nullptr), Residu_(nullptr),
 rho_(nullptr), u_(nullptr), v_(nullptr), p_(nullptr){}
 
-Mesh_Data::Mesh_Data(unsigned int ncells, unsigned int nghost, unsigned int nfaces, unsigned int nnodes): 
-Nodes_x_(nullptr), Nodes_y_(nullptr), 
-Cell2Node_(nullptr), Cell2Face_(nullptr), Face2Node_(nullptr), Face2Cell_(nullptr), Cell2Cell_(nullptr), Node2Cell_(nullptr),
-CellNfaces_(nullptr), NCells_(0), NCellsGhost_(0), NFaces_(0), NFacesGhost_(0), NNodes_(0), Volume_(nullptr), Residu_(nullptr),
-rho_(nullptr), u_(nullptr), v_(nullptr), p_(nullptr){}
-
-
 
 /************************************DESTRUCTOR BY DEFAULT****************************************/
 Mesh_Data::~Mesh_Data()
