@@ -14,6 +14,8 @@ using namespace std;
 #include "NSCInitializer.h"
 #include "SolverInitializer.h"
 
+#include "OutputDataManager.h"
+
 #include "DataUpdater.h"
 
 int main()
@@ -31,15 +33,19 @@ int main()
     NSCInitializer nscInit(&nscData, &meshData);
     DataUpdater dataUpdater(&nscData, &meshData);
 
+    //Attach object to outputData
+    OutputDataManager outputDataManager(&nscData, &meshData);
+
     //Attach computers and data objects to inputManager
-    InputDataManager inputDataManager(&nscInit, &solverInit, &meshInit, &dataUpdater, &meshData, &nscData);
+    InputDataManager inputDataManager(&nscInit, &solverInit, &meshInit, &dataUpdater, &meshData, &nscData, &outputDataManager);
 
     //Attach inputManager to event manager
     EventManager eventManager(&inputDataManager);
 
-
     //User operations here:
-    eventManager.enterInputFile("input.txt");
+    eventManager.enterInputFile("input");
+
+    eventManager.testSU2Function();
 
     cout << "Done!" << endl;
     return 0;
