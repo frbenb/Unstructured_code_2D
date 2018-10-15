@@ -29,8 +29,8 @@ class MeshInitializer
 
     private:
 
-        NSCData     *_nscData;
-        Mesh_Data   *_meshData;
+        NSCData     *nscData_;
+        Mesh_Data   *meshData_;
 
 };
 
