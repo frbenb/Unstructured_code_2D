@@ -11,11 +11,7 @@ EventManager::EventManager(InputDataManager *iInputDataManager):
 EventManager::~EventManager()
 {
 
-    if (inputDataManager_ != nullptr)
-    {
-        delete inputDataManager_;
-    }
-    inputDataManager_ = nullptr;
+    
 }
 
 void EventManager::enterInputFile(std::string iPath)
