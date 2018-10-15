@@ -2,7 +2,7 @@
 #define DEF_MESHINITIALIZER_H
 
 //Standard lib.
-#include <iostream>
+#include <string>
 
 //Projet files
 #include "NSCData.h"
@@ -26,11 +26,14 @@ class MeshInitializer
         //Default Destructor
         virtual ~MeshInitializer();
 
+        void initializeMesh(string& meshFilename);
 
     private:
 
         NSCData     *nscData_;
         Mesh_Data   *meshData_;
+
+        void deallocateMesh();
 
 };
 
