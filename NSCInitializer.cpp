@@ -44,10 +44,10 @@ void NSCInitializer::initial_field()
     //Loop on every cells
     for (i=0;i<=meshData_->NCells_;i++)
     {
-        ro[i]=nscData->rhoInfini_;
-        uu[i]=nscData->uInfini_;
-        vv[i]=nscData->vInfini_;
-        pp[i]=nscData->pInfini_;
+        ro[i]=nscData_->rhoInfini_;
+        uu[i]=nscData_->uInfini_;
+        vv[i]=nscData_->vInfini_;
+        pp[i]=nscData_->pInfini_;
 
     }
 
