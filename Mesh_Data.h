@@ -19,15 +19,15 @@ class Mesh_Data{
     double* Nodes_y_;               //Done
 
     //Connectivity
-    int** Cell2Node_;               //Done
-    int** Cell2Face_;
-    int** Face2Node_;
-    int** Face2Cell_;
-    int** Cell2Cell_;
-    int** Node2Cell_;
+    unsigned int** Cell2Node_;               //Done
+    unsigned int** Cell2Face_;
+    unsigned int** Face2Node_;
+    unsigned int** Face2Cell_;
+    unsigned int** Cell2Cell_;
+    unsigned int** Node2Cell_;
 
     //Helper
-    int* CellNfaces_;               //Done
+    unsigned int* CellNfaces_;               //Done
     unsigned int NCells_;           //Done
     unsigned int NCellsGhost_;      //lui
     unsigned int NCellsTotal_;      // ?

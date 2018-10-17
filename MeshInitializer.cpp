@@ -28,24 +28,24 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     unsigned int ncellstot = ncells + nghosts;
     //calculate nfaces to allocate these vectors. 
 
-    meshData_->Nodes_x_ = allocate1D<double>(npoints);
-    meshData_->Nodes_y_ = allocate1D<double>(npoints);
+    meshData_->Nodes_x_ = allocate1Ddbl(npoints);
+    meshData_->Nodes_y_ = allocate1Ddbl(npoints);
 
-    meshData_->Cell2Node_ = allocate1D<int*>(ncellstot);
-    meshData_->CellNfaces_ = allocate1D<int>(ncellstot);
+    meshData_->Cell2Node_ = allocate1Dintstar(ncellstot);
+    meshData_->CellNfaces_ = allocate1Dint(ncellstot);
 
     // These are filled later
-    meshData_->Cell2Face_ = allocate1D<int*>(ncellstot);
-    meshData_->Cell2Cell_ = allocate1D<int*>(ncellstot);
-    meshData_->Node2Cell_ = allocate1D<int*>(npoints); // 2nd level not allocated yet
+    meshData_->Cell2Face_ = allocate1Dintstar(ncellstot);
+    meshData_->Cell2Cell_ = allocate1Dintstar(ncellstot);
+    meshData_->Node2Cell_ = allocate1Dintstar(npoints); // 2nd level not allocated yet
 
-    meshData_->Volume_ = allocate1D<double>(ncellstot);
-    meshData_->Residu_ = allocate1D<double>(ncellstot);
+    meshData_->Volume_ = allocate1Ddbl(ncellstot);
+    meshData_->Residu_ = allocate1Ddbl(ncellstot);
 
-    meshData_->rho_ = allocate1D<double>(ncellstot);
-    meshData_->u_ = allocate1D<double>(ncellstot);
-    meshData_->v_ = allocate1D<double>(ncellstot);
-    meshData_->p_ = allocate1D<double>(ncellstot);
+    meshData_->rho_ = allocate1Ddbl(ncellstot);
+    meshData_->u_ = allocate1Ddbl(ncellstot);
+    meshData_->v_ = allocate1Ddbl(ncellstot);
+    meshData_->p_ = allocate1Ddbl(ncellstot);
     
     //Display of the file name
     cout << "File name: " << meshFilename << endl;
@@ -120,9 +120,9 @@ void MeshInitializer::initializeMesh(string& meshFilename){
                 break;
         }
 
-        meshData_->Cell2Node_[i] = allocate1D<int>(meshData_->CellNfaces_[i]);
-        meshData_->Cell2Face_[i] = allocate1D<int>(meshData_->CellNfaces_[i]);
-        meshData_->Cell2Cell_[i] = allocate1D<int>(meshData_->CellNfaces_[i]);
+        meshData_->Cell2Node_[i] = allocate1Dint(meshData_->CellNfaces_[i]);
+        meshData_->Cell2Face_[i] = allocate1Dint(meshData_->CellNfaces_[i]);
+        meshData_->Cell2Cell_[i] = allocate1Dint(meshData_->CellNfaces_[i]);
         for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){
             meshfile >> meshData_->Cell2Node_[i][j];
         }
@@ -154,7 +154,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
             }
 
             meshData_->CellNfaces_[meshData_->NCells_ + boundary_counter] = 2;
-            meshData_->Cell2Node_[meshData_->NCells_ + boundary_counter] = allocate1D<int>(2);
+            meshData_->Cell2Node_[meshData_->NCells_ + boundary_counter] = allocate1Dint(2);
             meshfile >> meshData_->Cell2Node_[meshData_->NCells_ + boundary_counter][0] >> meshData_->Cell2Node_[meshData_->NCells_ + boundary_counter][1];
             
             boundary_counter++;
@@ -177,8 +177,8 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     //Closing the mesh file
     meshfile.close();
 
-    meshData_->Face2Node_ = allocate2D<int>(meshData_->NFaces_, 2);
-    meshData_->Face2Cell_ = allocate2D<int>(meshData_->NFaces_, 2);
+    meshData_->Face2Node_ = allocate2Dint(meshData_->NFaces_, 2);
+    meshData_->Face2Cell_ = allocate2Dint(meshData_->NFaces_, 2);
 
     unsigned int nFacesDone = 0;
     unsigned int node1, node2, min, max, found;

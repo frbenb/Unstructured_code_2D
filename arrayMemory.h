@@ -1,10 +1,12 @@
 #ifndef ARRAY_MEMORY_H_
 #define ARRAY_MEMORY_H_
 
-template <class T>
-T* allocate1D(unsigned int dim);
-template <class T>
-T** allocate2D(unsigned int dim1, unsigned int dim2); 
+unsigned int* allocate1Dint(unsigned int dim);
+unsigned int** allocate1Dintstar(unsigned int dim);
+unsigned int** allocate2Dint(unsigned int dim1, unsigned int dim2); 
+
+double* allocate1Ddbl(unsigned int dim);
+double** allocate2Ddbl(unsigned int dim1, unsigned int dim2); 
 
 template <class T>
 T* deallocate1D(T* vec);

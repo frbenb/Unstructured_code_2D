@@ -1,16 +1,34 @@
 #include "arrayMemory.h"
 
-template <class T>
-T* allocate1D(unsigned int dim){
-    T* vec = new T[dim];
+unsigned int* allocate1Dint(unsigned int dim){
+    unsigned int* vec = new unsigned int[dim];
     return vec;
 }
 
-template <class T>
-T** allocate2D(unsigned int dim1, unsigned int dim2){
-    T** vec = new T*[dim1];
+unsigned int** allocate1Dintstar(unsigned int dim){
+    unsigned int** vec = new unsigned int*[dim];
+    return vec;
+}
+
+
+unsigned int** allocate2Dint(unsigned int dim1, unsigned int dim2){
+    unsigned int** vec = new unsigned int*[dim1];
     for (unsigned int i = 0; i < dim1; i++){
-        vec[i] = new T[dim2];
+        vec[i] = new unsigned int[dim2];
+    }
+    return vec;
+}
+
+double* allocate1Ddbl(unsigned int dim){
+    double* vec = new double[dim];
+    return vec;
+}
+
+
+double** allocate2Ddbl(unsigned int dim1, unsigned int dim2){
+    double** vec = new double*[dim1];
+    for (unsigned int i = 0; i < dim1; i++){
+        vec[i] = new double[dim2];
     }
     return vec;
 }
