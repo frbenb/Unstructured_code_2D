@@ -5,6 +5,11 @@ unsigned int* allocate1Dint(unsigned int dim){
     return vec;
 }
 
+unsigned int** allocate1Dintstar(unsigned int dim){
+    unsigned int** vec = new unsigned int*[dim];
+    return vec;
+}
+
 
 unsigned int** allocate2Dint(unsigned int dim1, unsigned int dim2){
     unsigned int** vec = new unsigned int*[dim1];
