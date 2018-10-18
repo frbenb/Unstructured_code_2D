@@ -270,8 +270,26 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         meshData_->Face2Cell_[i][1] = max;
     }
 
-    /*TODO:
-        - Cell2Cell_
+    // Cell2Cell_
+
+    for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++){  //The cell we are checking
+        for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){   //The cell's faces we are chking, we want the cell on the other side
+
+            if (meshData_->Face2Cell_[i][0] =! meshData_->Cell2Face_[i][j]){ 
+                meshData_->Cell2Cell_[i][j] = meshData_->Face2Cell_[i][0];
+               
+             } 
+             else { 
+                meshData_->Cell2Cell_[i][j] = meshData_->Face2Cell_[i][1];
+             } 
+        }
+    }
+
+
+
+
+    /*
+    TO DO :
         - Node2Cell_
     */
 
