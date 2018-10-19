@@ -11,8 +11,6 @@ class Mesh_Data{
     Mesh_Data();    //Constructor
     ~Mesh_Data();   //Desctructor
 
-    void read_SU2(string filename); //Reading the mesh file + connectivity?
-  
     public:
     //Input
     double* Nodes_x_;               
