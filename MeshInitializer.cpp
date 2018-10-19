@@ -152,6 +152,9 @@ void MeshInitializer::initializeMesh(string& meshFilename){
                 cout << "Boundaries can only be line elements." << endl;
                 return;
             }
+            
+            meshData_->Cell2Face_[meshData_->NCells_ + boundary_counter] = allocate1Dint(2);
+            meshData_->Cell2Cell_[meshData_->NCells_ + boundary_counter] = allocate1Dint(2);
 
             meshData_->CellNfaces_[meshData_->NCells_ + boundary_counter] = 2;
             meshData_->Cell2Node_[meshData_->NCells_ + boundary_counter] = allocate1Dint(2);
@@ -182,7 +185,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     unsigned int nFacesDone = 0;
     unsigned int node1, node2, min, max, found;
-
 
     for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++){
         for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){
@@ -218,15 +220,17 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     // Face2Cell_
     unsigned int ncellsdone, face1, face2;
-    unsigned int facedone;
+    unsigned int facedone, facedonek;
     for (unsigned int i = 0; i < meshData_->NFaces_ ; i++){
         ncellsdone = 0;
         facedone = -1;
+        facedonek = -1;
         for (unsigned int j = 0; j < meshData_->NCellsTotal_; j++){
             ncellsdone++;
-            for (unsigned int k = 0; k < meshData_->CellNfaces_[i]; k++){
+            for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++){
                 if (meshData_->Cell2Face_[j][k] == i){
                     facedone = j;
+                    facedonek = k;
                     break;
                 }  
             }
@@ -236,7 +240,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         }
 
         if (facedone == -1){
-            cout << "Face " << i << " not found." << endl;
+            cout << "Face " << i << " cell 1 not found."  << endl;
             return;
         }
 
@@ -244,7 +248,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
         facedone = -1;
         for (unsigned int j = ncellsdone; j < meshData_->NCellsTotal_; j++){
-            for (unsigned int k = 0; k < meshData_->CellNfaces_[i]; k++){
+            for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++){
                 if (meshData_->Cell2Face_[j][k] == i){
                     facedone = j;
                     break;
@@ -256,15 +260,22 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         }
 
         if (facedone == -1){
-            cout << "Face " << i << " not found." << endl;
+            if (meshData_->Cell2Face_[face1][1 + -facedonek] == i){
+                facedone = face1;
+            }
+            else{
+                cout << "Face " << i << " cell 2 not found." << endl;
             return;
+            }
         }
 
         face2 = facedone;
 
+        bool bigger = face1 <= face2;
+
         // Check here for order.
-        min = face1 * (face1 <= face2) + face2* (face2 < face1);
-        max = face1 * (face1 >= face2) + face2 * (face2 > face1);
+        min = face1 * bigger + face2 * !bigger;
+        max = face1 * !bigger + face2 * bigger;
     
         meshData_->Face2Cell_[i][0] = min;
         meshData_->Face2Cell_[i][1] = max;
