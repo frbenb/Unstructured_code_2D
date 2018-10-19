@@ -44,7 +44,7 @@ T* deallocate1D(T* vec){
 template <class T>
 T** deallocate2D(T** vec, unsigned int dim1){
     if (vec != nullptr){
-        for (unsigned int i = 0; i < dim1){
+        for (unsigned int i = 0; i < dim1; i++){
             if (vec[i] != nullptr){
                 delete [] vec[i];
             }

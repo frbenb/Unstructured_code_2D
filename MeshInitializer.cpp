@@ -275,7 +275,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++){  //The cell we are checking
         for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){   //The cell's faces we are chking, we want the cell on the other side
 
-            if (meshData_->Face2Cell_[i][0] =! meshData_->Cell2Face_[i][j]){ 
+            if (meshData_->Face2Cell_[i][0] != meshData_->Cell2Face_[i][j]){ 
                 meshData_->Cell2Cell_[i][j] = meshData_->Face2Cell_[i][0];
                
              } 
