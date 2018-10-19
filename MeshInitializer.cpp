@@ -275,7 +275,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++){  //The cell we are checking
         for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){   //The cell's faces we are chking, we want the cell on the other side
 
-            if (meshData_->Face2Cell_[i][0] =! meshData_->Cell2Face_[i][j]){ 
+            if (meshData_->Face2Cell_[i][0] != meshData_->Cell2Face_[i][j]){ 
                 meshData_->Cell2Cell_[i][j] = meshData_->Face2Cell_[i][0];
                
              } 
@@ -297,22 +297,22 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 }
 
 void MeshInitializer::deallocateMesh(){
-    meshData_->Nodes_x_ = deallocate1D(meshData_->Nodes_x_);
-    meshData_->Nodes_y_ = deallocate1D(meshData_->Nodes_y_);
-    meshData_->CellNfaces_ = deallocate1D(meshData_->CellNfaces_);
-    meshData_->Volume_ = deallocate1D(meshData_->Volume_);
-    meshData_->Residu_ = deallocate1D(meshData_->Residu_);
-    meshData_->rho_ = deallocate1D(meshData_->rho_);
-    meshData_->u_ = deallocate1D(meshData_->u_);
-    meshData_->v_ = deallocate1D(meshData_->v_);
-    meshData_->p_ = deallocate1D(meshData_->p_);
+    meshData_->Nodes_x_ = deallocate1Ddbl(meshData_->Nodes_x_);
+    meshData_->Nodes_y_ = deallocate1Ddbl(meshData_->Nodes_y_);
+    meshData_->CellNfaces_ = deallocate1Dint(meshData_->CellNfaces_);
+    meshData_->Volume_ = deallocate1Ddbl(meshData_->Volume_);
+    meshData_->Residu_ = deallocate1Ddbl(meshData_->Residu_);
+    meshData_->rho_ = deallocate1Ddbl(meshData_->rho_);
+    meshData_->u_ = deallocate1Ddbl(meshData_->u_);
+    meshData_->v_ = deallocate1Ddbl(meshData_->v_);
+    meshData_->p_ = deallocate1Ddbl(meshData_->p_);
 
-    meshData_->Cell2Node_ = deallocate2D(meshData_->Cell2Node_, meshData_->NCellsTotal_);
-    meshData_->Cell2Face_ = deallocate2D(meshData_->Cell2Face_, meshData_->NCellsTotal_);
-    meshData_->Face2Node_ = deallocate2D(meshData_->Face2Node_, meshData_->NFaces_);
-    meshData_->Face2Cell_ = deallocate2D(meshData_->Face2Cell_, meshData_->NFaces_);
-    meshData_->Cell2Cell_ = deallocate2D(meshData_->Cell2Cell_, meshData_->NCellsTotal_);
-    meshData_->Node2Cell_ = deallocate2D(meshData_->Node2Cell_, meshData_->NNodes_);
+    meshData_->Cell2Node_ = deallocate2Dint(meshData_->Cell2Node_, meshData_->NCellsTotal_);
+    meshData_->Cell2Face_ = deallocate2Dint(meshData_->Cell2Face_, meshData_->NCellsTotal_);
+    meshData_->Face2Node_ = deallocate2Dint(meshData_->Face2Node_, meshData_->NFaces_);
+    meshData_->Face2Cell_ = deallocate2Dint(meshData_->Face2Cell_, meshData_->NFaces_);
+    meshData_->Cell2Cell_ = deallocate2Dint(meshData_->Cell2Cell_, meshData_->NCellsTotal_);
+    meshData_->Node2Cell_ = deallocate2Dint(meshData_->Node2Cell_, meshData_->NNodes_);
 
     meshData_->NCells_ = 0;
     meshData_->NCellsGhost_ = 0;
@@ -320,6 +320,6 @@ void MeshInitializer::deallocateMesh(){
     meshData_->NFaces_ = 0;
     meshData_->NFacesGhost_ = 0;
     meshData_->NFacesTotal_ = 0;
-    meshData_->NNodes_ = 0;
+    meshData_->NNodes_ = 0; 
 }
 

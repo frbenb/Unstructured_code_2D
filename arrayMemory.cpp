@@ -41,10 +41,47 @@ T* deallocate1D(T* vec){
     return nullptr;
 }
 
+unsigned int* deallocate1Dint(unsigned int* vec){
+    if (vec != nullptr){
+        delete [] vec;
+    }
+    return nullptr;
+}
+double* deallocate1Ddbl(double* vec){
+    if (vec != nullptr){
+        delete [] vec;
+    }
+    return nullptr;
+}
+
 template <class T>
 T** deallocate2D(T** vec, unsigned int dim1){
     if (vec != nullptr){
-        for (unsigned int i = 0; i < dim1){
+        for (unsigned int i = 0; i < dim1; i++){
+            if (vec[i] != nullptr){
+                delete [] vec[i];
+            }
+        }
+        delete [] vec;
+    }
+    return nullptr;
+}
+
+unsigned int** deallocate2Dint(unsigned int** vec, unsigned int dim1){
+    if (vec != nullptr){
+        for (unsigned int i = 0; i < dim1; i++){
+            if (vec[i] != nullptr){
+                delete [] vec[i];
+            }
+        }
+        delete [] vec;
+    }
+    return nullptr;
+}
+
+double** deallocate2Ddbl(double** vec, unsigned int dim1){
+    if (vec != nullptr){
+        for (unsigned int i = 0; i < dim1; i++){
             if (vec[i] != nullptr){
                 delete [] vec[i];
             }

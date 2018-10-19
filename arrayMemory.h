@@ -13,4 +13,9 @@ T* deallocate1D(T* vec);
 template <class T>
 T** deallocate2D(T** vec, unsigned int dim1); 
 
+unsigned int* deallocate1Dint(unsigned int* vec);
+double* deallocate1Ddbl(double* vec);
+unsigned int** deallocate2Dint(unsigned int** vec, unsigned int dim1);
+double** deallocate2Ddbl(double** vec, unsigned int dim1);
+
 #endif
