@@ -29,7 +29,7 @@ class InputDataManager
 
     public:
         //Default Constructor
-        InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData, OutputDataManager *iOutputDataManager);
+        InputDataManager(NSCInitializer *iNSCInit, MainSolver *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData, OutputDataManager *iOutputDataManager);
 
         //Default Destructor
         virtual ~InputDataManager();
@@ -45,6 +45,10 @@ class InputDataManager
         //This method allows to process to the initialization of all the data.
         // Considered as the main routine calling the private object initializer.
         void doInitProcess();
+
+        //This method allows to call the solving of the mesh and nsc data. 
+        // Calls the MainSolver method responsible.
+        void solve();
 
         // This method allows to read the input commands of the user. 
         // the input are presented as a text file.

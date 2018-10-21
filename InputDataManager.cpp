@@ -4,9 +4,9 @@
 
 using namespace std;
 
-InputDataManager::InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData, OutputDataManager *iOutputDataManager):
+InputDataManager::InputDataManager(NSCInitializer *iNSCInit, MainSolver *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData, OutputDataManager *iOutputDataManager):
                                 nscInit_(iNSCInit),
-                                solverInit_(iSolverInit),
+                                mainSolver_(iSolverInit),
                                 meshInit_(iMeshInit),
                                 dataUpdater_(iDataUpdater),
                                 meshData_(iMeshData),
@@ -52,11 +52,15 @@ void InputDataManager::doInitProcess()
     nscInit_->initial_rk_scheme();
 
     //Initial field: Put here. Implemented but need to allocate memory.
-   
 
     //Update Boundary
     dataUpdater_->update_boundary();
 
+}
+
+void InputDataManager::solve()
+{
+    //Here is called the method of MainSolver to solve problem 
 }
 
 void InputDataManager::readInputFile()
