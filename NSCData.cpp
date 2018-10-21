@@ -11,7 +11,7 @@ NSCData::NSCData():
     mach_(0),
     reynolds_(0),
     tinf_(0),
-	xref_(0),
+    xref_(0),
     yref_(0),
     pi_(0),
     epsilon_(0),
@@ -23,7 +23,7 @@ NSCData::NSCData():
     ressmo_(0),
     nitc_(0),
     niter_(0),
-    itccfl_(0), 
+    itccfl_(0),
     cfl_(0),
     dissip_(0),
     itertot_(0),
@@ -31,8 +31,7 @@ NSCData::NSCData():
     rk_beta_(nullptr),
     nbiter_(0),
     rms0_(0)
-{  	
-	    //Nothing.
+{  
 }
 
 NSCData::~NSCData()
