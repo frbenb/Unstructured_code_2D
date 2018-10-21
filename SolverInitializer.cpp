@@ -1,15 +1,15 @@
 
-#include "SolverInitializer.h"
+#include "MainSolver.h"
 
 
-SolverInitializer::SolverInitializer(NSCData *iNSCData, Mesh_Data *iMeshData) :
+MainSolver::MainSolver(NSCData *iNSCData, Mesh_Data *iMeshData) :
                                     _nscData(iNSCData),
                                     _meshData(iMeshData)
 {
 
 }
 
-SolverInitializer::~SolverInitializer()
+MainSolver::~MainSolver()
 {
     
 }
