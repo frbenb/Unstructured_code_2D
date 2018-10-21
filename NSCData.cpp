@@ -31,7 +31,8 @@ NSCData::NSCData():
     rk_beta_(nullptr),
     nbiter_(0),
     rms0_(0)
-{  
+{  	
+	    //Nothing.
 }
 
 NSCData::~NSCData()
