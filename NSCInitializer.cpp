@@ -40,8 +40,6 @@ void NSCInitializer::initial_flow_parameters()
 
 void NSCInitializer::initial_field()
 {
-
-
     //Loop on every cells
     for (unsigned i=0;i<=meshData_->NCells_;i++)
     {
@@ -51,8 +49,6 @@ void NSCInitializer::initial_field()
         meshData_->p_[i] = nscData_->pInfini_;
 
     }
-
-
 }
 
 void NSCInitializer::initial_rk_scheme()

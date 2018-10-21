@@ -10,7 +10,48 @@ Mesh_Data::Mesh_Data():
 Nodes_x_(nullptr), Nodes_y_(nullptr), 
 Cell2Node_(nullptr), Cell2Face_(nullptr), Face2Node_(nullptr), Face2Cell_(nullptr), Cell2Cell_(nullptr), Node2Cell_(nullptr),
 CellNfaces_(nullptr), NCells_(0), NCellsGhost_(0), NFaces_(0), NFacesGhost_(0), NNodes_(0), Volume_(nullptr), Residu_(nullptr),
-rho_(nullptr), u_(nullptr), v_(nullptr), p_(nullptr){}
+rho_(nullptr), u_(nullptr), v_(nullptr), p_(nullptr),
+imax_(0),
+jmax_(0), 
+itl_(0), 
+itu_(0),      //imax, jmax
+imaxGhost_(0), 
+jmaxGhost_(0),        //himax, hjmax
+rimax_(0),
+rjmax_(0),                //rimax, rjmax - restricted domain cv imax,jmax
+inci_(0), 
+incj_(0),                  //inci, incj - address  increments in i,j
+cellArea_(nullptr),         //area
+normal_i_x_(nullptr), 		//six, siy - face i projections
+normal_i_y_(nullptr),
+normal_j_x_(nullptr),      //sjx, sjy - face j projections
+normal_j_y_(nullptr), 
+rho_nodes_(nullptr),         //rocv, uucv, vvcv, ppcv - primitive variables cell-vertex
+u_nodes_(nullptr), 
+v_nodes_(nullptr), 
+p_nodes_(nullptr),           // vertexes
+rho_0_(nullptr),             //ro0, ru0, rv0, re0 - conservative variables rk(0)
+u_0_(nullptr), 
+v_0_(nullptr), 
+p_0_(nullptr), 
+residualInviscid_rho_(nullptr),  //Ri_ro, Ri_uu, Ri_vv, Ri_pp - inviscid Residual
+residualInviscid_u_(nullptr), 
+residualInviscid_v_(nullptr), 
+residualInviscid_p_(nullptr), 
+residualDissip_rho_(nullptr),   
+residualDissip_u_(nullptr), 
+residualDissip_v_(nullptr), 
+residualDissip_p_(nullptr), 
+tmp_rho_(nullptr),               //tmp_ro, tmp_uu, tmp_vv, tmp_pp - artificial Residual
+tmp_u_(nullptr), 
+tmp_v_(nullptr), 
+tmp_p_(nullptr), 
+deltaT_(nullptr),                //dt
+speci_(nullptr),                 //speci, specj
+specj_(nullptr)
+
+{
+}
 
 
 /************************************DESTRUCTOR BY DEFAULT****************************************/
