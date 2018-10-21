@@ -1,5 +1,5 @@
-#ifndef DEF_SOLVERINITIALIZER_H
-#define DEF_SOLVERINITIALIZER_H
+#ifndef DEF_MAINSOLVER_H
+#define DEF_MAINSOLVER_H
 
 
 //Standard lib.
@@ -13,17 +13,17 @@
 // This class allows to store the data according to NSC structure presented in the
 // NSCode. Is called by the solvers and initializer through multiple processes.
 //
-// initial_rk_scheme()
+// 
 //
-class SolverInitializer
+class MainSolver
 {
 
     public:
         //Default Constructor
-        SolverInitializer(NSCData *iNSCData, Mesh_Data *iMeshData);
+        MainSolver(NSCData *iNSCData, Mesh_Data *iMeshData);
 
         //Default Destructor
-        virtual ~SolverInitializer();
+        virtual ~MainSolver();
 
         
 
@@ -31,7 +31,7 @@ class SolverInitializer
 
         NSCData     *_nscData;
         Mesh_Data   *_meshData;
-
+        
 
 };
 
