@@ -47,7 +47,8 @@ class NSCData
         double vis4_;
         double ressmo_;
 
-        unsigned int nitc_, niter_;
+        unsigned int nitc_;
+        unsigned int niter_;
         double* itccfl_; //iterate timestep
         double cfl_;
 
