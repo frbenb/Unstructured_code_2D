@@ -12,7 +12,7 @@ using namespace std;
 
 #include "MeshInitializer.h"
 #include "NSCInitializer.h"
-#include "SolverInitializer.h"
+#include "MainSolver.h"
 
 #include "OutputDataManager.h"
 
@@ -29,7 +29,7 @@ int main()
 
     //Attach data to all computers
     MeshInitializer meshInit(&nscData, &meshData);
-    SolverInitializer solverInit(&nscData, &meshData);
+    MainSolver solver(&nscData, &meshData);
     NSCInitializer nscInit(&nscData, &meshData);
     DataUpdater dataUpdater(&nscData, &meshData);
 
@@ -37,7 +37,7 @@ int main()
     OutputDataManager outputDataManager(&nscData, &meshData);
 
     //Attach computers and data objects to inputManager
-    InputDataManager inputDataManager(&nscInit, &solverInit, &meshInit, &dataUpdater, &meshData, &nscData, &outputDataManager);
+    InputDataManager inputDataManager(&nscInit, &solver, &meshInit, &dataUpdater, &meshData, &nscData, &outputDataManager);
 
     //Attach inputManager to event manager
     EventManager eventManager(&inputDataManager);

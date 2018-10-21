@@ -6,7 +6,7 @@
 #include "Mesh_Data.h"
 
 #include "NSCInitializer.h"
-#include "SolverInitializer.h"
+#include "MainSolver.h"
 #include "MeshInitializer.h"
 
 #include "DataUpdater.h"
@@ -20,20 +20,16 @@
 
 // This class allows to handle and manage the events given from the userinterface.
 // Takes the roles of the following functions:
-// initial_system()
 // readctrl()
-// connectivity
-// readmesh (?? should it be in MeshInitializer object ??)
-// new_mesh (?? should it be in MeshInitializer object ??)
-// allocate_2D ()
-// allocate_1D ()
+// doInitProcess()
+
 
 class InputDataManager
 {
 
     public:
         //Default Constructor
-        InputDataManager(NSCInitializer *iNSCInit, SolverInitializer *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData, OutputDataManager *iOutputDataManager);
+        InputDataManager(NSCInitializer *iNSCInit, MainSolver *iSolverInit, MeshInitializer *iMeshInit, DataUpdater *iDataUpdater, Mesh_Data *iMeshData, NSCData *iNSCData, OutputDataManager *iOutputDataManager);
 
         //Default Destructor
         virtual ~InputDataManager();
@@ -50,6 +46,10 @@ class InputDataManager
         // Considered as the main routine calling the private object initializer.
         void doInitProcess();
 
+        //This method allows to call the solving of the mesh and nsc data. 
+        // Calls the MainSolver method responsible.
+        void solve();
+
         // This method allows to read the input commands of the user. 
         // the input are presented as a text file.
         void readInputFile();
@@ -62,7 +62,7 @@ class InputDataManager
     private:
 
         NSCInitializer      *nscInit_;
-        SolverInitializer   *solverInit_;
+        MainSolver          *mainSolver_;
         MeshInitializer     *meshInit_;
 
         DataUpdater         *dataUpdater_;
