@@ -6,7 +6,7 @@
 #include "Mesh_Data.h"
 
 #include "NSCInitializer.h"
-#include "SolverInitializer.h"
+#include "MainSolver.h"
 #include "MeshInitializer.h"
 
 #include "DataUpdater.h"
@@ -20,13 +20,9 @@
 
 // This class allows to handle and manage the events given from the userinterface.
 // Takes the roles of the following functions:
-// initial_system()
 // readctrl()
-// connectivity
-// readmesh (?? should it be in MeshInitializer object ??)
-// new_mesh (?? should it be in MeshInitializer object ??)
-// allocate_2D ()
-// allocate_1D ()
+// doInitProcess()
+
 
 class InputDataManager
 {
@@ -62,7 +58,7 @@ class InputDataManager
     private:
 
         NSCInitializer      *nscInit_;
-        SolverInitializer   *solverInit_;
+        MainSolver          *mainSolver_;
         MeshInitializer     *meshInit_;
 
         DataUpdater         *dataUpdater_;
