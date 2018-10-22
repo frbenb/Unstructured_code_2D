@@ -41,7 +41,6 @@ void NSCInitializer::initial_flow_parameters()
 void NSCInitializer::initial_field()
 {
 
-
     //Loop on every cells
     for (unsigned i=0;i<=meshData_->NCells_;i++)
     {
