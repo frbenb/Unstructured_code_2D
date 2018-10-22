@@ -48,8 +48,8 @@ void InputDataManager::doInitProcess()
     // Initial_flow_parameters
     nscInit_->initial_flow_parameters();
 
-    // Initial rk scheme (is Empty)
-    nscInit_->initial_rk_scheme();
+    // Initial rk scheme (work in progress)
+    
 
     //Initial field: Put here. Implemented but need to allocate memory.
     nscInit_->initial_field();
@@ -102,7 +102,7 @@ void InputDataManager::readInputFile()
 
         //Mapping.
         nscData_->meshfilename_ = meshFileName;
-
+        
 
         //Close file.
         inputFile.close();
