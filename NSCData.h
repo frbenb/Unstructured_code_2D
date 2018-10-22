@@ -47,7 +47,8 @@ class NSCData
         double vis4_;
         double ressmo_;
 
-        unsigned int nitc_, niter_;
+        unsigned int nitc_;
+        unsigned int niter_;
         double* itccfl_; //iterate timestep
         double cfl_;
 
@@ -56,12 +57,16 @@ class NSCData
         
         double* rk_alfa_;
         double* rk_beta_;
+        int* rklevel_;
+        int nstage_;
         
         /* constants from "input file" */
         unsigned int nbiter_;
     
         /*convergence*/
         double rms0_;
+
+
 
 
 };

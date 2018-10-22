@@ -56,5 +56,53 @@ void NSCInitializer::initial_field()
 
 void NSCInitializer::initial_rk_scheme()
 {
-    //TBD.
+    nscData_->nstage_ = nscData_->rklevel_[nscData_->nitc_];
+    
+    switch(nscData_->nstage_)
+    {
+      case 1:
+          nscData_->rk_alfa_[0]=1.0; 
+          nscData_->rk_beta_[0]=1.0; 
+      break;
+      case 2:
+          nscData_->rk_alfa_[0]=0.6; 
+          nscData_->rk_alfa_[1]=1.0; 
+          nscData_->rk_beta_[0]=1.0; 
+          nscData_->rk_beta_[1]=0.0; 
+      break;
+    case 3:
+          nscData_->rk_alfa_[0]=0.6; 
+          nscData_->rk_alfa_[1]=0.6; 
+          nscData_->rk_alfa_[2]=1.0; 
+          nscData_->rk_beta_[0]=1.0; 
+          nscData_->rk_beta_[1]=0.0; 
+          nscData_->rk_beta_[2]=0.0; 
+      break;
+    case 4:
+          nscData_->rk_alfa_[0]=0.25; 
+          nscData_->rk_alfa_[1]=0.333333; 
+          nscData_->rk_alfa_[2]=0.5; 
+          nscData_->rk_alfa_[3]=1.0; 
+          nscData_->rk_beta_[0]=1.0; 
+          nscData_->rk_beta_[1]=0.5; 
+          nscData_->rk_beta_[2]=0.0; 
+          nscData_->rk_beta_[3]=0.0; 
+      break;
+    case 5:
+          nscData_->rk_alfa_[0]=0.25; 
+          nscData_->rk_alfa_[1]=0.1666667; 
+          nscData_->rk_alfa_[2]=0.375; 
+          nscData_->rk_alfa_[3]=0.5; 
+          nscData_->rk_alfa_[4]=1.0; 
+          nscData_->rk_beta_[0]=1.0; 
+          nscData_->rk_beta_[1]=0.0; 
+          nscData_->rk_beta_[2]=0.56; 
+          nscData_->rk_beta_[3]=0.0; 
+          nscData_->rk_beta_[4]=0.44;
+      break;
+  
+    default:
+        std::cout << "Error: cannot initialize Runge-Kutta" << endl;
+  }
+ 
 }

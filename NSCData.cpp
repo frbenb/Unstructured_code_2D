@@ -30,7 +30,8 @@ NSCData::NSCData():
     rk_alfa_(nullptr),
     rk_beta_(nullptr),
     nbiter_(0),
-    rms0_(0)
+    rms0_(0),
+    rklevel_(nullptr)
 {  
 }
 
