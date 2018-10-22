@@ -52,6 +52,7 @@ void InputDataManager::doInitProcess()
     nscInit_->initial_rk_scheme();
 
     //Initial field: Put here. Implemented but need to allocate memory.
+    nscInit_->initial_field();
 
     //Update Boundary
     dataUpdater_->update_boundary();
