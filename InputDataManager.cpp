@@ -49,7 +49,7 @@ void InputDataManager::doInitProcess()
     nscInit_->initial_flow_parameters();
 
     // Initial rk scheme (work in progress)
-    
+    nscInit_->initial_rk_scheme();
 
     //Initial field: Put here. Implemented but need to allocate memory.
     nscInit_->initial_field();
@@ -69,22 +69,10 @@ void InputDataManager::readInputFile()
     //Open input file in reading mode.
     ifstream inputFile(nscData_->ctrlfilename_, ios::in);
 
-    string title;
     string str, str1, str2;
-    string meshFileName;
-
-    int topo;
-    int imax;
-    int jmax;
-    int itl;
-    int itu;
-
-    float mach, alpha, cl, dcl, reynolds;
-    double xref, yref, cmac;
-    int residualSmoothing, itc;
-    int level, iter, mglevel, rk;
-    double cfl;
-    double dissip, vis2, vis4;
+    int level , mglevel;
+    
+    
 
     if(inputFile)
     {
