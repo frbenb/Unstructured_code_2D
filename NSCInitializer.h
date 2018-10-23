@@ -9,9 +9,7 @@
 //Projet files
 #include "NSCData.h"
 #include "Mesh_Data.h"
-
-
-
+#include "arrayMemory.h"
 
 // This class allows to
 // Takes the roles of the following functions:

@@ -10,7 +10,9 @@ NSCInitializer::NSCInitializer(NSCData *iNSCData, Mesh_Data *iMeshData) :
 
 NSCInitializer::~NSCInitializer()
 {
-    
+    //Memory deallocating
+    deallocate1Ddbl(nscData_->rk_alfa_);
+    deallocate1Ddbl(nscData_->rk_beta_);
 
 }
 
@@ -35,7 +37,6 @@ void NSCInitializer::initial_flow_parameters()
     nscData_->vInfini_=mach*sqrt(g)*sin(alpha);
     nscData_->pInfini_=1.0;
 
-
 }
 
 void NSCInitializer::initial_field()
@@ -56,7 +57,11 @@ void NSCInitializer::initial_field()
 
 void NSCInitializer::initial_rk_scheme()
 {
-    nscData_->nstage_ = nscData_->rklevel_[nscData_->nitc_];
+    nscData_->nstage_ = nscData_->rk_;
+
+    //Allocating memory
+    nscData_->rk_alfa_ = allocate1Ddbl(nscData_->nstage_);
+    nscData_->rk_beta_ = allocate1Ddbl(nscData_->nstage_);
     
     switch(nscData_->nstage_)
     {

@@ -49,7 +49,7 @@ void InputDataManager::doInitProcess()
     nscInit_->initial_flow_parameters();
 
     // Initial rk scheme (work in progress)
-    
+    nscInit_->initial_rk_scheme();
 
     //Initial field: Put here. Implemented but need to allocate memory.
     nscInit_->initial_field();
@@ -69,41 +69,83 @@ void InputDataManager::readInputFile()
     //Open input file in reading mode.
     ifstream inputFile(nscData_->ctrlfilename_, ios::in);
 
-    string title;
     string str, str1, str2;
-    string meshFileName;
-
-    int topo;
-    int imax;
-    int jmax;
-    int itl;
-    int itu;
-
+    int level , mglevel;
+    
+    
 
     if(inputFile)
     {
         //Reading input.
-        inputFile >> title;
+        inputFile >> nscData_->title_;
 
         inputFile >> str;
-        inputFile >> topo;
+        inputFile >> nscData_->topo_;
         inputFile >> str1;
 
-        inputFile >> imax;
+        inputFile >> meshData_->imax_;
         inputFile >> str;
-        inputFile >> jmax;
+        inputFile >> meshData_->jmax_;
         inputFile >> str1;
-        inputFile >> itl;
+        inputFile >> meshData_->itl_;
         inputFile >> str2;
-        inputFile >> itu;
+        inputFile >> meshData_->itu_;
 
         inputFile >> str;
-        inputFile >> meshFileName;
+        inputFile >> nscData_->meshfilename_;
 
-        //Mapping.
-        nscData_->meshfilename_ = meshFileName;
-        
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
 
+        inputFile >> nscData_->mach_;
+        inputFile >> nscData_->alpha_;
+        inputFile >> nscData_->cltarget_;    
+        inputFile >> nscData_->dcl_;
+        inputFile >> nscData_->reynolds_;
+
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+
+        inputFile >> nscData_->xref_;
+        inputFile >> nscData_->yref_;
+        inputFile >> nscData_->cmac_;
+
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+
+        inputFile >> nscData_->dissip_;
+        inputFile >> nscData_->vis2_;
+        inputFile >> nscData_->vis4_;
+
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+
+        inputFile >> nscData_->ressmo_;
+
+        inputFile >> str;
+
+        inputFile >> nscData_->nitc_;
+
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+
+        inputFile >> level;
+        inputFile >> nscData_->niter_;
+        inputFile >> mglevel;
+        inputFile >> nscData_->rk_;
+        inputFile >> nscData_->cfl_;        
+      
         //Close file.
         inputFile.close();
     }

@@ -30,6 +30,9 @@ class NSCData
         double reynolds_;
         double tinf_;
 
+        double cltarget_;
+        double dcl_;
+
         /* flow & geometry properties */
 	    double xref_;
         double yref_; //from "input file"
@@ -57,7 +60,7 @@ class NSCData
         
         double* rk_alfa_;
         double* rk_beta_;
-        int* rklevel_;
+        int rk_;
         int nstage_;
         
         /* constants from "input file" */
@@ -65,8 +68,6 @@ class NSCData
     
         /*convergence*/
         double rms0_;
-
-
 
 
 };
