@@ -89,60 +89,60 @@ void InputDataManager::readInputFile()
     if(inputFile)
     {
         //Reading input.
-        inputFile >> title;
+        inputFile >> nscData_->title_;
 
         inputFile >> str;
-        inputFile >> topo;
+        inputFile >> nscData_->topo_;
         inputFile >> str1;
 
-        inputFile >> imax;
+        inputFile >> meshData_->imax_;
         inputFile >> str;
-        inputFile >> jmax;
+        inputFile >> meshData_->jmax_;
         inputFile >> str1;
-        inputFile >> itl;
+        inputFile >> meshData_->itl_;
         inputFile >> str2;
-        inputFile >> itu;
+        inputFile >> meshData_->itu_;
 
         inputFile >> str;
-        inputFile >> meshFileName;
-
-        inputFile >> str;
-        inputFile >> str;
-        inputFile >> str;
-        inputFile >> str;
-        inputFile >> str;
-
-        inputFile >> mach;
-        inputFile >> alpha;
-        inputFile >> cl;    
-        inputFile >> dcl;
-        inputFile >> reynolds;
+        inputFile >> nscData_->meshfilename_;
 
         inputFile >> str;
         inputFile >> str;
         inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
 
-        inputFile >> xref;
-        inputFile >> yref;
-        inputFile >> cmac;
+        inputFile >> nscData_->mach_;
+        inputFile >> nscData_->alpha_;
+        inputFile >> nscData_->cl;    
+        inputFile >> nscData_->dcl_;
+        inputFile >> nscData_->reynolds_;
 
         inputFile >> str;
         inputFile >> str;
         inputFile >> str;
 
-        inputFile >> dissip;
-        inputFile >> vis2;
-        inputFile >> vis4;
+        inputFile >> nscData_->xref_;
+        inputFile >> nscData_->yref_;
+        inputFile >> nscData_->cmac_;
 
         inputFile >> str;
         inputFile >> str;
         inputFile >> str;
 
-        inputFile >> residualSmoothing;
+        inputFile >> nscData_->dissip_;
+        inputFile >> nscData_->vis2_;
+        inputFile >> nscData_->vis4_;
+
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+
+        inputFile >> nscData_->ressmo_;
 
         inputFile >> str;
 
-        inputFile >> itc;
+        inputFile >> nscData_->nitc_;
 
         inputFile >> str;
         inputFile >> str;
@@ -156,12 +156,7 @@ void InputDataManager::readInputFile()
         inputFile >> iter;
         inputFile >> mglevel;
         inputFile >> rk;
-        inputFile >> cfl;
-
-        //Mapping.
-        nscData_->meshfilename_ = meshFileName;
-        nscData_->title_ = title;
-        
+        inputFile >> cfl;        
       
         //Close file.
         inputFile.close();
