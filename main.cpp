@@ -45,7 +45,7 @@ int main()
     //User operations here:
     eventManager.enterInputFile("input");
 
-    //eventManager.testSU2Function();
+    eventManager.testSU2Function();
 
     cout << "Done!" << endl;
     return 0;
