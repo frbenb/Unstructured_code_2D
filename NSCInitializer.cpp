@@ -56,11 +56,13 @@ void NSCInitializer::initial_field()
 
 void NSCInitializer::initial_rk_scheme()
 {
-    nscData_->nstage_ = nscData_->rklevel_[nscData_->nitc_];
+    nscData_->nstage_ = nscData_->rk_;
     
     switch(nscData_->nstage_)
     {
       case 1:
+            
+
           nscData_->rk_alfa_[0]=1.0; 
           nscData_->rk_beta_[0]=1.0; 
       break;

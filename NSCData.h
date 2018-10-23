@@ -60,7 +60,7 @@ class NSCData
         
         double* rk_alfa_;
         double* rk_beta_;
-        int* rklevel_;
+        int rk_;
         int nstage_;
         
         /* constants from "input file" */

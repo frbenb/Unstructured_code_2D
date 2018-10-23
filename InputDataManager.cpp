@@ -153,10 +153,10 @@ void InputDataManager::readInputFile()
         inputFile >> str;
 
         inputFile >> level;
-        inputFile >> iter;
+        inputFile >> nscData_->niter_;
         inputFile >> mglevel;
-        inputFile >> rk;
-        inputFile >> cfl;        
+        inputFile >> nscData_->rk_;
+        inputFile >> nscData_->cfl_;        
       
         //Close file.
         inputFile.close();
