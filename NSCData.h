@@ -70,8 +70,6 @@ class NSCData
         double rms0_;
 
 
-
-
 };
 
 
