@@ -30,6 +30,9 @@ class NSCData
         double reynolds_;
         double tinf_;
 
+        double cltarget_;
+        double dcl_;
+
         /* flow & geometry properties */
 	    double xref_;
         double yref_; //from "input file"

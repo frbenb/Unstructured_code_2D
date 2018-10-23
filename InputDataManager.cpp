@@ -114,7 +114,7 @@ void InputDataManager::readInputFile()
 
         inputFile >> nscData_->mach_;
         inputFile >> nscData_->alpha_;
-        inputFile >> nscData_->cl;    
+        inputFile >> nscData_->cltarget_;    
         inputFile >> nscData_->dcl_;
         inputFile >> nscData_->reynolds_;
 

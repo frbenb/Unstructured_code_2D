@@ -31,7 +31,9 @@ NSCData::NSCData():
     rk_beta_(nullptr),
     nbiter_(0),
     rms0_(0),
-    rklevel_(nullptr)
+    rklevel_(nullptr),
+    cltarget_(0),
+    dcl(0)
 {  
 }
 
