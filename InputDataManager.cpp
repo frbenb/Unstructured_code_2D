@@ -79,6 +79,12 @@ void InputDataManager::readInputFile()
     int itl;
     int itu;
 
+    float mach, alpha, cl, dcl, reynolds;
+    double xref, yref, cmac;
+    int residualSmoothing, itc;
+    int level, iter, mglevel, rk;
+    double cfl;
+    double dissip, vis2, vis4;
 
     if(inputFile)
     {
@@ -100,10 +106,63 @@ void InputDataManager::readInputFile()
         inputFile >> str;
         inputFile >> meshFileName;
 
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+
+        inputFile >> mach;
+        inputFile >> alpha;
+        inputFile >> cl;    
+        inputFile >> dcl;
+        inputFile >> reynolds;
+
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+
+        inputFile >> xref;
+        inputFile >> yref;
+        inputFile >> cmac;
+
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+
+        inputFile >> dissip;
+        inputFile >> vis2;
+        inputFile >> vis4;
+
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+
+        inputFile >> residualSmoothing;
+
+        inputFile >> str;
+
+        inputFile >> itc;
+
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+        inputFile >> str;
+
+        inputFile >> level;
+        inputFile >> iter;
+        inputFile >> mglevel;
+        inputFile >> rk;
+        inputFile >> cfl;
+
         //Mapping.
         nscData_->meshfilename_ = meshFileName;
+        nscData_->title_ = title;
         
-
+      
         //Close file.
         inputFile.close();
     }
