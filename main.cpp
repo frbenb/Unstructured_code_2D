@@ -29,9 +29,11 @@ int main()
 
     //Attach data to all computers
     MeshInitializer meshInit(&nscData, &meshData);
-    MainSolver solver(&nscData, &meshData);
     NSCInitializer nscInit(&nscData, &meshData);
     DataUpdater dataUpdater(&nscData, &meshData);
+
+    //Solver objects
+    MainSolver solver(&nscData, &meshData, &dataUpdater);
 
     //Attach object to outputData
     OutputDataManager outputDataManager(&nscData, &meshData);
