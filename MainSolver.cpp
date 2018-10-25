@@ -2,9 +2,10 @@
 #include "MainSolver.h"
 
 
-MainSolver::MainSolver(NSCData *iNSCData, Mesh_Data *iMeshData) :
+MainSolver::MainSolver(NSCData *iNSCData, Mesh_Data *iMeshData, DataUpdater *iDataUpdater) :
                                     nscData_(iNSCData),
-                                    meshData_(iMeshData)
+                                    meshData_(iMeshData),
+                                    dataUpdater_(iDataUpdater)
 {
 
 }

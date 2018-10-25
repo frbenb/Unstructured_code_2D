@@ -21,7 +21,7 @@ class MainSolver
 
     public:
         //Default Constructor
-        MainSolver(NSCData *iNSCData, Mesh_Data *iMeshData);
+        MainSolver(NSCData *iNSCData, Mesh_Data *iMeshData, DataUpdater *iDataUpdater);
 
         //Default Destructor
         virtual ~MainSolver();
@@ -49,7 +49,6 @@ class MainSolver
 
         // This method allows to smooth the residual values.
         void residual_smoothing();
-
 
         // This method allows to monitor convergence
         void monitor_convergence();
