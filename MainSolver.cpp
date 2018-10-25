@@ -6,7 +6,7 @@ MainSolver::MainSolver(NSCData *iNSCData, Mesh_Data *iMeshData) :
                                     nscData_(iNSCData),
                                     meshData_(iMeshData)
 {
-    
+
 }
 
 MainSolver::~MainSolver()
