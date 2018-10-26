@@ -336,13 +336,13 @@ void MeshInitializer::deallocateMesh(){
 
 void MeshInitializer::metric()
 {
-    // Calculate Cell center
+    // Calculate Cell center.
 
-    // Calculate face center
+    // Calculate face center.
 
-    // Calculate face area
+    // Calculate face area.
 
-    //Calculatre normal on faces
+    //Calculatre normal on faces.
 
 }
 
@@ -364,9 +364,12 @@ void MeshInitializer::calculateFaceCenter()
 void MeshInitializer::calculateNormal()
 {
 
-
 }
 
+void MeshInitializer::calculateFacesArea()
+{
+    
+}
 
 
 

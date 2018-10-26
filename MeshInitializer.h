@@ -34,14 +34,13 @@ class MeshInitializer
 
         void mesh4halos();
 
-        
         void calculateCellCenter();
-
 
         void calculateFaceCenter();
 
-
         void calculateNormal();
+
+        void calculateFacesArea();
 
 
     private:
