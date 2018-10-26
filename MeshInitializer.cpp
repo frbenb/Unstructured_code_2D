@@ -33,6 +33,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     delete [] variables;
 
+    // Nodes, Cells allocation
     meshData_->Nodes_x_ = allocate1Ddbl(npoints);
     meshData_->Nodes_y_ = allocate1Ddbl(npoints);
 
@@ -172,6 +173,9 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         meshData_->NCellsGhost_ += nelements; 
     }
 
+    //Closing the mesh file
+    meshfile.close();
+
     meshData_->NCellsTotal_ = meshData_->NCellsGhost_ + meshData_->NCells_;
 
     if (meshData_->NCellsGhost_ != nghosts){
@@ -182,9 +186,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     //Counting the thotal number of faces
     meshData_->NFaces_ = (nFaces_double + meshData_->NCellsGhost_)/2;
 
-    //Closing the mesh file
-    meshfile.close();
-
+    // NFaces allocation
     meshData_->Face2Node_ = allocate2Dint(meshData_->NFaces_, 2);
     meshData_->Face2Cell_ = allocate2Dint(meshData_->NFaces_, 2);
 
