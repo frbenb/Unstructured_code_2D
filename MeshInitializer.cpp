@@ -385,7 +385,7 @@ void MeshInitializer::prepass(string& meshFilename, unsigned int* variables){
     meshfile >> token >> npoints;
 
     for (unsigned int i = 0; i < npoints; i++){
-        cout << dbldummy0 << dbldummy1;
+        meshfile >> dbldummy0 >> dbldummy1;
     }
 
     meshfile >> token >> ncells;
