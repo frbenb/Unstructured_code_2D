@@ -20,10 +20,15 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     deallocateMesh();
 
+    unsigned int* variables;
+
+    variables = prepass(meshFilename);
+
+
     // pre-pass should give the following results
-    unsigned int npoints = 16512;
-    unsigned int ncells = 16384;
-    unsigned int nghosts = 128 + 128; // far field and airfoil
+    unsigned int npoints = variables[0];
+    unsigned int ncells = variables[1];
+    unsigned int nghosts = variables[2]; // far field and airfoil
     unsigned int ncellstot = ncells + nghosts;
     //calculate nfaces to allocate these vectors. 
 
@@ -411,8 +416,6 @@ unsigned int* MeshInitializer::prepass(string& meshFilename){
         }
     }
 
-    // AAAAAAAAAAAAA
-
     unsigned int nboundarytypes;
     meshfile >> token >> nboundarytypes; //Here, token = "NMARK="
 
@@ -442,6 +445,8 @@ unsigned int* MeshInitializer::prepass(string& meshFilename){
 
     meshfile.close();
 
-
+    variables[0] = npoints;
+    variables[1] = ncells;
+    variables[2] = nghosts;
 }
 
