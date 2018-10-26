@@ -44,8 +44,8 @@ int main()
     //Attach inputManager to event manager
     EventManager* eventManager = new EventManager(inputDataManager);
 
-    string inputfile = "naca0012_129x129_1B_JAMESON.x";
-
+    string inputfile = "input";
+    
     //User operations here:
     eventManager->enterInputFile(inputfile);
 
