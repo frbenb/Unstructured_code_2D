@@ -11,6 +11,8 @@ NSCData::NSCData():
     mach_(0),
     reynolds_(0),
     tinf_(0),
+    cltarget_(0),
+    dcl_(0),
 	xref_(0),
     yref_(0),
     pi_(0),
@@ -29,11 +31,10 @@ NSCData::NSCData():
     itertot_(0),
     rk_alfa_(nullptr),
     rk_beta_(nullptr),
-    nbiter_(0),
-    rms0_(0),
     rk_(0),
-    cltarget_(0),
-    dcl_(0)
+    nstage_(0),
+    nbiter_(0),
+    rms0_(0)
 {  
 }
 
