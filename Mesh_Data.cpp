@@ -146,7 +146,7 @@ void Mesh_Data::write_stuff(){
     ofstream faceNodesFile;
     faceNodesFile.open(faceNodesFileName);
     faceNodesFile << NFaces_ << endl;
-    faceNodesFile << "Face ID     nFaces      nodes" << endl;
+    faceNodesFile << "Face ID     nodes" << endl;
 
     for (unsigned int i = 0; i < NFaces_; i++){
         faceNodesFile << i << " ";
@@ -161,7 +161,7 @@ void Mesh_Data::write_stuff(){
     ofstream faceCellsFile;
     faceCellsFile.open(faceCellsFileName);
     faceCellsFile << NFaces_ << endl;
-    faceCellsFile << "Face ID     nFaces      cells" << endl;
+    faceCellsFile << "Face ID     cells" << endl;
 
     for (unsigned int i = 0; i < NFaces_; i++){
         faceCellsFile << i << " ";
