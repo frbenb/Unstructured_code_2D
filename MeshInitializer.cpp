@@ -407,6 +407,8 @@ void MeshInitializer::calculateNormal()
     int dot_product = 0;
     int sign_orientation = 0;
 
+    int normal_vector_lenght = 0;
+
     // Loop on every face
     for(int i(0); i < meshData_->NFacesTotal_; i++)
     {
@@ -455,24 +457,14 @@ void MeshInitializer::calculateNormal()
             dot_product = vector_center_cells[0]*vector_normal[0] + vector_center_cells[1]*vector_normal[1];
             sign_orientation = dot_product / abs(dot_product); // Get -1 or 1.
 
-            //Final normal Result of the face[j] in  cell[i]
-            
+            //Final normal Result of the face[j] in  cell[i] and final mapping.
+            normal_vector_lenght = sqrt(vector_normal[0]*vector_normal[0] + vector_normal[1]*vector_normal[1]);
+
+            meshData_->normal_x_[faceID] = (sign_orientation * vector_normal[0]) / normal_vector_lenght;
+            meshData_->normal_y_[faceID] = (sign_orientation * vector_normal[1]) / normal_vector_lenght;
 
         }
-
-        //2. Get the center of left cell  [0]
-
-        //3. Get the center of right cell [1]
-
-        //4. Calculate perpendicular of vector nodes-nodes
-
-        //5. Calculate perpendicular of vecotr cellCentered-cellCentered
-
-        //6. Dot product to get sign
-
-        //7. normalize node-node vector and apply sign
     }
-
 }
 
 void MeshInitializer::calculateCellsArea()
