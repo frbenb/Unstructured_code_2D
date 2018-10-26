@@ -70,11 +70,11 @@ void InputDataManager::readInputFile()
     ifstream inputFile(nscData_->ctrlfilename_, ios::in);
 
     string str, str1, str2;
-    int level , mglevel;
+    unsigned int level , mglevel;
     
     
 
-    if(inputFile)
+    if(inputFile.is_open())
     {
         //Reading input.
         inputFile >> nscData_->title_;
