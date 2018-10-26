@@ -369,17 +369,31 @@ void MeshInitializer::calculateCellCenter()
 
 void MeshInitializer::calculateFaceCenter()
 {
+    int unsigned nbFaces = 0;
+    int unsigned faceID = 0;
+
+    int unsigned nodeID[2];
+
     // Loop on every cell
+    for(int i(0);i < meshData_->NCells_;i++)
+    {
+        nbFaces = meshData_->CellNfaces_[i];
 
-        //1. Get the nodes of the nodes 
+        for(int j(0); j < nbFaces;j++)
+        {
+            //1. Get face ID
+            faceID = meshData_->Cell2Face_[i][j];
 
-        //2. Calculate average on  x coordinates
+            //2.Get nodes of face.
+            
 
-        //3. Calculatate average on y coordinates
+            //2. Calculate average on  x coordinates
 
-        //4. Store coordinates on cell
+            //3. Calculate average on y coordinates
 
-
+            //4. Store coordinates on cell
+        }
+    }
 }
 
 void MeshInitializer::calculateNormal()
