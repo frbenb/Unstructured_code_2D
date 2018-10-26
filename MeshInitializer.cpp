@@ -45,6 +45,8 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->u_ = allocate1Ddbl(ncellstot);
     meshData_->v_ = allocate1Ddbl(ncellstot);
     meshData_->p_ = allocate1Ddbl(ncellstot);
+
+    
     
     //Display of the file name
     cout << "File name: " << meshFilename << endl;
@@ -175,6 +177,10 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     //Counting the thotal number of faces
     meshData_->NFaces_ = (nFaces_double + meshData_->NCellsGhost_)/2;
+
+    //Initialize memory for normal of faces
+    meshData_->normal_x_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->normal_y_ = allocate1Ddbl(meshData_->NFaces_);
 
     //Closing the mesh file
     meshfile.close();
@@ -316,6 +322,8 @@ void MeshInitializer::deallocateMesh(){
     meshData_->u_ = deallocate1Ddbl(meshData_->u_);
     meshData_->v_ = deallocate1Ddbl(meshData_->v_);
     meshData_->p_ = deallocate1Ddbl(meshData_->p_);
+    meshData_->normal_x_ = deallocate1Ddbl(meshData_->normal_x_);
+    meshData_->normal_y_ = deallocate1Ddbl(meshData_->normal_y_);
 
     meshData_->Cell2Node_ = deallocate2Dint(meshData_->Cell2Node_, meshData_->NCellsTotal_);
     meshData_->Cell2Face_ = deallocate2Dint(meshData_->Cell2Face_, meshData_->NCellsTotal_);
@@ -323,6 +331,7 @@ void MeshInitializer::deallocateMesh(){
     meshData_->Face2Cell_ = deallocate2Dint(meshData_->Face2Cell_, meshData_->NFaces_);
     meshData_->Cell2Cell_ = deallocate2Dint(meshData_->Cell2Cell_, meshData_->NCellsTotal_);
     meshData_->Node2Cell_ = deallocate2Dint(meshData_->Node2Cell_, meshData_->NNodes_);
+    
 
     meshData_->NCells_ = 0;
     meshData_->NCellsGhost_ = 0;
@@ -331,6 +340,8 @@ void MeshInitializer::deallocateMesh(){
     meshData_->NFacesGhost_ = 0;
     meshData_->NFacesTotal_ = 0;
     meshData_->NNodes_ = 0; 
+
+
 }
 
 
@@ -442,7 +453,10 @@ void MeshInitializer::calculateNormal()
 
             //Dot product between Normal and center-vector to get sign
             dot_product = vector_center_cells[0]*vector_normal[0] + vector_center_cells[1]*vector_normal[1];
-            sign_orientation = dot_product / abs(dot_product);
+            sign_orientation = dot_product / abs(dot_product); // Get -1 or 1.
+
+            //Final normal Result of the face[j] in  cell[i]
+            
 
         }
 

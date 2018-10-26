@@ -46,10 +46,8 @@ class Mesh_Data{
     unsigned int inci_, incj_;                  //inci, incj - address  increments in i,j
 
     double* cellArea_;         //area
-    double* normal_i_x_; 		//six, siy - face i projections
-    double* normal_i_y_;
-    double* normal_j_x_;       //sjx, sjy - face j projections
-    double* normal_j_y_;
+    double* normal_x_; 		//x value of normal vector for every faces
+    double* normal_y_;      //y value of normal vector for every faces
     // How to define the normal on the faces
 
     double* rho_nodes_;        //rocv, uucv, vvcv, ppcv - primitive variables cell-vertex
