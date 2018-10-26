@@ -366,9 +366,9 @@ void MeshInitializer::calculateNormal()
 
 }
 
-void MeshInitializer::calculateFacesArea()
+void MeshInitializer::calculateCellsArea()
 {
-    
+
 }
 
 
