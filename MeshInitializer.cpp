@@ -358,11 +358,106 @@ void MeshInitializer::calculateCellCenter()
 
 void MeshInitializer::calculateFaceCenter()
 {
+    // Loop on every cell
+
+        //1. Get the nodes of the nodes 
+
+        //2. Calculate average on  x coordinates
+
+        //3. Calculatate average on y coordinates
+
+        //4. Store coordinates on cell
+
 
 }
 
 void MeshInitializer::calculateNormal()
 {
+    unsigned int nbFaces = 0;
+    unsigned int faceID = 0;
+    unsigned int nodeID[2];
+
+    double node1_x; // Contains values of x for nodeID[0]
+    double node1_y; // Contains values of x for nodeID[0]
+
+    double node2_x;// Contains value of x for nodeID[1]
+    double node2_y;// Contains value of x for nodeID[1]
+
+    double vector_nodes[2];
+    double vector_normal[2];
+    double vector_center_cells[2];
+
+    unsigned int leftCellID;
+    unsigned int rightCellID;
+
+    double leftCellCoord[2]; // Coord x and y
+    double rightCellCoord[2]; // Coord x and y
+
+    int dot_product = 0;
+    int sign_orientation = 0;
+
+    // Loop on every face
+    for(int i(0); i < meshData_->NFacesTotal_; i++)
+    {
+        nbFaces = meshData_->CellNfaces_[i];
+
+        for(int j(0);j < nbFaces;j++)
+        {
+            //1.1Get face number.
+            faceID = meshData_->Cell2Face_[i][j];
+
+            //1.2 Get the 2 nodes ID in 1 face.
+            nodeID[0] = meshData_->Face2Node_[faceID][0];
+            nodeID[1] = meshData_->Face2Node_[faceID][1];
+
+            //1.3 Get coordinateds x and y for each nodeID
+            node1_x = meshData_->Nodes_x_[nodeID[0]];
+            node1_y = meshData_->Nodes_x_[nodeID[0]];
+
+            node2_x = meshData_->Nodes_y_[nodeID[1]];
+            node2_y = meshData_->Nodes_y_[nodeID[1]];
+
+            //1.4 Get vector connecting the two nodes.
+            vector_nodes[0] = node2_x - node1_x;
+            vector_nodes[1] = node2_y - node1_y;
+
+            //1.5 Get a normal vector of vector_nodes
+            vector_normal[0] = vector_nodes[1];
+            vector_normal[1] = (-1)*vector_nodes[0];
+
+            //1.6 Find coordinates of center of cells on left and right
+            leftCellID = meshData_->Face2Cell_[faceID][0];
+            rightCellID = meshData_->Face2Cell_[faceID][1];
+
+            //Get Coordinates of cells at centers
+            rightCellCoord[0] = 0;
+            rightCellCoord[1] = 0;
+
+            leftCellCoord[0] = 0;
+            leftCellCoord[1] = 0;
+
+            //Calculate vector between centers of cells right + left
+            vector_center_cells[0] = rightCellCoord[0] - leftCellCoord[0];
+            vector_center_cells[1] = rightCellCoord[1] - leftCellCoord[1];
+
+            //Dot product between Normal and center-vector to get sign
+            dot_product = vector_center_cells[0]*vector_normal[0] + vector_center_cells[1]*vector_normal[1];
+            sign_orientation = dot_product / abs(dot_product);
+
+        }
+
+        //2. Get the center of left cell  [0]
+
+        //3. Get the center of right cell [1]
+
+        //4. Calculate perpendicular of vector nodes-nodes
+
+        //5. Calculate perpendicular of vecotr cellCentered-cellCentered
+
+        //6. Dot product to get sign
+
+        //7. normalize node-node vector and apply sign
+    }
 
 }
 

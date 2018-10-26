@@ -42,9 +42,7 @@ class Mesh_Data{
     double* v_;
     double* p_;
 
-    unsigned int imax_, jmax_, itl_, itu_;      //imax, jmax
-    unsigned int imaxGhost_, jmaxGhost_;        //himax, hjmax
-    unsigned int rimax_, rjmax_;                //rimax, rjmax - restricted domain cv imax,jmax
+    unsigned int itl_, itu_;      
     unsigned int inci_, incj_;                  //inci, incj - address  increments in i,j
 
     double* cellArea_;         //area
