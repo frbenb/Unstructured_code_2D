@@ -154,8 +154,6 @@ void InputDataManager::readInputFile()
         cout << "ERROR: Cannot open " << nscData_->ctrlfilename_ << "." << endl;
         return;
     }
-    
-
 }
 
 void InputDataManager::printDataSU2()
