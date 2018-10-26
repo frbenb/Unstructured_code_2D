@@ -20,10 +20,9 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     deallocateMesh();
 
-    unsigned int* variables;
+    unsigned int variables[3];
 
-    variables = prepass(meshFilename);
-
+    prepass(meshFilename, variables);
 
     // pre-pass should give the following results
     unsigned int npoints = variables[0];
@@ -346,8 +345,8 @@ void MeshInitializer::mesh4halos()
     
 }
 
-unsigned int* MeshInitializer::prepass(string& meshFilename){
-    unsigned int variables[3]; // 0 is npoints, 1 is ncells, 2 is nghost
+void prepass(string& meshFilename, unsigned int* variables){
+    //unsigned int variables[3]; // 0 is npoints, 1 is ncells, 2 is nghost
 
     unsigned int npoints;
     unsigned int ncells;
@@ -369,7 +368,7 @@ unsigned int* MeshInitializer::prepass(string& meshFilename){
     if(!meshfile.is_open())
     {
         cout << "Error: " << meshFilename << " could not open for pre-pass." << endl;
-        return nullptr;
+        return;
     }
     else
     {
@@ -392,6 +391,7 @@ unsigned int* MeshInitializer::prepass(string& meshFilename){
     for (unsigned int i=0; i < ncells; i++)
     {
         meshfile >> shape;
+        cellnshape = 0;
 
         switch (shape)
         {
@@ -432,7 +432,7 @@ unsigned int* MeshInitializer::prepass(string& meshFilename){
             meshfile >> shape;
             if (shape != 3){
                 cout << "Boundaries can only be line elements." << endl;
-                return nullptr;
+                return;
             }
 
             meshfile >> intdummy;
@@ -448,7 +448,6 @@ unsigned int* MeshInitializer::prepass(string& meshFilename){
     variables[0] = npoints;
     variables[1] = ncells;
     variables[2] = nghosts;
-
-    return variables;
+    return;
 }
 
