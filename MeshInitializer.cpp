@@ -218,74 +218,15 @@ void MeshInitializer::initializeMesh(string& meshFilename){
                 meshData_->Face2Node_[nFacesDone][0] = min;
                 meshData_->Face2Node_[nFacesDone][1] = max;
                 found = nFacesDone;
+                meshData_->Face2Cell_[nFacesDone][0] = i;
                 nFacesDone++;  
+            }
+            else{
+                meshData_->Face2Cell_[found][1] = i;
             }
 
             meshData_->Cell2Face_[i][j] = found;
         }
-    }
-
-    // Face2Cell_
-    unsigned int ncellsdone, face1, face2;
-    unsigned int facedone, facedonek;
-    for (unsigned int i = 0; i < meshData_->NFaces_ ; i++){
-        ncellsdone = 0;
-        facedone = meshData_->NFaces_ + 1; // Just an impossible value. was -1 and generated warnings.
-        facedonek = meshData_->NFaces_ + 1; // Just an impossible value. was -1 and generated warnings.
-        for (unsigned int j = 0; j < meshData_->NCellsTotal_; j++){
-            ncellsdone++;
-            for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++){
-                if (meshData_->Cell2Face_[j][k] == i){
-                    facedone = j;
-                    facedonek = k;
-                    break;
-                }  
-            }
-            if (facedone != meshData_->NFaces_ + 1){
-                break;
-            }
-        }
-
-        if (facedone == meshData_->NFaces_ + 1){
-            cout << "Face " << i << " cell 1 not found."  << endl;
-            return;
-        }
-
-        face1 = facedone;
-
-        facedone = meshData_->NFaces_ + 1; // Just an impossible value. was -1 and generated warnings.
-        for (unsigned int j = ncellsdone; j < meshData_->NCellsTotal_; j++){
-            for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++){
-                if (meshData_->Cell2Face_[j][k] == i){
-                    facedone = j;
-                    break;
-                }  
-            }
-            if (facedone != meshData_->NFaces_ + 1){
-                break;
-            }
-        }
-
-        if (facedone == meshData_->NFaces_ + 1){
-            if (meshData_->Cell2Face_[face1][1 + -facedonek] == i){
-                facedone = face1;
-            }
-            else{
-                cout << "Face " << i << " cell 2 not found." << endl;
-            return;
-            }
-        }
-
-        face2 = facedone;
-
-        bool bigger = face1 <= face2;
-
-        // Check here for order.
-        min = face1 * bigger + face2 * !bigger;
-        max = face1 * !bigger + face2 * bigger;
-    
-        meshData_->Face2Cell_[i][0] = min;
-        meshData_->Face2Cell_[i][1] = max;
     }
 
     // Cell2Cell_ 
