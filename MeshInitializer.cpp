@@ -20,7 +20,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     deallocateMesh();
 
-    unsigned int variables[3];
+    unsigned int* variables = new unsigned int[3]; // no other idea
 
     prepass(meshFilename, variables);
 
@@ -30,6 +30,8 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     unsigned int nghosts = variables[2]; // far field and airfoil
     unsigned int ncellstot = ncells + nghosts;
     //calculate nfaces to allocate these vectors. 
+
+    delete [] variables;
 
     meshData_->Nodes_x_ = allocate1Ddbl(npoints);
     meshData_->Nodes_y_ = allocate1Ddbl(npoints);
@@ -345,7 +347,7 @@ void MeshInitializer::mesh4halos()
     
 }
 
-void prepass(string& meshFilename, unsigned int* variables){
+void MeshInitializer::prepass(string& meshFilename, unsigned int* variables){
     //unsigned int variables[3]; // 0 is npoints, 1 is ncells, 2 is nghost
 
     unsigned int npoints;
