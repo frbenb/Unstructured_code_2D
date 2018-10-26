@@ -22,7 +22,7 @@ InputDataManager::~InputDataManager()
 }
 
 
-void InputDataManager::manageEntryFileName(std::string iPath)
+void InputDataManager::manageEntryFileName(std::string& iPath)
 {
     //Set ctrlfilename in data base
     nscData_->ctrlfilename_ = iPath;
