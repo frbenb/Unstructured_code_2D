@@ -28,15 +28,15 @@ class OutputDataManager
         // This methos allows to show the results of storing the Mesh_Data
         // and NSCData by reading the SU2 file. Testing function read_SU2.
         void showSU2ReadingData();
+
+        // Visualisation of the mesh on Tecplot (includes creation of an ASCII file)
+        void showMeshTecplot();
     
 
     private:
 
         NSCData     *nscData_;
         Mesh_Data   *meshData_;
-
-
 };
-
 
 #endif

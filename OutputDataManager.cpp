@@ -60,9 +60,16 @@ void OutputDataManager::showSU2ReadingData()
     {
         cout << "Error: cannot create file for tecplot." << endl;
     }
-    
-    
+}
 
+void OutputDataManager::showMeshTecplot()
+{
+    //File open for output operations (ios::out) and previous text in it is deleted (ios::trunc)
+    ofstream outputFile("outputFile.txt", ios::out | ios::trunc);
+
+    outputFile << "VARIABLES=\"X\",\"Y\",\"Z\",\"Gamma\",\"alphaLocal\",\"betaLocal\"\n";
+    
+    
 
 }
 
