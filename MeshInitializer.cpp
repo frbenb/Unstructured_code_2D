@@ -333,3 +333,14 @@ void MeshInitializer::deallocateMesh(){
     meshData_->NNodes_ = 0; 
 }
 
+
+void MeshInitializer::metric()
+{
+
+}
+
+void MeshInitializer::mesh4halos()
+{
+    
+}
+
