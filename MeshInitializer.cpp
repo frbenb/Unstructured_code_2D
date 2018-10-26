@@ -369,7 +369,7 @@ unsigned int* MeshInitializer::prepass(string& meshFilename){
     if(!meshfile.is_open())
     {
         cout << "Error: " << meshFilename << " could not open for pre-pass." << endl;
-        return;
+        return nullptr;
     }
     else
     {
@@ -432,7 +432,7 @@ unsigned int* MeshInitializer::prepass(string& meshFilename){
             meshfile >> shape;
             if (shape != 3){
                 cout << "Boundaries can only be line elements." << endl;
-                return;
+                return nullptr;
             }
 
             meshfile >> intdummy;
@@ -448,5 +448,7 @@ unsigned int* MeshInitializer::prepass(string& meshFilename){
     variables[0] = npoints;
     variables[1] = ncells;
     variables[2] = nghosts;
+
+    return variables;
 }
 
