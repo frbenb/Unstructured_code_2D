@@ -187,7 +187,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++){
         for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){
-            found = -1;
+            found = meshData_->NFaces_ + 1; // Just an impossible value. was -1 and generated warnings.
             node1 = meshData_->Cell2Node_[i][j];
             if (j+1 >= meshData_->CellNfaces_[i]){
                 node2 = meshData_->Cell2Node_[i][0];
@@ -206,7 +206,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
                 }
             }
 
-            if (found == -1){
+            if (found == meshData_->NFaces_ + 1){
                 meshData_->Face2Node_[nFacesDone][0] = min;
                 meshData_->Face2Node_[nFacesDone][1] = max;
                 found = nFacesDone;
@@ -222,8 +222,8 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     unsigned int facedone, facedonek;
     for (unsigned int i = 0; i < meshData_->NFaces_ ; i++){
         ncellsdone = 0;
-        facedone = -1;
-        facedonek = -1;
+        facedone = meshData_->NFaces_ + 1; // Just an impossible value. was -1 and generated warnings.
+        facedonek = meshData_->NFaces_ + 1; // Just an impossible value. was -1 and generated warnings.
         for (unsigned int j = 0; j < meshData_->NCellsTotal_; j++){
             ncellsdone++;
             for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++){
@@ -233,19 +233,19 @@ void MeshInitializer::initializeMesh(string& meshFilename){
                     break;
                 }  
             }
-            if (facedone != -1){
+            if (facedone != meshData_->NFaces_ + 1){
                 break;
             }
         }
 
-        if (facedone == -1){
+        if (facedone == meshData_->NFaces_ + 1){
             cout << "Face " << i << " cell 1 not found."  << endl;
             return;
         }
 
         face1 = facedone;
 
-        facedone = -1;
+        facedone = meshData_->NFaces_ + 1; // Just an impossible value. was -1 and generated warnings.
         for (unsigned int j = ncellsdone; j < meshData_->NCellsTotal_; j++){
             for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++){
                 if (meshData_->Cell2Face_[j][k] == i){
@@ -253,12 +253,12 @@ void MeshInitializer::initializeMesh(string& meshFilename){
                     break;
                 }  
             }
-            if (facedone != -1){
+            if (facedone != meshData_->NFaces_ + 1){
                 break;
             }
         }
 
-        if (facedone == -1){
+        if (facedone == meshData_->NFaces_ + 1){
             if (meshData_->Cell2Face_[face1][1 + -facedonek] == i){
                 facedone = face1;
             }
