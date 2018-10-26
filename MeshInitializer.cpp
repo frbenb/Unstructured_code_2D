@@ -442,7 +442,7 @@ void MeshInitializer::calculateNormal()
             leftCellID = meshData_->Face2Cell_[faceID][0];
             rightCellID = meshData_->Face2Cell_[faceID][1];
 
-            //Get Coordinates of cells at centers
+            //Get Coordinates of cells at centers (To do here) with ID defined previously
             rightCellCoord[0] = 0;
             rightCellCoord[1] = 0;
 
@@ -455,10 +455,10 @@ void MeshInitializer::calculateNormal()
 
             //Dot product between Normal and center-vector to get sign
             dot_product = vector_center_cells[0]*vector_normal[0] + vector_center_cells[1]*vector_normal[1];
-            sign_orientation = dot_product / abs(dot_product); // Get -1 or 1.
+            sign_orientation = dot_product / std::abs(dot_product); // Get -1 or 1.
 
             //Final normal Result of the face[j] in  cell[i] and final mapping.
-            normal_vector_lenght = sqrt(vector_normal[0]*vector_normal[0] + vector_normal[1]*vector_normal[1]);
+            normal_vector_lenght = std::sqrt(vector_normal[0]*vector_normal[0] + vector_normal[1]*vector_normal[1]);
 
             meshData_->normal_x_[faceID] = (sign_orientation * vector_normal[0]) / normal_vector_lenght;
             meshData_->normal_y_[faceID] = (sign_orientation * vector_normal[1]) / normal_vector_lenght;

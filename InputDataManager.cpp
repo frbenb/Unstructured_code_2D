@@ -83,9 +83,9 @@ void InputDataManager::readInputFile()
         inputFile >> nscData_->topo_;
         inputFile >> str1;
 
-        inputFile >> meshData_->imax_;
+        inputFile >> str; //imax_;
         inputFile >> str;
-        inputFile >> meshData_->jmax_;
+        inputFile >> str; //jmax_;
         inputFile >> str1;
         inputFile >> meshData_->itl_;
         inputFile >> str2;
