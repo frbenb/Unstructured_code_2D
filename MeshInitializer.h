@@ -28,6 +28,13 @@ class MeshInitializer
 
         void initializeMesh(string& meshFilename);
 
+        //This method allows to define some properties beonging to faces and 
+        //cells (normals direction, areas)
+        void metric();
+
+        void mesh4halos();
+
+
     private:
 
         NSCData     *nscData_;
