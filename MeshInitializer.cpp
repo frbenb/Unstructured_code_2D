@@ -327,8 +327,6 @@ void MeshInitializer::deallocateMesh(){
     meshData_->NCellsGhost_ = 0;
     meshData_->NCellsTotal_ = 0;
     meshData_->NFaces_ = 0;
-    meshData_->NFacesGhost_ = 0;
-    meshData_->NFacesTotal_ = 0;
     meshData_->NNodes_ = 0; 
 }
 
@@ -341,5 +339,109 @@ void MeshInitializer::metric()
 void MeshInitializer::mesh4halos()
 {
     
+}
+
+unsigned int* MeshInitializer::prepass(string& meshFilename){
+    unsigned int variables[3]; // 0 is npoints, 1 is ncells, 2 is nghost
+
+    unsigned int npoints;
+    unsigned int ncells;
+    unsigned int nghosts = 0; 
+
+    double dbldummy0, dbldummy1;
+    unsigned int intdummy;
+    
+    string token;
+
+    /*unsigned int npoints = 16512;
+    unsigned int ncells = 16384;
+    unsigned int nghosts = 128 + 128; */
+
+    ifstream meshfile;
+    meshfile.open(meshFilename);
+
+    //Checking if the file is open or not
+    if(!meshfile.is_open())
+    {
+        cout << "Error: " << meshFilename << " could not open for pre-pass." << endl;
+        return;
+    }
+    else
+    {
+        cout << meshFilename << " is open for pre-pass." << endl;
+    }
+
+    unsigned int ndim;
+    unsigned int shape;
+    unsigned int cellnshape;
+    meshfile >> token >> ndim;
+
+    meshfile >> token >> npoints;
+
+    for (unsigned int i = 0; i < npoints; i++){
+        cout << dbldummy0 << dbldummy1;
+    }
+
+    meshfile >> token >> ncells;
+
+    for (unsigned int i=0; i < ncells; i++)
+    {
+        meshfile >> shape;
+
+        switch (shape)
+        {
+            //Quadrilaterals
+            case 9:
+                cellnshape = 4; //4 faces for a quadrilateral
+                break;
+
+            //Triangles
+            case 5:
+                cellnshape = 3; //3 faces for a triangle
+                break;
+            
+            //Lines
+            case 3:
+                cellnshape = 2; //2 faces for a line
+                break;
+        }
+
+        for (unsigned int j = 0; j < cellnshape; j++){
+            meshfile >> intdummy;
+        }
+    }
+
+    // AAAAAAAAAAAAA
+
+    unsigned int nboundarytypes;
+    meshfile >> token >> nboundarytypes; //Here, token = "NMARK="
+
+    unsigned int nelements;
+
+    for (unsigned int i=0; i<nboundarytypes; i++)
+    {
+        meshfile >> token; //Here, token = "MARKER_TAG="
+        meshfile >> token; // boundary type
+
+        meshfile >> token >> nelements; //Here, token = "MARKER_ELEMS="
+        for (unsigned int j=0; j<nelements; j++)
+        {
+            meshfile >> shape;
+            if (shape != 3){
+                cout << "Boundaries can only be line elements." << endl;
+                return;
+            }
+
+            meshfile >> intdummy;
+            meshfile >> intdummy;
+        }
+
+        //For every bc, adding the number of elem. to the number of ghost faces (every element is a line in 2D)
+        nghosts += nelements; 
+    }
+
+    meshfile.close();
+
+
 }
 
