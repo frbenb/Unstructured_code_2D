@@ -87,22 +87,21 @@ void Mesh_Data::write_stuff(){
     ofstream nodesFile;
     nodesFile.open(nodesFileName);
     nodesFile << NNodes_ << endl;
-    nodesFile << "x      y" << endl;
+    nodesFile << "Nnode ID     x      y" << endl;
 
     for (unsigned int i = 0; i < NNodes_; i++){
-        nodesFile << Nodes_x_[i] << " " << Nodes_y_[i] << endl;
+        nodesFile << i << " " << Nodes_x_[i] << " " << Nodes_y_[i] << endl;
     }
     nodesFile.close();
-
 
     string cellNodesFileName = "./bin/cell_nodes.txt";
     ofstream cellNodesFile;
     cellNodesFile.open(cellNodesFileName);
     cellNodesFile << NCellsTotal_ << endl;
-    cellNodesFile << "nNodes      nodes" << endl;
+    cellNodesFile << "Cell ID     nNodes      nodes" << endl;
 
     for (unsigned int i = 0; i < NCellsTotal_; i++){
-        cellNodesFile << CellNfaces_[i];
+        cellNodesFile << i << " " << CellNfaces_[i];
 
         for (unsigned int j = 0; j < CellNfaces_[i]; j++){
             cellNodesFile << " " << Cell2Node_[i][j];
@@ -115,10 +114,10 @@ void Mesh_Data::write_stuff(){
     ofstream cellFacesFile;
     cellFacesFile.open(cellFacesFileName);
     cellFacesFile << NCellsTotal_ << endl;
-    cellFacesFile << "nNodes      faces" << endl;
+    cellFacesFile << "Cell ID     nNodes      faces" << endl;
 
     for (unsigned int i = 0; i < NCellsTotal_; i++){
-        cellFacesFile << CellNfaces_[i];
+        cellFacesFile << i << " " << CellNfaces_[i];
 
         for (unsigned int j = 0; j < CellNfaces_[i]; j++){
             cellFacesFile << " " << Cell2Face_[i][j];
@@ -131,10 +130,10 @@ void Mesh_Data::write_stuff(){
     ofstream cellCellsFile;
     cellCellsFile.open(cellCellsFileName);
     cellCellsFile << NCellsTotal_ << endl;
-    cellCellsFile << "nNodes      cells" << endl;
+    cellCellsFile << "Cell ID     nNodes      cells" << endl;
 
     for (unsigned int i = 0; i < NCellsTotal_; i++){
-        cellCellsFile << CellNfaces_[i];
+        cellCellsFile << i << " " << CellNfaces_[i];
 
         for (unsigned int j = 0; j < CellNfaces_[i]; j++){
             cellCellsFile << " " << Cell2Cell_[i][j];
@@ -147,9 +146,10 @@ void Mesh_Data::write_stuff(){
     ofstream faceNodesFile;
     faceNodesFile.open(faceNodesFileName);
     faceNodesFile << NFaces_ << endl;
-    faceNodesFile << "nFaces      nodes" << endl;
+    faceNodesFile << "Face ID     nodes" << endl;
 
     for (unsigned int i = 0; i < NFaces_; i++){
+        faceNodesFile << i << " ";
         for (unsigned int j = 0; j < 2; j++){
             faceNodesFile << " " << Face2Node_[i][j];
         }
@@ -161,9 +161,10 @@ void Mesh_Data::write_stuff(){
     ofstream faceCellsFile;
     faceCellsFile.open(faceCellsFileName);
     faceCellsFile << NFaces_ << endl;
-    faceCellsFile << "nFaces      cells" << endl;
+    faceCellsFile << "Face ID     cells" << endl;
 
     for (unsigned int i = 0; i < NFaces_; i++){
+        faceCellsFile << i << " ";
         for (unsigned int j = 0; j < 2; j++){
             faceCellsFile << " " << Face2Cell_[i][j];
         }
