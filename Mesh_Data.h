@@ -11,6 +11,8 @@ class Mesh_Data{
     Mesh_Data();    //Constructor
     ~Mesh_Data();   //Desctructor
 
+    void write_stuff();
+
     public:
     //Input
     double* Nodes_x_;               

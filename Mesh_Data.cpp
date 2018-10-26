@@ -80,8 +80,96 @@ Mesh_Data::~Mesh_Data()
     NCellsTotal_ = 0;
     NFaces_ = 0;
     NNodes_ = 0;
+}
+
+void Mesh_Data::write_stuff(){
+    string nodesFileName = "./bin/nodes_coord.txt";
+    ofstream nodesFile;
+    nodesFile.open(nodesFileName);
+    nodesFile << NNodes_ << endl;
+    nodesFile << "x      y" << endl;
+
+    for (unsigned int i = 0; i < NNodes_; i++){
+        nodesFile << Nodes_x_[i] << " " << Nodes_y_[i] << endl;
+    }
+    nodesFile.close();
 
 
+    string cellNodesFileName = "./bin/cell_nodes.txt";
+    ofstream cellNodesFile;
+    cellNodesFile.open(cellNodesFileName);
+    cellNodesFile << NCellsTotal_ << endl;
+    cellNodesFile << "nNodes      nodes" << endl;
+
+    for (unsigned int i = 0; i < NCellsTotal_; i++){
+        cellNodesFile << CellNfaces_[i];
+
+        for (unsigned int j = 0; j < CellNfaces_[i]; j++){
+            cellNodesFile << " " << Cell2Node_[i][j];
+        }
+        cellNodesFile << endl;
+    }
+    cellNodesFile.close();
+
+    string cellFacesFileName = "./bin/cell_faces.txt";
+    ofstream cellFacesFile;
+    cellFacesFile.open(cellFacesFileName);
+    cellFacesFile << NCellsTotal_ << endl;
+    cellFacesFile << "nNodes      faces" << endl;
+
+    for (unsigned int i = 0; i < NCellsTotal_; i++){
+        cellFacesFile << CellNfaces_[i];
+
+        for (unsigned int j = 0; j < CellNfaces_[i]; j++){
+            cellFacesFile << " " << Cell2Face_[i][j];
+        }
+        cellFacesFile << endl;
+    }
+    cellFacesFile.close();
+
+    string cellCellsFileName = "./bin/cell_cells.txt";
+    ofstream cellCellsFile;
+    cellCellsFile.open(cellCellsFileName);
+    cellCellsFile << NCellsTotal_ << endl;
+    cellCellsFile << "nNodes      cells" << endl;
+
+    for (unsigned int i = 0; i < NCellsTotal_; i++){
+        cellCellsFile << CellNfaces_[i];
+
+        for (unsigned int j = 0; j < CellNfaces_[i]; j++){
+            cellCellsFile << " " << Cell2Cell_[i][j];
+        }
+        cellCellsFile << endl;
+    }
+    cellCellsFile.close();
+
+    string faceNodesFileName = "./bin/face_nodes.txt";
+    ofstream faceNodesFile;
+    faceNodesFile.open(faceNodesFileName);
+    faceNodesFile << NFaces_ << endl;
+    faceNodesFile << "nFaces      nodes" << endl;
+
+    for (unsigned int i = 0; i < NFaces_; i++){
+        for (unsigned int j = 0; j < 2; j++){
+            faceNodesFile << " " << Face2Node_[i][j];
+        }
+        faceNodesFile << endl;
+    }
+    faceNodesFile.close();
+
+    string faceCellsFileName = "./bin/face_cells.txt";
+    ofstream faceCellsFile;
+    faceCellsFile.open(faceCellsFileName);
+    faceCellsFile << NFaces_ << endl;
+    faceCellsFile << "nFaces      cells" << endl;
+
+    for (unsigned int i = 0; i < NFaces_; i++){
+        for (unsigned int j = 0; j < 2; j++){
+            faceCellsFile << " " << Face2Cell_[i][j];
+        }
+        faceCellsFile << endl;
+    }
+    faceCellsFile.close();
 
 }
 

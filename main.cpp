@@ -51,6 +51,8 @@ int main()
 
     eventManager->testSU2Function();
 
+    meshData->write_stuff();
+
     cout << "Done!" << endl;
     return 0;
 }
