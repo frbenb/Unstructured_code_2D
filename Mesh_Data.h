@@ -14,7 +14,9 @@ class Mesh_Data{
     public:
     //Input
     double* Nodes_x_;               
-    double* Nodes_y_;               
+    double* Nodes_y_;    
+    double* FaceCenter_x_;
+    double* FaceCenter_y_;           
 
     //Connectivity
     unsigned int** Cell2Node_;               

@@ -182,6 +182,8 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->normal_x_ = allocate1Ddbl(meshData_->NFaces_);
     meshData_->normal_y_ = allocate1Ddbl(meshData_->NFaces_);
 
+    //Initialize memory for CenterFaces coordinates vector
+
     //Closing the mesh file
     meshfile.close();
 
@@ -374,6 +376,14 @@ void MeshInitializer::calculateFaceCenter()
 
     int unsigned nodeID[2];
 
+    double node1_x = 0;
+    double node1_y = 0;
+
+    double node2_x = 0;
+    double node2_y = 0;
+
+    double node_at_center_coord[2]; // Index 0 stands for x value and 1 for y value.
+
     // Loop on every cell
     for(int i(0);i < meshData_->NCells_;i++)
     {
@@ -385,13 +395,21 @@ void MeshInitializer::calculateFaceCenter()
             faceID = meshData_->Cell2Face_[i][j];
 
             //2.Get nodes of face.
-            
+            nodeID[0] = meshData_->Face2Node_[faceID][0];
+            nodeID[1] = meshData_->Face2Node_[faceID][1];
 
-            //2. Calculate average on  x coordinates
+            //3. Get coordinates x and y of each node
+            node1_x = meshData_->Nodes_x_[nodeID[0]];
+            node1_y = meshData_->Nodes_y_[nodeID[0]];
 
-            //3. Calculate average on y coordinates
+            node2_x = meshData_->Nodes_x_[nodeID[1]];
+            node2_y = meshData_->Nodes_y_[nodeID[1]];
 
-            //4. Store coordinates on cell
+            //4. Calculate average on y coordinates
+            node_at_center_coord[0] = (node1_x + node2_x)/2;
+            node_at_center_coord[1] = (node1_y + node2_y)/2;
+
+
         }
     }
 }

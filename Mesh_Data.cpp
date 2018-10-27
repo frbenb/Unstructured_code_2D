@@ -41,8 +41,9 @@ tmp_v_(nullptr),
 tmp_p_(nullptr), 
 deltaT_(nullptr),                
 speci_(nullptr),                 
-specj_(nullptr)
-
+specj_(nullptr),
+FaceCenter_x_(nullptr),
+FaceCenter_y_(nullptr)
 {
 }
 
