@@ -356,11 +356,12 @@ void MeshInitializer::metric()
     // Calculate Cell center.
 
     // Calculate face center.
+    calculateFaceCenter();
 
     // Calculate face area.
 
-    //Calculatre normal on faces.
-
+    //Calculate normal on faces.
+    calculateNormal();
 }
 
 void MeshInitializer::mesh4halos()
@@ -410,9 +411,8 @@ void MeshInitializer::calculateFaceCenter()
             node2_y = meshData_->Nodes_y_[nodeID[1]];
 
             //4. Calculate average on y coordinates
-            node_at_center_coord[0] = (node1_x + node2_x)/2;
-            node_at_center_coord[1] = (node1_y + node2_y)/2;
-
+            meshData_->FaceCenter_x_[faceID] = (node1_x + node2_x)/2;
+            meshData_->FaceCenter_y_[faceID] = (node1_y + node2_y)/2;
 
         }
     }
@@ -479,11 +479,11 @@ void MeshInitializer::calculateNormal()
             rightCellID = meshData_->Face2Cell_[faceID][1];
 
             //Get Coordinates of cells at centers (To do here) with ID defined previously
-            rightCellCoord[0] = 0;
-            rightCellCoord[1] = 0;
+            rightCellCoord[0] = 0; // Coord. x of right cell
+            rightCellCoord[1] = 0; // Coord. y of right cell
 
-            leftCellCoord[0] = 0;
-            leftCellCoord[1] = 0;
+            leftCellCoord[0] = 0; // Coord. x
+            leftCellCoord[1] = 0; // Coord. y
 
             //Calculate vector between centers of cells right + left
             vector_center_cells[0] = rightCellCoord[0] - leftCellCoord[0];
