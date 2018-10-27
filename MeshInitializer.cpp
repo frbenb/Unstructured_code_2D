@@ -20,13 +20,20 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     deallocateMesh();
 
+    unsigned int* variables = new unsigned int[3]; // no other idea
+
+    prepass(meshFilename, variables);
+
     // pre-pass should give the following results
-    unsigned int npoints = 16512;
-    unsigned int ncells = 16384;
-    unsigned int nghosts = 128 + 128; // far field and airfoil
+    unsigned int npoints = variables[0];
+    unsigned int ncells = variables[1];
+    unsigned int nghosts = variables[2]; // far field and airfoil
     unsigned int ncellstot = ncells + nghosts;
     //calculate nfaces to allocate these vectors. 
 
+    delete [] variables;
+
+    // Nodes, Cells allocation
     meshData_->Nodes_x_ = allocate1Ddbl(npoints);
     meshData_->Nodes_y_ = allocate1Ddbl(npoints);
 
@@ -168,6 +175,9 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         meshData_->NCellsGhost_ += nelements; 
     }
 
+    //Closing the mesh file
+    meshfile.close();
+
     meshData_->NCellsTotal_ = meshData_->NCellsGhost_ + meshData_->NCells_;
 
     if (meshData_->NCellsGhost_ != nghosts){
@@ -177,6 +187,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     //Counting the thotal number of faces
     meshData_->NFaces_ = (nFaces_double + meshData_->NCellsGhost_)/2;
+
 
     //Initialize memory for normal of faces
     meshData_->normal_x_ = allocate1Ddbl(meshData_->NFaces_);
@@ -189,6 +200,9 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     //Closing the mesh file
     meshfile.close();
 
+
+    // NFaces allocation
+
     meshData_->Face2Node_ = allocate2Dint(meshData_->NFaces_, 2);
     meshData_->Face2Cell_ = allocate2Dint(meshData_->NFaces_, 2);
 
@@ -197,7 +211,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++){
         for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){
-            found = -1;
+            found = meshData_->NFaces_ + 1; // Just an impossible value. was -1 and generated warnings.
             node1 = meshData_->Cell2Node_[i][j];
             if (j+1 >= meshData_->CellNfaces_[i]){
                 node2 = meshData_->Cell2Node_[i][0];
@@ -216,92 +230,32 @@ void MeshInitializer::initializeMesh(string& meshFilename){
                 }
             }
 
-            if (found == -1){
+            if (found == meshData_->NFaces_ + 1){
                 meshData_->Face2Node_[nFacesDone][0] = min;
                 meshData_->Face2Node_[nFacesDone][1] = max;
                 found = nFacesDone;
+                meshData_->Face2Cell_[nFacesDone][0] = i;
                 nFacesDone++;  
+            }
+            else{
+                meshData_->Face2Cell_[found][1] = i;
             }
 
             meshData_->Cell2Face_[i][j] = found;
         }
     }
 
-    // Face2Cell_
-    unsigned int ncellsdone, face1, face2;
-    unsigned int facedone, facedonek;
-    for (unsigned int i = 0; i < meshData_->NFaces_ ; i++){
-        ncellsdone = 0;
-        facedone = -1;
-        facedonek = -1;
-        for (unsigned int j = 0; j < meshData_->NCellsTotal_; j++){
-            ncellsdone++;
-            for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++){
-                if (meshData_->Cell2Face_[j][k] == i){
-                    facedone = j;
-                    facedonek = k;
-                    break;
-                }  
-            }
-            if (facedone != -1){
-                break;
-            }
-        }
-
-        if (facedone == -1){
-            cout << "Face " << i << " cell 1 not found."  << endl;
-            return;
-        }
-
-        face1 = facedone;
-
-        facedone = -1;
-        for (unsigned int j = ncellsdone; j < meshData_->NCellsTotal_; j++){
-            for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++){
-                if (meshData_->Cell2Face_[j][k] == i){
-                    facedone = j;
-                    break;
-                }  
-            }
-            if (facedone != -1){
-                break;
-            }
-        }
-
-        if (facedone == -1){
-            if (meshData_->Cell2Face_[face1][1 + -facedonek] == i){
-                facedone = face1;
-            }
-            else{
-                cout << "Face " << i << " cell 2 not found." << endl;
-            return;
-            }
-        }
-
-        face2 = facedone;
-
-        bool bigger = face1 <= face2;
-
-        // Check here for order.
-        min = face1 * bigger + face2 * !bigger;
-        max = face1 * !bigger + face2 * bigger;
-    
-        meshData_->Face2Cell_[i][0] = min;
-        meshData_->Face2Cell_[i][1] = max;
-    }
-
-    // Cell2Cell_
+    // Cell2Cell_ 
 
     for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++){  //The cell we are checking
         for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){   //The cell's faces we are chking, we want the cell on the other side
 
-            if (meshData_->Face2Cell_[i][0] != meshData_->Cell2Face_[i][j]){ 
-                meshData_->Cell2Cell_[i][j] = meshData_->Face2Cell_[i][0];
-               
-             } 
-             else { 
-                meshData_->Cell2Cell_[i][j] = meshData_->Face2Cell_[i][1];
-             } 
+            unsigned int cell0 = meshData_->Face2Cell_[meshData_->Cell2Face_[i][j]][0];
+            unsigned int cell1 = meshData_->Face2Cell_[meshData_->Cell2Face_[i][j]][1]; 
+
+            bool factor = cell1 == i;
+
+            meshData_->Cell2Cell_[i][j] = factor * cell0 + !factor * cell1; 
         }
     }
 
@@ -343,8 +297,6 @@ void MeshInitializer::deallocateMesh(){
     meshData_->NCellsGhost_ = 0;
     meshData_->NCellsTotal_ = 0;
     meshData_->NFaces_ = 0;
-    meshData_->NFacesGhost_ = 0;
-    meshData_->NFacesTotal_ = 0;
     meshData_->NNodes_ = 0; 
 
 
@@ -368,6 +320,7 @@ void MeshInitializer::mesh4halos()
 {
     
 }
+
 
 void MeshInitializer::calculateCellCenter()
 {
@@ -509,8 +462,110 @@ void MeshInitializer::calculateCellsArea()
 }
 
 
+void MeshInitializer::prepass(string& meshFilename, unsigned int* variables){
+    //unsigned int variables[3]; // 0 is npoints, 1 is ncells, 2 is nghost
 
+    unsigned int npoints;
+    unsigned int ncells;
+    unsigned int nghosts = 0; 
 
+    double dbldummy0, dbldummy1;
+    unsigned int intdummy;
+    
+    string token;
 
+    /*unsigned int npoints = 16512;
+    unsigned int ncells = 16384;
+    unsigned int nghosts = 128 + 128; */
+
+    ifstream meshfile;
+    meshfile.open(meshFilename);
+
+    //Checking if the file is open or not
+    if(!meshfile.is_open())
+    {
+        cout << "Error: " << meshFilename << " could not open for pre-pass." << endl;
+        return;
+    }
+    else
+    {
+        cout << meshFilename << " is open for pre-pass." << endl;
+    }
+
+    unsigned int ndim;
+    unsigned int shape;
+    unsigned int cellnshape;
+    meshfile >> token >> ndim;
+
+    meshfile >> token >> npoints;
+
+    for (unsigned int i = 0; i < npoints; i++){
+        meshfile >> dbldummy0 >> dbldummy1;
+    }
+
+    meshfile >> token >> ncells;
+
+    for (unsigned int i=0; i < ncells; i++)
+    {
+        meshfile >> shape;
+        cellnshape = 0;
+
+        switch (shape)
+        {
+            //Quadrilaterals
+            case 9:
+                cellnshape = 4; //4 faces for a quadrilateral
+                break;
+
+            //Triangles
+            case 5:
+                cellnshape = 3; //3 faces for a triangle
+                break;
+            
+            //Lines
+            case 3:
+                cellnshape = 2; //2 faces for a line
+                break;
+        }
+
+        for (unsigned int j = 0; j < cellnshape; j++){
+            meshfile >> intdummy;
+        }
+    }
+
+    unsigned int nboundarytypes;
+    meshfile >> token >> nboundarytypes; //Here, token = "NMARK="
+
+    unsigned int nelements;
+
+    for (unsigned int i=0; i<nboundarytypes; i++)
+    {
+        meshfile >> token; //Here, token = "MARKER_TAG="
+        meshfile >> token; // boundary type
+
+        meshfile >> token >> nelements; //Here, token = "MARKER_ELEMS="
+        for (unsigned int j=0; j<nelements; j++)
+        {
+            meshfile >> shape;
+            if (shape != 3){
+                cout << "Boundaries can only be line elements." << endl;
+                return;
+            }
+
+            meshfile >> intdummy;
+            meshfile >> intdummy;
+        }
+
+        //For every bc, adding the number of elem. to the number of ghost faces (every element is a line in 2D)
+        nghosts += nelements; 
+    }
+
+    meshfile.close();
+
+    variables[0] = npoints;
+    variables[1] = ncells;
+    variables[2] = nghosts;
+    return;
+}
 
 

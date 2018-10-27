@@ -11,6 +11,8 @@ class Mesh_Data{
     Mesh_Data();    //Constructor
     ~Mesh_Data();   //Desctructor
 
+    void write_stuff();
+
     public:
     //Input
     double* Nodes_x_;               
@@ -32,8 +34,6 @@ class Mesh_Data{
     unsigned int NCellsGhost_;     
     unsigned int NCellsTotal_;      
     unsigned int NFaces_;           
-    unsigned int NFacesGhost_;      // should not exist I think
-    unsigned int NFacesTotal_;      // should not exist I think
     unsigned int NNodes_;           
     double* Volume_;
     double* Residu_;

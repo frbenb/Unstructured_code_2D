@@ -50,7 +50,7 @@ class MeshInitializer
         Mesh_Data   *meshData_;
 
         void deallocateMesh();
-
+        void prepass(string& meshFilename, unsigned int* variables);
 };
 
 
