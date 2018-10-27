@@ -342,8 +342,8 @@ void MeshInitializer::calculateFaceCenter()
 
     double node_at_center_coord[2]; // Index 0 stands for x value and 1 for y value.
 
-    // Loop on every cell
-    for(int i(0);i < meshData_->NCells_;i++)
+    // Loop on total cells
+    for(int i(0);i < meshData_->NCellsTotal_;i++)
     {
         nbFaces = meshData_->CellNfaces_[i];
 
@@ -398,8 +398,8 @@ void MeshInitializer::calculateNormal()
 
     int normal_vector_lenght = 0;
 
-    // Loop on every face
-    for(int i(0); i < meshData_->NFacesTotal_; i++)
+    // Loop on restricted cells
+    for(int i(0); i < meshData_->NCells_; i++)
     {
         nbFaces = meshData_->CellNfaces_[i];
 
