@@ -16,7 +16,9 @@ class Mesh_Data{
     public:
     //Input
     double* Nodes_x_;               
-    double* Nodes_y_;               
+    double* Nodes_y_;    
+    double* FaceCenter_x_;
+    double* FaceCenter_y_;           
 
     //Connectivity
     unsigned int** Cell2Node_;               
@@ -42,16 +44,12 @@ class Mesh_Data{
     double* v_;
     double* p_;
 
-    unsigned int imax_, jmax_, itl_, itu_;      //imax, jmax
-    unsigned int imaxGhost_, jmaxGhost_;        //himax, hjmax
-    unsigned int rimax_, rjmax_;                //rimax, rjmax - restricted domain cv imax,jmax
+    unsigned int itl_, itu_;      
     unsigned int inci_, incj_;                  //inci, incj - address  increments in i,j
 
     double* cellArea_;         //area
-    double* normal_i_x_; 		//six, siy - face i projections
-    double* normal_i_y_;
-    double* normal_j_x_;       //sjx, sjy - face j projections
-    double* normal_j_y_;
+    double* normal_x_; 		//x value of normal vector for every faces
+    double* normal_y_;      //y value of normal vector for every faces
     // How to define the normal on the faces
 
     double* rho_nodes_;        //rocv, uucv, vvcv, ppcv - primitive variables cell-vertex

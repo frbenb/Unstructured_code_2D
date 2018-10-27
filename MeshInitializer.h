@@ -3,6 +3,7 @@
 
 //Standard lib.
 #include <string>
+#include <math.h>
 
 //Projet files
 #include "NSCData.h"
@@ -33,6 +34,14 @@ class MeshInitializer
         void metric();
 
         void mesh4halos();
+
+        void calculateCellCenter();
+
+        void calculateFaceCenter();
+
+        void calculateNormal();
+
+        void calculateCellsArea();
 
 
     private:
