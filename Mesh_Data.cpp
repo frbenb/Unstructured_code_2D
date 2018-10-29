@@ -10,7 +10,7 @@ using namespace std;
 Mesh_Data::Mesh_Data(): 
 Nodes_x_(nullptr), Nodes_y_(nullptr), 
 Cell2Node_(nullptr), Cell2Face_(nullptr), Face2Node_(nullptr), Face2Cell_(nullptr), Cell2Cell_(nullptr), Node2Cell_(nullptr),
-CellNfaces_(nullptr), NCells_(0), NCellsGhost_(0), NFaces_(0), NNodes_(0), Volume_(nullptr), Residu_(nullptr),
+CellNfaces_(nullptr), NCells_(0), NCellsGhost_(0), NFaces_(0), NNodes_(0), Volume_(nullptr), Residu_(nullptr), GhostType_(nullptr),
 rho_(nullptr), u_(nullptr), v_(nullptr), p_(nullptr),
 itl_(0), 
 itu_(0),                     
@@ -56,6 +56,7 @@ Mesh_Data::~Mesh_Data()
     CellNfaces_ = deallocate1Dint(CellNfaces_);
     Volume_ = deallocate1Ddbl(Volume_);
     Residu_ = deallocate1Ddbl(Residu_);
+    GhostType_ = deallocate1Dint(GhostType_);
     rho_ = deallocate1Ddbl(rho_);
     u_ = deallocate1Ddbl(u_);
     v_ = deallocate1Ddbl(v_);
@@ -67,12 +68,6 @@ Mesh_Data::~Mesh_Data()
     Face2Cell_ = deallocate2Dint(Face2Cell_, NFaces_);
     Cell2Cell_ = deallocate2Dint(Cell2Cell_, NCellsTotal_);
     Node2Cell_ = deallocate2Dint(Node2Cell_, NNodes_);
-
-    NCells_ = 0;
-    NCellsGhost_ = 0;
-    NCellsTotal_ = 0;
-    NFaces_ = 0;
-    NNodes_ = 0;
 }
 
 void Mesh_Data::write_stuff(){

@@ -39,6 +39,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     meshData_->Cell2Node_ = allocate1Dintstar(ncellstot);
     meshData_->CellNfaces_ = allocate1Dint(ncellstot);
+    meshData_->GhostType_ = allocate1Dint(nghosts);
 
     // These are filled later
     meshData_->Cell2Face_ = allocate1Dintstar(ncellstot);
@@ -276,6 +277,7 @@ void MeshInitializer::deallocateMesh(){
     meshData_->CellNfaces_ = deallocate1Dint(meshData_->CellNfaces_);
     meshData_->Volume_ = deallocate1Ddbl(meshData_->Volume_);
     meshData_->Residu_ = deallocate1Ddbl(meshData_->Residu_);
+    meshData_->GhostType_ = deallocate1Dint(meshData_->GhostType_);
     meshData_->rho_ = deallocate1Ddbl(meshData_->rho_);
     meshData_->u_ = deallocate1Ddbl(meshData_->u_);
     meshData_->v_ = deallocate1Ddbl(meshData_->v_);
@@ -298,8 +300,6 @@ void MeshInitializer::deallocateMesh(){
     meshData_->NCellsTotal_ = 0;
     meshData_->NFaces_ = 0;
     meshData_->NNodes_ = 0; 
-
-
 }
 
 
