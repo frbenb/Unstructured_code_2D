@@ -329,10 +329,10 @@ void MeshInitializer::calculateCellCenter()
 
 void MeshInitializer::calculateFaceCenter()
 {
-    int unsigned nbFaces = 0;
-    int unsigned faceID = 0;
+    unsigned int nbFaces = 0;
+    unsigned int faceID = 0;
 
-    int unsigned nodeID[2];
+    unsigned int nodeID[2];
 
     double node1_x = 0;
     double node1_y = 0;
@@ -343,11 +343,11 @@ void MeshInitializer::calculateFaceCenter()
     double node_at_center_coord[2]; // Index 0 stands for x value and 1 for y value.
 
     // Loop on total cells
-    for(int i(0);i < meshData_->NCellsTotal_;i++)
+    for(unsigned int i(0);i < meshData_->NCellsTotal_;i++)
     {
         nbFaces = meshData_->CellNfaces_[i];
 
-        for(int j(0); j < nbFaces;j++)
+        for(unsigned int j(0); j < nbFaces;j++)
         {
             //1. Get face ID
             faceID = meshData_->Cell2Face_[i][j];
@@ -366,7 +366,6 @@ void MeshInitializer::calculateFaceCenter()
             //4. Calculate average on y coordinates
             meshData_->FaceCenter_x_[faceID] = (node1_x + node2_x)/2;
             meshData_->FaceCenter_y_[faceID] = (node1_y + node2_y)/2;
-
         }
     }
 }
@@ -393,10 +392,10 @@ void MeshInitializer::calculateNormal()
     double leftCellCoord[2]; // Coord x and y
     double rightCellCoord[2]; // Coord x and y
 
-    int dot_product = 0;
+    double dot_product = 0;
     int sign_orientation = 0;
 
-    int normal_vector_lenght = 0;
+    double normal_vector_length = 0;
 
     // Loop on restricted cells
     for(int i(0); i < meshData_->NCells_; i++)
@@ -447,10 +446,10 @@ void MeshInitializer::calculateNormal()
             sign_orientation = dot_product / std::abs(dot_product); // Get -1 or 1.
 
             //Final normal Result of the face[j] in  cell[i] and final mapping.
-            normal_vector_lenght = std::sqrt(vector_normal[0]*vector_normal[0] + vector_normal[1]*vector_normal[1]);
+            normal_vector_length = std::sqrt(vector_normal[0]*vector_normal[0] + vector_normal[1]*vector_normal[1]);
 
-            meshData_->normal_x_[faceID] = (sign_orientation * vector_normal[0]) / normal_vector_lenght;
-            meshData_->normal_y_[faceID] = (sign_orientation * vector_normal[1]) / normal_vector_lenght;
+            meshData_->normal_x_[faceID] = (sign_orientation * vector_normal[0]) / normal_vector_length;
+            meshData_->normal_y_[faceID] = (sign_orientation * vector_normal[1]) / normal_vector_length;
 
         }
     }
