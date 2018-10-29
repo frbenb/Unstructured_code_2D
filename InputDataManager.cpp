@@ -45,7 +45,7 @@ void InputDataManager::doInitProcess()
     //2. Read mesh file. Equivalent as readmesh()
     meshInit_->initializeMesh(nscData_->meshfilename_);
 
-    //Call metric
+    //Call metric.
     meshInit_->metric();
 
     // Initial_flow_parameters

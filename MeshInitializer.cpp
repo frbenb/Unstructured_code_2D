@@ -329,9 +329,8 @@ void MeshInitializer::calculateCellCenter()
 
 void MeshInitializer::calculateFaceCenter()
 {
-    unsigned int nbFaces = 0;
-    unsigned int faceID = 0;
 
+    int unsigned nbFaces = 0;
     unsigned int nodeID[2];
 
     double node1_x = 0;
@@ -341,39 +340,29 @@ void MeshInitializer::calculateFaceCenter()
     double node2_y = 0;
 
     double node_at_center_coord[2]; // Index 0 stands for x value and 1 for y value.
-
-    // Loop on total cells
-    for(unsigned int i(0);i < meshData_->NCellsTotal_;i++)
+  
+    for(unsigned int i(0); i < meshData_->NFaces_;i++)
     {
-        nbFaces = meshData_->CellNfaces_[i];
+       
+        nodeID[0] = meshData_->Face2Node_[i][0];
+        nodeID[1] = meshData_->Face2Node_[i][1];
 
-        for(unsigned int j(0); j < nbFaces;j++)
-        {
-            //1. Get face ID
-            faceID = meshData_->Cell2Face_[i][j];
+        //Get coordinates x and y of each node
+        node1_x = meshData_->Nodes_x_[nodeID[0]];
+        node1_y = meshData_->Nodes_y_[nodeID[0]];
+        node2_x = meshData_->Nodes_x_[nodeID[1]];
+        node2_y = meshData_->Nodes_y_[nodeID[1]];
 
-            //2.Get nodes of face.
-            nodeID[0] = meshData_->Face2Node_[faceID][0];
-            nodeID[1] = meshData_->Face2Node_[faceID][1];
+        //Calculate average on y coordinates
+        meshData_->FaceCenter_x_[i] = (node1_x + node2_x)/2;
+        meshData_->FaceCenter_y_[i] = (node1_y + node2_y)/2;
 
-            //3. Get coordinates x and y of each node
-            node1_x = meshData_->Nodes_x_[nodeID[0]];
-            node1_y = meshData_->Nodes_y_[nodeID[0]];
-
-            node2_x = meshData_->Nodes_x_[nodeID[1]];
-            node2_y = meshData_->Nodes_y_[nodeID[1]];
-
-            //4. Calculate average on y coordinates
-            meshData_->FaceCenter_x_[faceID] = (node1_x + node2_x)/2;
-            meshData_->FaceCenter_y_[faceID] = (node1_y + node2_y)/2;
-        }
     }
+
 }
 
 void MeshInitializer::calculateNormal()
 {
-    unsigned int nbFaces = 0;
-    unsigned int faceID = 0;
     unsigned int nodeID[2];
 
     double node1_x; // Contains values of x for nodeID[0]
@@ -397,61 +386,48 @@ void MeshInitializer::calculateNormal()
 
     double normal_vector_length = 0;
 
-    // Loop on restricted cells
-    for(unsigned int i(0); i < meshData_->NCells_; i++)
+    for(int i(0);i < meshData_->NFaces_;i++)
     {
-        nbFaces = meshData_->CellNfaces_[i];
+        //1.2 Get the 2 nodes ID in 1 face.
+        nodeID[0] = meshData_->Face2Node_[i][0];
+        nodeID[1] = meshData_->Face2Node_[i][1];
 
-        for(unsigned int j(0);j < nbFaces;j++)
-        {
-            //1.1Get face number.
-            faceID = meshData_->Cell2Face_[i][j];
+        //1.3 Get coordinateds x and y for each nodeID
+        node1_x = meshData_->Nodes_x_[nodeID[0]];
+        node1_y = meshData_->Nodes_x_[nodeID[0]];
+        node2_x = meshData_->Nodes_y_[nodeID[1]];
+        node2_y = meshData_->Nodes_y_[nodeID[1]];
 
-            //1.2 Get the 2 nodes ID in 1 face.
-            nodeID[0] = meshData_->Face2Node_[faceID][0];
-            nodeID[1] = meshData_->Face2Node_[faceID][1];
+        //1.4 Get vector connecting the two nodes.
+        vector_nodes[0] = node2_x - node1_x;
+        vector_nodes[1] = node2_y - node1_y;
 
-            //1.3 Get coordinateds x and y for each nodeID
-            node1_x = meshData_->Nodes_x_[nodeID[0]];
-            node1_y = meshData_->Nodes_x_[nodeID[0]];
+        //1.5 Get a normal vector of vector_nodes
+        vector_normal[0] = vector_nodes[1];
+        vector_normal[1] = (-1)*vector_nodes[0];
 
-            node2_x = meshData_->Nodes_y_[nodeID[1]];
-            node2_y = meshData_->Nodes_y_[nodeID[1]];
+        //1.6 Find coordinates of center of cells on left and right
+        leftCellID = meshData_->Face2Cell_[i][0];
+        rightCellID = meshData_->Face2Cell_[i][1];
 
-            //1.4 Get vector connecting the two nodes.
-            vector_nodes[0] = node2_x - node1_x;
-            vector_nodes[1] = node2_y - node1_y;
+        //Get Coordinates of cells at centers (To do here) with ID defined previously
+        rightCellCoord[0] = 0; // Coord. x of right cell
+        rightCellCoord[1] = 0; // Coord. y of right cell
+        leftCellCoord[0] = 0; // Coord. x
+        leftCellCoord[1] = 0; // Coord. y
 
-            //1.5 Get a normal vector of vector_nodes
-            vector_normal[0] = vector_nodes[1];
-            vector_normal[1] = (-1)*vector_nodes[0];
+        //Calculate vector between centers of cells right + left
+        vector_center_cells[0] = rightCellCoord[0] - leftCellCoord[0];
+        vector_center_cells[1] = rightCellCoord[1] - leftCellCoord[1];
 
-            //1.6 Find coordinates of center of cells on left and right
-            leftCellID = meshData_->Face2Cell_[faceID][0];
-            rightCellID = meshData_->Face2Cell_[faceID][1];
+        //Dot product between Normal and center-vector to get sign
+        dot_product = vector_center_cells[0]*vector_normal[0] + vector_center_cells[1]*vector_normal[1];
+        sign_orientation = dot_product / std::abs(dot_product); // Get -1 or 1.
 
-            //Get Coordinates of cells at centers (To do here) with ID defined previously
-            rightCellCoord[0] = 0; // Coord. x of right cell
-            rightCellCoord[1] = 0; // Coord. y of right cell
-
-            leftCellCoord[0] = 0; // Coord. x
-            leftCellCoord[1] = 0; // Coord. y
-
-            //Calculate vector between centers of cells right + left
-            vector_center_cells[0] = rightCellCoord[0] - leftCellCoord[0];
-            vector_center_cells[1] = rightCellCoord[1] - leftCellCoord[1];
-
-            //Dot product between Normal and center-vector to get sign
-            dot_product = vector_center_cells[0]*vector_normal[0] + vector_center_cells[1]*vector_normal[1];
-            sign_orientation = dot_product / std::abs(dot_product); // Get -1 or 1.
-
-            //Final normal Result of the face[j] in  cell[i] and final mapping.
-            normal_vector_length = std::sqrt(vector_normal[0]*vector_normal[0] + vector_normal[1]*vector_normal[1]);
-
-            meshData_->normal_x_[faceID] = (sign_orientation * vector_normal[0]) / normal_vector_length;
-            meshData_->normal_y_[faceID] = (sign_orientation * vector_normal[1]) / normal_vector_length;
-
-        }
+        //Final normal Result of the face[j] in  cell[i] and final mapping.
+        normal_vector_lenght = std::sqrt(vector_normal[0]*vector_normal[0] + vector_normal[1]*vector_normal[1]);
+        meshData_->normal_x_[i] = (sign_orientation * vector_normal[0]) / normal_vector_lenght;
+        meshData_->normal_y_[i] = (sign_orientation * vector_normal[1]) / normal_vector_lenght;
     }
 }
 
