@@ -35,6 +35,7 @@ class Mesh_Data{
     unsigned int NNodes_;           
     double* Volume_;
     double* Residu_;
+    unsigned int* GhostType_;
 
     //Output
     double* rho_;
