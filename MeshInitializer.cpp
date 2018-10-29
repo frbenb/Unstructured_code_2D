@@ -398,11 +398,11 @@ void MeshInitializer::calculateNormal()
     double normal_vector_length = 0;
 
     // Loop on restricted cells
-    for(int i(0); i < meshData_->NCells_; i++)
+    for(unsigned int i(0); i < meshData_->NCells_; i++)
     {
         nbFaces = meshData_->CellNfaces_[i];
 
-        for(int j(0);j < nbFaces;j++)
+        for(unsigned int j(0);j < nbFaces;j++)
         {
             //1.1Get face number.
             faceID = meshData_->Cell2Face_[i][j];
