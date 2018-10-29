@@ -172,7 +172,6 @@ void Mesh_Data::write_stuff(){
         ghostTypeFile << endl;
     }
     ghostTypeFile.close();
-
 }
 
 
