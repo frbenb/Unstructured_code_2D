@@ -19,6 +19,8 @@ incj_(0),
 cellArea_(nullptr),         
 normal_x_(nullptr), 		
 normal_y_(nullptr),
+FaceCenter_x_(nullptr),
+FaceCenter_y_(nullptr),
 rho_nodes_(nullptr),         
 u_nodes_(nullptr), 
 v_nodes_(nullptr), 
@@ -41,9 +43,7 @@ tmp_v_(nullptr),
 tmp_p_(nullptr), 
 deltaT_(nullptr),                
 speci_(nullptr),                 
-specj_(nullptr),
-FaceCenter_x_(nullptr),
-FaceCenter_y_(nullptr)
+specj_(nullptr)
 {
 }
 
