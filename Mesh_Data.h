@@ -35,7 +35,7 @@ class Mesh_Data{
     unsigned int NNodes_;           
     double* Volume_;
     double* Residu_;
-    unsigned int* GhostType_;
+    unsigned int* GhostType_; // 0 is airfoil, 1 is far field
 
     //Output
     double* rho_;
