@@ -399,7 +399,7 @@ void MeshInitializer::calculateNormal()
 
     double normal_vector_length = 0;
 
-    for(int i(0);i < meshData_->NFaces_;i++)
+    for(unsigned int i(0);i < meshData_->NFaces_;i++)
     {
         //1.2 Get the 2 nodes ID in 1 face.
         nodeID[0] = meshData_->Face2Node_[i][0];
@@ -438,9 +438,9 @@ void MeshInitializer::calculateNormal()
         sign_orientation = dot_product / std::abs(dot_product); // Get -1 or 1.
 
         //Final normal Result of the face[j] in  cell[i] and final mapping.
-        normal_vector_lenght = std::sqrt(vector_normal[0]*vector_normal[0] + vector_normal[1]*vector_normal[1]);
-        meshData_->normal_x_[i] = (sign_orientation * vector_normal[0]) / normal_vector_lenght;
-        meshData_->normal_y_[i] = (sign_orientation * vector_normal[1]) / normal_vector_lenght;
+        normal_vector_length = std::sqrt(vector_normal[0]*vector_normal[0] + vector_normal[1]*vector_normal[1]);
+        meshData_->normal_x_[i] = (sign_orientation * vector_normal[0]) / normal_vector_length;
+        meshData_->normal_y_[i] = (sign_orientation * vector_normal[1]) / normal_vector_length;
     }
 }
 
