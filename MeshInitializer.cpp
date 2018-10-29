@@ -300,8 +300,6 @@ void MeshInitializer::deallocateMesh(){
     meshData_->NCellsTotal_ = 0;
     meshData_->NFaces_ = 0;
     meshData_->NNodes_ = 0; 
-
-
 }
 
 
