@@ -160,6 +160,18 @@ void Mesh_Data::write_stuff(){
     }
     faceCellsFile.close();
 
+    string ghostTypeFileName = "./bin/ghost_type.txt";
+    ofstream ghostTypeFile;
+    ghostTypeFile.open(ghostTypeFileName);
+    ghostTypeFile << NCellsGhost_ << endl;
+    ghostTypeFile << "Cell ID     type" << endl;
+
+    for (unsigned int i = 0; i < NCellsGhost_; i++){
+        ghostTypeFile << i + NCells_ << " ";
+        ghostTypeFile << GhostType_[i];
+        ghostTypeFile << endl;
+    }
+    ghostTypeFile.close();
 }
 
 

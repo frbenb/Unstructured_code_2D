@@ -143,15 +143,27 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     unsigned int nboundarytypes;
     meshfile >> token >> nboundarytypes; //Here, token = "NMARK="
 
-    string boundarytype;
+    string boundarytype_string;
     unsigned int nelements;
     unsigned int boundary_counter = 0;
+    unsigned int boundary_type;
 
 
     for (unsigned int i=0; i<nboundarytypes; i++)
     {
-        meshfile >> token >> boundarytype; //Here, token = "MARKER_TAG="
-        cout << "Boundary condition " << i+1 << ": " << boundarytype << endl;
+        meshfile >> token >> boundarytype_string; //Here, token = "MARKER_TAG="
+        cout << "Boundary condition " << i+1 << ": " << boundarytype_string << endl;
+
+        if (boundarytype_string.compare("airfoil")){
+            boundary_type = 0;
+        }
+        else if(boundarytype_string.compare("farfield")){
+            boundary_type = 1;
+        }
+        else{
+            cout << "Error, boundary type '" << boundarytype_string << "' unknown." << endl;
+            return;
+        }
 
         meshfile >> token >> nelements; //Here, token = "MARKER_ELEMS="
         for (unsigned int j=0; j<nelements; j++)
@@ -161,7 +173,8 @@ void MeshInitializer::initializeMesh(string& meshFilename){
                 cout << "Boundaries can only be line elements." << endl;
                 return;
             }
-            
+
+            meshData_->GhostType_[boundary_counter] = boundary_type;
             meshData_->Cell2Face_[meshData_->NCells_ + boundary_counter] = allocate1Dint(2);
             meshData_->Cell2Cell_[meshData_->NCells_ + boundary_counter] = allocate1Dint(2);
 
