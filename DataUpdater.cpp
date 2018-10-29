@@ -36,6 +36,9 @@ void DataUpdater::update_boundary()
 
         normal_x = meshData_->normal_x_[i];
         normal_y = meshData_->normal_y_[i];
+
+        normal_length = (normal_x*normal_x + normal_y*normal_y);
+
         
 
     }
