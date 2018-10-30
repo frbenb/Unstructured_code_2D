@@ -433,9 +433,8 @@ void MeshInitializer::calculateNormal()
         sign_orientation = dot_product / std::abs(dot_product); // Get -1 or 1.
 
         //Final normal Result of the face[j] in  cell[i] and final mapping.
-        normal_vector_length = std::sqrt(vector_normal[0]*vector_normal[0] + vector_normal[1]*vector_normal[1]);
-        meshData_->normal_x_[i] = (sign_orientation * vector_normal[0]) / normal_vector_length;
-        meshData_->normal_y_[i] = (sign_orientation * vector_normal[1]) / normal_vector_length;
+        meshData_->normal_x_[i] = (sign_orientation * vector_normal[0]);
+        meshData_->normal_y_[i] = (sign_orientation * vector_normal[1]);
     }
 }
 
