@@ -75,9 +75,9 @@ class Mesh_Data{
     double* tmp_u_;
     double* tmp_v_;
     double* tmp_p_;
-    double* deltaT_;               //dt
-    double* speci_;                //speci, specj
-    double* specj_;
+    double* deltaT_;                //dt
+    double* spec_x_;                //speci, specj, variables for spectral radius.
+    double* spec_y_;
 
 };
 

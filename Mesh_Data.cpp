@@ -42,8 +42,8 @@ tmp_u_(nullptr),
 tmp_v_(nullptr), 
 tmp_p_(nullptr), 
 deltaT_(nullptr),                
-speci_(nullptr),                 
-specj_(nullptr)
+spec_x_(nullptr),                 
+spec_y_(nullptr)
 {
 }
 
@@ -68,6 +68,9 @@ Mesh_Data::~Mesh_Data()
     Face2Cell_ = deallocate2Dint(Face2Cell_, NFaces_);
     Cell2Cell_ = deallocate2Dint(Cell2Cell_, NCellsTotal_);
     Node2Cell_ = deallocate2Dint(Node2Cell_, NNodes_);
+
+    spec_x_ = deallocate1Ddbl(spec_x_);
+    spec_y_ = deallocate1Ddbl(spec_y_);
 }
 
 void Mesh_Data::write_stuff(){

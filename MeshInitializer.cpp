@@ -211,6 +211,10 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->FaceCenter_x_ = allocate1Ddbl(meshData_->NFaces_);
     meshData_->FaceCenter_y_ = allocate1Ddbl(meshData_->NFaces_);
 
+    //Initialize memory for spec_x_ and spec_y_
+    meshData_->spec_x_ = allocate1Ddbl(meshData_->spec_x_);
+    meshData_->spec_y_ = allocate1Ddbl(meshData_->spec_y_);
+
     //Closing the mesh file
     meshfile.close();
 
@@ -306,7 +310,9 @@ void MeshInitializer::deallocateMesh(){
     meshData_->Face2Cell_ = deallocate2Dint(meshData_->Face2Cell_, meshData_->NFaces_);
     meshData_->Cell2Cell_ = deallocate2Dint(meshData_->Cell2Cell_, meshData_->NCellsTotal_);
     meshData_->Node2Cell_ = deallocate2Dint(meshData_->Node2Cell_, meshData_->NNodes_);
-    
+
+    meshData_->spec_x_ = deallocate1Ddbl(meshData_->spec_x_);
+    meshData_->spec_y_ = deallocate1Ddbl(meshData_->spec_y_);
 
     meshData_->NCells_ = 0;
     meshData_->NCellsGhost_ = 0;

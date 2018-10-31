@@ -84,7 +84,28 @@ void MainSolver::saveW0()
 
 void MainSolver::spectral_radius()
 {
+    double delta_S_x = 0;
+    double delta_S_y = 0;
 
+    double g = nscData_->gamma_;
+    double c; // Speed of sound.
+
+    //Loop on all faces
+    for(int i(0);i<meshData_->NFaces_;i++)
+    {
+        delta_S_x += 0.5*std::abs(meshData_->normal_x_[i]); 
+        delta_S_y += 0.5*std::abs(meshData_->normal_y_[i]);
+    }
+
+    //Loop on cells
+    for (int i(0);i < meshData_->NCells_;i++)
+    {
+        c = 
+
+        spec_x[i] = meshData_->u_[i] + nscData_->;
+
+    }
+    
 
 }
 
