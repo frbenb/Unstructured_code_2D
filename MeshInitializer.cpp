@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "arrayMemory.h"
-
+#include <vector>
 
 MeshInitializer::MeshInitializer(NSCData *iNSCData, Mesh_Data *iMeshData) :
                                     nscData_(iNSCData),
@@ -37,6 +37,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->Cell2Face_ = allocate1Dintstar(ncellstot);
     meshData_->Cell2Cell_ = allocate1Dintstar(ncellstot);
     meshData_->Node2Cell_ = allocate1Dintstar(npoints); // 2nd level not allocated yet
+    meshData_->nodeNCell_ = allocate1Dint(npoints);
 
     meshData_->Volume_ = allocate1Ddbl(ncellstot);
     meshData_->Residu_ = allocate1Ddbl(ncellstot);
@@ -296,19 +297,40 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
 
 
+    // Node2Cell_ 
 
-    /*
-    TO DO :
-        - Node2Cell_
-    */
+    for (unsigned int i = 0; i < meshData_->NNodes_; i++) {
 
+        unsigned int counter = 0;       
+        vector<unsigned int> cellFound(10);
 
+        for (unsigned int j = 0; j < meshData_->NCells_; j++)  {
+
+            for (unsigned int k = 0; k < meshData_->CellNfaces_[i]; k++) { 
+
+                if (meshData_->Cell2Node_[j][k] == i) {
+                    counter++;  
+                    cellFound.push_back(j);
+                    break;  
+                }
+            }
+        } 
+        meshData_->nodeNCell_[i] = counter;
+        meshData_->Node2Cell_[i] = allocate1Dint(counter);
+
+        for (unsigned int l = 0; l < counter; l++) {
+            meshData_->Node2Cell_[i][l] = cellFound[i];             
+        }   
+    }
+    
 }
+
 
 void MeshInitializer::deallocateMesh(){
     meshData_->Nodes_x_ = deallocate1Ddbl(meshData_->Nodes_x_);
     meshData_->Nodes_y_ = deallocate1Ddbl(meshData_->Nodes_y_);
     meshData_->CellNfaces_ = deallocate1Dint(meshData_->CellNfaces_);
+    meshData_->nodeNCell_ = deallocate1Dint(meshData_->nodeNCell_);
     meshData_->Volume_ = deallocate1Ddbl(meshData_->Volume_);
     meshData_->Residu_ = deallocate1Ddbl(meshData_->Residu_);
     meshData_->rho_ = deallocate1Ddbl(meshData_->rho_);

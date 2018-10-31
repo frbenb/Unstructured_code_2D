@@ -32,7 +32,8 @@ class Mesh_Data{
     unsigned int NFaces_;           
     unsigned int NFacesGhost_;      // should not exist I think
     unsigned int NFacesTotal_;      // should not exist I think
-    unsigned int NNodes_;           
+    unsigned int NNodes_; 
+    unsigned int* nodeNCell_;         
     double* Volume_;
     double* Residu_;
 
@@ -79,6 +80,8 @@ class Mesh_Data{
     double* speci_;                //speci, specj
     double* specj_;
 
+  public:
+    void write_stuff();
 };
 
 #endif
