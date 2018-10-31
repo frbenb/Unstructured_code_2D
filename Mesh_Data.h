@@ -44,7 +44,6 @@ class Mesh_Data{
     double* p_;
 
     unsigned int itl_, itu_;      
-    unsigned int inci_, incj_;                  //inci, incj - address  increments in i,j
 
     // Metrics
     double* cellArea_;         //area
