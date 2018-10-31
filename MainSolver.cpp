@@ -48,17 +48,31 @@ void MainSolver::computeSolution()
 
 void MainSolver::timestep()
 {
+    //Calculate spec_x_ and spec_y_
     spectral_radius();
 
-    double cfl = nscData_->cfl_;
+    double cfl;
     double area, speci, specj;
 
     //Loop on cells
     for(int i(0); i < meshData_->NCells_;i++)
     {
+        cfl = nscData_->cfl_;
         area = meshData_->cellArea_[i];
+        speci = meshData_->spec_x_[i];
+        specj = meshData_->spec_y_[i];
 
         // Apply formula of delta time
+        if((speci + specj) != 0)
+        {
+            meshData_->deltaT_[i] = cfl*area/(speci+specj);
+        }
+        else
+        {
+            std::cout << "Error: (speci + specj) should be different than 0." << endl;
+            return;
+        }
+            
     }
 
 }
@@ -76,7 +90,15 @@ void MainSolver::saveW0()
         meshData_->v_0_[i] = meshData_->rho_[i] * meshData_->v_[i];
 
         meshData_->p_0_[i] = 0.5 * meshData_->rho_[i] * (meshData_->u_[i]*meshData_->u_[i] + meshData_->v_[i]*meshData_->v_[i]);
-        meshData_->p_0_[i] += 1/(g - 1)*meshData_->p_[i];
+        if(meshData_->p_[i] != 0)
+        {
+            meshData_->p_0_[i] += 1/(g - 1)*meshData_->p_[i];
+        }
+        else
+        {
+            std::cout << "Error: p_ should be different than 0" << endl;
+            return;
+        }
 
     }
 
@@ -99,14 +121,21 @@ void MainSolver::spectral_radius()
 
     //Loop on cells
     for (int i(0);i < meshData_->NCells_;i++)
-    {
-        c = 
+    {   
+        if (meshData_->rho_ != 0)
+        {
+            c = g*meshData_->p_[i]/meshData_->rho_[i];
+        }
+        else
+        {
+            std::cout << "Error: Rho should be different than 0." << endl;
+            return;
+        }
 
-        spec_x[i] = meshData_->u_[i] + nscData_->;
-
+        meshData_->spec_x_[i] = (meshData_->u_[i] + c )*delta_S_x;
+        meshData_->spec_y_[i] = (meshData_->v_[i] + c ) *delta_S_y;
     }
     
-
 }
 
 void MainSolver::residual()
