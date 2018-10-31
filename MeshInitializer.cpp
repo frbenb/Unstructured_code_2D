@@ -212,8 +212,8 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->FaceCenter_y_ = allocate1Ddbl(meshData_->NFaces_);
 
     //Initialize memory for spec_x_ and spec_y_
-    meshData_->spec_x_ = allocate1Ddbl(meshData_->spec_x_);
-    meshData_->spec_y_ = allocate1Ddbl(meshData_->spec_y_);
+    meshData_->spec_x_ = allocate1Ddbl(meshData_->NCells_);
+    meshData_->spec_y_ = allocate1Ddbl(meshData_->NCells_);
 
     //Closing the mesh file
     meshfile.close();
