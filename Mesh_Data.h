@@ -51,12 +51,8 @@ class Mesh_Data{
     double* normal_y_;      //y value of normal vector for every faces
     double* FaceCenter_x_;
     double* FaceCenter_y_; 
+    
     // How to define the normal on the faces
-
-    double* rho_nodes_;        //rocv, uucv, vvcv, ppcv - primitive variables cell-vertex
-    double* u_nodes_;
-    double* v_nodes_;
-    double* p_nodes_;          // vertexes
     double* rho_0_;            //ro0, ru0, rv0, re0 - conservative variables rk(0)
     double* u_0_;
     double* v_0_;
