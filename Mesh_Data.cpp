@@ -185,7 +185,7 @@ void Mesh_Data::write_stuff(){
     nodeCellsFile << "nCells      cells" << endl;
 
     for (unsigned int i = 0; i < NNodes_; i++){
-        nodeCellsFile << nodeNCell_[i] << " " ;
+        nodeCellsFile << i << " " << nodeNCell_[i] << " " ;
         for (unsigned int j = 0; j < nodeNCell_[i]; j++){
             nodeCellsFile << " " << Node2Cell_[i][j];
         }
