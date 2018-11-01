@@ -302,9 +302,9 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     for (unsigned int i = 0; i < meshData_->NNodes_; i++) {
 
         unsigned int counter = 0;       
-        vector<unsigned int> cellFound(10);
+        vector<unsigned int> cellFound;
 
-        for (unsigned int j = 0; j < meshData_->NCells_; j++)  {
+        for (unsigned int j = 0; j < meshData_->NCellsTotal_; j++)  {
 
             for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++) { 
 
@@ -319,7 +319,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         meshData_->Node2Cell_[i] = allocate1Dint(counter);
 
         for (unsigned int l = 0; l < counter; l++) {
-            meshData_->Node2Cell_[i][l] = cellFound[i];             
+            meshData_->Node2Cell_[i][l] = cellFound[l];             
         }   
     }
     
