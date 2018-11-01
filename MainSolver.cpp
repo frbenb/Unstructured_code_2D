@@ -19,7 +19,7 @@ void MainSolver::doUpdate()
 {
     //Inside a loop, stop when convergence...
 
-        //1. Iterate_pseudo_timestep
+        //1. Iterate_pseudo_timestep (computeSolution)
 
         //2. Monitor the convergence.
 
@@ -27,6 +27,10 @@ void MainSolver::doUpdate()
 
 void MainSolver::computeSolution()
 {
+
+    //timestep
+
+    // Save w0
 
     //In a loop, for nstage...
 
@@ -44,19 +48,94 @@ void MainSolver::computeSolution()
 
 void MainSolver::timestep()
 {
+    //Calculate spec_x_ and spec_y_
+    spectral_radius();
+
+    double cfl;
+    double area, speci, specj;
+
+    //Loop on cells
+    for(int i(0); i < meshData_->NCells_;i++)
+    {
+        cfl = nscData_->cfl_;
+        area = meshData_->cellArea_[i];
+        speci = meshData_->spec_x_[i];
+        specj = meshData_->spec_y_[i];
+
+        // Apply formula of delta time
+        if((speci + specj) != 0)
+        {
+            meshData_->deltaT_[i] = cfl*area/(speci+specj);
+        }
+        else
+        {
+            std::cout << "Error: (speci + specj) should be different than 0." << endl;
+            return;
+        }
+            
+    }
 
 }
 
 void MainSolver::saveW0()
 {
+    double g = nscData_->gamma_;
+    double ro,u,v,p;
 
+    //Loop on cells
+    for(int i(0);i < meshData_->NCellsTotal_; i++)
+    {
+        meshData_->rho_0_[i] = meshData_->rho_[i];
+        meshData_->u_0_[i] = meshData_->rho_[i] * meshData_->u_[i];
+        meshData_->v_0_[i] = meshData_->rho_[i] * meshData_->v_[i];
+
+        meshData_->p_0_[i] = 0.5 * meshData_->rho_[i] * (meshData_->u_[i]*meshData_->u_[i] + meshData_->v_[i]*meshData_->v_[i]);
+        if(meshData_->p_[i] != 0)
+        {
+            meshData_->p_0_[i] += 1/(g - 1)*meshData_->p_[i];
+        }
+        else
+        {
+            std::cout << "Error: p_ should be different than 0" << endl;
+            return;
+        }
+
+    }
 
 }
 
 void MainSolver::spectral_radius()
 {
+    double delta_S_x = 0;
+    double delta_S_y = 0;
 
+    double g = nscData_->gamma_;
+    double c; // Speed of sound.
 
+    //Loop on all faces
+    for(int i(0);i<meshData_->NFaces_;i++)
+    {
+        delta_S_x += 0.5*std::abs(meshData_->normal_x_[i]); 
+        delta_S_y += 0.5*std::abs(meshData_->normal_y_[i]);
+    }
+
+    //Loop on cells
+    for (int i(0);i < meshData_->NCells_;i++)
+    {   
+        if (meshData_->rho_ != 0)
+        {
+            c = g*meshData_->p_[i]/meshData_->rho_[i];
+        }
+        else
+        {
+            std::cout << "Error: Rho should be different than 0." << endl;
+            return;
+        }
+
+        meshData_->spec_x_[i] = (meshData_->u_[i] + c )*delta_S_x;
+        meshData_->spec_y_[i] = (meshData_->v_[i] + c ) *delta_S_y;
+    }
+    
 }
 
 void MainSolver::residual()

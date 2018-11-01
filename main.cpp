@@ -29,10 +29,30 @@ int main()
 
     //Attach data to all computers
     MeshInitializer* meshInit = new MeshInitializer(nscData, meshData);
-    string fichier = "naca0012_129x129_1B_JAMESON.x";
-    meshInit->initializeMesh(fichier);
+    NSCInitializer* nscInit = new NSCInitializer(nscData, meshData);
+    DataUpdater* dataUpdater = new DataUpdater(nscData, meshData);
+
+    //Solver objects
+    MainSolver* solver = new MainSolver(nscData, meshData, dataUpdater);
+
+    //Attach object to outputData
+    OutputDataManager* outputDataManager = new OutputDataManager(nscData, meshData);
+
+    //Attach computers and data objects to inputManager
+    InputDataManager* inputDataManager  = new InputDataManager(nscInit, solver, meshInit, dataUpdater, meshData, nscData, outputDataManager);
+
+    //Attach inputManager to event manager
+    EventManager* eventManager = new EventManager(inputDataManager);
+
+    string inputfile = "input";
+    
+    //User operations here:
+    eventManager->enterInputFile(inputfile);
+
+    eventManager->testSU2Function();
 
     meshData->write_stuff();
-    cout << "done" << endl;
+
+    cout << "Done!" << endl;
     return 0;
 }

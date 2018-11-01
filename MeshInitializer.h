@@ -3,6 +3,7 @@
 
 //Standard lib.
 #include <string>
+#include <math.h>
 
 //Projet files
 #include "NSCData.h"
@@ -27,14 +28,28 @@ class MeshInitializer
         virtual ~MeshInitializer();
 
         void initializeMesh(string& meshFilename);
-        
+
+        //This method allows to define some properties beonging to faces and 
+        //cells (normals direction, areas)
+        void metric();
+
+        void mesh4halos();
+
+        void calculateCellCenter();
+
+        void calculateFaceCenter();
+
+        void calculateNormal();
+
+        void calculateCellsArea();
+
     private:
 
         NSCData     *nscData_;
         Mesh_Data   *meshData_;
 
         void deallocateMesh();
-
+        void prepass(string& meshFilename, unsigned int* variables);
 };
 
 

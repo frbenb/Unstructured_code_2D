@@ -12,7 +12,7 @@ EventManager::~EventManager()
 
 }
 
-void EventManager::enterInputFile(std::string iPath)
+void EventManager::enterInputFile(std::string& iPath)
 {
     //Manage the command of user in an input file.
     inputDataManager_->manageEntryFileName(iPath);

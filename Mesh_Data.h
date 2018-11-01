@@ -11,10 +11,12 @@ class Mesh_Data{
     Mesh_Data();    //Constructor
     ~Mesh_Data();   //Desctructor
 
+    void write_stuff();
+
     public:
     //Input
     double* Nodes_x_;               
-    double* Nodes_y_;               
+    double* Nodes_y_;              
 
     //Connectivity
     unsigned int** Cell2Node_;               
@@ -30,12 +32,11 @@ class Mesh_Data{
     unsigned int NCellsGhost_;     
     unsigned int NCellsTotal_;      
     unsigned int NFaces_;           
-    unsigned int NFacesGhost_;      // should not exist I think
-    unsigned int NFacesTotal_;      // should not exist I think
-    unsigned int NNodes_; 
-    unsigned int* nodeNCell_;         
+    unsigned int NNodes_;  
+    unsigned int* nodeNCell_;
     double* Volume_;
     double* Residu_;
+    unsigned int* GhostType_; // 0 is airfoil, 1 is far field
 
     //Output
     double* rho_;
@@ -43,22 +44,16 @@ class Mesh_Data{
     double* v_;
     double* p_;
 
-    unsigned int imax_, jmax_, itl_, itu_;      //imax, jmax
-    unsigned int imaxGhost_, jmaxGhost_;        //himax, hjmax
-    unsigned int rimax_, rjmax_;                //rimax, rjmax - restricted domain cv imax,jmax
-    unsigned int inci_, incj_;                  //inci, incj - address  increments in i,j
+    unsigned int itl_, itu_;      
 
+    // Metrics
     double* cellArea_;         //area
-    double* normal_i_x_; 		//six, siy - face i projections
-    double* normal_i_y_;
-    double* normal_j_x_;       //sjx, sjy - face j projections
-    double* normal_j_y_;
+    double* normal_x_; 		//x value of normal vector for every faces
+    double* normal_y_;      //y value of normal vector for every faces
+    double* FaceCenter_x_;
+    double* FaceCenter_y_; 
+    
     // How to define the normal on the faces
-
-    double* rho_nodes_;        //rocv, uucv, vvcv, ppcv - primitive variables cell-vertex
-    double* u_nodes_;
-    double* v_nodes_;
-    double* p_nodes_;          // vertexes
     double* rho_0_;            //ro0, ru0, rv0, re0 - conservative variables rk(0)
     double* u_0_;
     double* v_0_;
@@ -76,9 +71,9 @@ class Mesh_Data{
     double* tmp_u_;
     double* tmp_v_;
     double* tmp_p_;
-    double* deltaT_;               //dt
-    double* speci_;                //speci, specj
-    double* specj_;
+    double* deltaT_;                //dt
+    double* spec_x_;                //speci, specj, variables for spectral radius.
+    double* spec_y_;
 
   public:
     void write_stuff();

@@ -26,7 +26,7 @@ class EventManager
 
         //This method allows to send the input path from user entry.
         // it contains all the routine to run when is called
-        void enterInputFile(std::string iPath);
+        void enterInputFile(std::string& iPath);
     
         //This method allows the user to trigger the event of printing data.
         void testSU2Function();
