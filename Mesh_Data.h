@@ -32,7 +32,8 @@ class Mesh_Data{
     unsigned int NCellsGhost_;     
     unsigned int NCellsTotal_;      
     unsigned int NFaces_;           
-    unsigned int NNodes_;           
+    unsigned int NNodes_;  
+    unsigned int* nodeNCell_;
     double* Volume_;
     double* Residu_;
     unsigned int* GhostType_; // 0 is airfoil, 1 is far field
@@ -74,6 +75,8 @@ class Mesh_Data{
     double* spec_x_;                //speci, specj, variables for spectral radius.
     double* spec_y_;
 
+  public:
+    void write_stuff();
 };
 
 #endif

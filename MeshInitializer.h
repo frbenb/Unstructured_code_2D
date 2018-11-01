@@ -43,7 +43,6 @@ class MeshInitializer
 
         void calculateCellsArea();
 
-
     private:
 
         NSCData     *nscData_;

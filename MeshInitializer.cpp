@@ -276,16 +276,29 @@ void MeshInitializer::initializeMesh(string& meshFilename){
             meshData_->Cell2Cell_[i][j] = factor * cell0 + !factor * cell1; 
         }
     }
+  for (unsigned int i = 0; i < meshData_->NNodes_; i++) {
 
+        unsigned int counter = 0;       
+        vector<unsigned int> cellFound;
 
+        for (unsigned int j = 0; j < meshData_->NCellsTotal_; j++)  {
 
+            for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++) { 
 
-    /*
-    TO DO :
-        - Node2Cell_
-    */
+                if (meshData_->Cell2Node_[j][k] == i) {
+                    counter++;  
+                    cellFound.push_back(j);
+                    break;  
+                }
+            }
+        } 
+        meshData_->nodeNCell_[i] = counter;
+        meshData_->Node2Cell_[i] = allocate1Dint(counter);
 
-
+        for (unsigned int l = 0; l < counter; l++) {
+            meshData_->Node2Cell_[i][l] = cellFound[l];             
+        }   
+    }
 }
 
 void MeshInitializer::deallocateMesh(){
@@ -555,5 +568,3 @@ void MeshInitializer::prepass(string& meshFilename, unsigned int* variables){
     variables[2] = nghosts;
     return;
 }
-
-
