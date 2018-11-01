@@ -27,7 +27,7 @@ class MeshInitializer
         virtual ~MeshInitializer();
 
         void initializeMesh(string& meshFilename);
-
+        
     private:
 
         NSCData     *nscData_;

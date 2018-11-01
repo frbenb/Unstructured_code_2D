@@ -33,5 +33,6 @@ int main()
     meshInit->initializeMesh(fichier);
 
     meshData->write_stuff();
+    cout << "done" << endl;
     return 0;
 }

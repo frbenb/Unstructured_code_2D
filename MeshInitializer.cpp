@@ -306,7 +306,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
         for (unsigned int j = 0; j < meshData_->NCells_; j++)  {
 
-            for (unsigned int k = 0; k < meshData_->CellNfaces_[i]; k++) { 
+            for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++) { 
 
                 if (meshData_->Cell2Node_[j][k] == i) {
                     counter++;  
