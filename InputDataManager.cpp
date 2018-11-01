@@ -105,7 +105,17 @@ void InputDataManager::readInputFile()
 
         inputFile >> nscData_->mach_;
         inputFile >> nscData_->alpha_;
-        inputFile >> nscData_->cltarget_;    
+
+        std::string str_cl;
+        inputFile >> str_cl;
+        if (str_cl == "no"){
+            nscData_->cltarget_ = 0;
+        }
+        else{
+            nscData_->cltarget_ = std::stoi(str_cl);
+        }
+
+
         inputFile >> nscData_->dcl_;
         inputFile >> nscData_->reynolds_;
 
