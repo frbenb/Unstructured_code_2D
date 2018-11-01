@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "arrayMemory.h"
+#include <vector>
 
 
 MeshInitializer::MeshInitializer(NSCData *iNSCData, Mesh_Data *iMeshData) :
