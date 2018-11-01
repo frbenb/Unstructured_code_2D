@@ -55,7 +55,7 @@ void MainSolver::timestep()
     double area, speci, specj;
 
     //Loop on cells
-    for(int i(0); i < meshData_->NCells_;i++)
+    for(unsigned int i(0); i < meshData_->NCells_;i++)
     {
         cfl = nscData_->cfl_;
         area = meshData_->cellArea_[i];
@@ -80,10 +80,10 @@ void MainSolver::timestep()
 void MainSolver::saveW0()
 {
     double g = nscData_->gamma_;
-    double ro,u,v,p;
+    double ro,u,v,p; // What are thoooose
 
     //Loop on cells
-    for(int i(0);i < meshData_->NCellsTotal_; i++)
+    for(unsigned int i(0);i < meshData_->NCellsTotal_; i++)
     {
         meshData_->rho_0_[i] = meshData_->rho_[i];
         meshData_->u_0_[i] = meshData_->rho_[i] * meshData_->u_[i];
@@ -113,14 +113,14 @@ void MainSolver::spectral_radius()
     double c; // Speed of sound.
 
     //Loop on all faces
-    for(int i(0);i<meshData_->NFaces_;i++)
+    for(unsigned int i(0);i<meshData_->NFaces_;i++)
     {
         delta_S_x += 0.5*std::abs(meshData_->normal_x_[i]); 
         delta_S_y += 0.5*std::abs(meshData_->normal_y_[i]);
     }
 
     //Loop on cells
-    for (int i(0);i < meshData_->NCells_;i++)
+    for (unsigned int i(0);i < meshData_->NCells_;i++)
     {   
         if (meshData_->rho_ != 0)
         {
