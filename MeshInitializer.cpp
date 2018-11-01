@@ -203,7 +203,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     //Counting the thotal number of faces
     meshData_->NFaces_ = (nFaces_double + meshData_->NCellsGhost_)/2;
 
-
     //Initialize memory for normal of faces
     meshData_->normal_x_ = allocate1Ddbl(meshData_->NFaces_);
     meshData_->normal_y_ = allocate1Ddbl(meshData_->NFaces_);
@@ -215,10 +214,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     //Initialize memory for spec_x_ and spec_y_
     meshData_->spec_x_ = allocate1Ddbl(meshData_->NCells_);
     meshData_->spec_y_ = allocate1Ddbl(meshData_->NCells_);
-
-    //Closing the mesh file
-    meshfile.close();
-
 
     // NFaces allocation
 
@@ -277,7 +272,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
             meshData_->Cell2Cell_[i][j] = factor * cell0 + !factor * cell1; 
         }
     }
-  for (unsigned int i = 0; i < meshData_->NNodes_; i++) {
+    for (unsigned int i = 0; i < meshData_->NNodes_; i++) {
 
         unsigned int counter = 0;       
         vector<unsigned int> cellFound;
