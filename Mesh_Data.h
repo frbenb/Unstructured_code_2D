@@ -7,13 +7,11 @@ using namespace std;
 #include <iostream>
 
 class Mesh_Data{
-    public:
+  public:
     Mesh_Data();    //Constructor
     ~Mesh_Data();   //Desctructor
 
-    void write_stuff();
-
-    public:
+  public:
     //Input
     double* Nodes_x_;               
     double* Nodes_y_;              
@@ -75,6 +73,7 @@ class Mesh_Data{
     double* spec_x_;                //speci, specj, variables for spectral radius.
     double* spec_y_;
 
+  // Methods
   public:
     void write_stuff();
 };

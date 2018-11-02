@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "arrayMemory.h"
+#include <vector>
 
 
 MeshInitializer::MeshInitializer(NSCData *iNSCData, Mesh_Data *iMeshData) :
@@ -45,6 +46,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->Cell2Face_ = allocate1Dintstar(ncellstot);
     meshData_->Cell2Cell_ = allocate1Dintstar(ncellstot);
     meshData_->Node2Cell_ = allocate1Dintstar(npoints); // 2nd level not allocated yet
+    meshData_->nodeNCell_ = allocate1Dint(npoints);
 
     meshData_->Volume_ = allocate1Ddbl(ncellstot);
     meshData_->Residu_ = allocate1Ddbl(ncellstot);
@@ -53,8 +55,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->u_ = allocate1Ddbl(ncellstot);
     meshData_->v_ = allocate1Ddbl(ncellstot);
     meshData_->p_ = allocate1Ddbl(ncellstot);
-
-    
     
     //Display of the file name
     cout << "File name: " << meshFilename << endl;
@@ -202,7 +202,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     //Counting the thotal number of faces
     meshData_->NFaces_ = (nFaces_double + meshData_->NCellsGhost_)/2;
 
-
     //Initialize memory for normal of faces
     meshData_->normal_x_ = allocate1Ddbl(meshData_->NFaces_);
     meshData_->normal_y_ = allocate1Ddbl(meshData_->NFaces_);
@@ -214,10 +213,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     //Initialize memory for spec_x_ and spec_y_
     meshData_->spec_x_ = allocate1Ddbl(meshData_->NCells_);
     meshData_->spec_y_ = allocate1Ddbl(meshData_->NCells_);
-
-    //Closing the mesh file
-    meshfile.close();
-
 
     // NFaces allocation
 
@@ -276,15 +271,14 @@ void MeshInitializer::initializeMesh(string& meshFilename){
             meshData_->Cell2Cell_[i][j] = factor * cell0 + !factor * cell1; 
         }
     }
-  for (unsigned int i = 0; i < meshData_->NNodes_; i++) {
 
+    // Node2Cell_ 
+    for (unsigned int i = 0; i < meshData_->NNodes_; i++) {
         unsigned int counter = 0;       
         vector<unsigned int> cellFound;
 
         for (unsigned int j = 0; j < meshData_->NCellsTotal_; j++)  {
-
             for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++) { 
-
                 if (meshData_->Cell2Node_[j][k] == i) {
                     counter++;  
                     cellFound.push_back(j);
@@ -305,6 +299,7 @@ void MeshInitializer::deallocateMesh(){
     meshData_->Nodes_x_ = deallocate1Ddbl(meshData_->Nodes_x_);
     meshData_->Nodes_y_ = deallocate1Ddbl(meshData_->Nodes_y_);
     meshData_->CellNfaces_ = deallocate1Dint(meshData_->CellNfaces_);
+    meshData_->nodeNCell_ = deallocate1Dint(meshData_->nodeNCell_);
     meshData_->Volume_ = deallocate1Ddbl(meshData_->Volume_);
     meshData_->Residu_ = deallocate1Ddbl(meshData_->Residu_);
     meshData_->GhostType_ = deallocate1Dint(meshData_->GhostType_);
