@@ -606,5 +606,3 @@ void MeshInitializer::prepass(string& meshFilename, unsigned int* variables){
     variables[2] = nghosts;
     return;
 }
-
-
