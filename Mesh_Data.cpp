@@ -73,6 +73,18 @@ Mesh_Data::~Mesh_Data()
 
     spec_x_ = deallocate1Ddbl(spec_x_);
     spec_y_ = deallocate1Ddbl(spec_y_);
+
+    residualInviscid_rho_ = deallocate1Ddbl(residualInviscid_rho_);
+    residualInviscid_u_ = deallocate1Ddbl(residualInviscid_u_);
+    residualInviscid_v_ = deallocate1Ddbl(residualInviscid_v_ );
+    residualInviscid_p_ = deallocate1Ddbl(residualInviscid_p_);
+
+    residualDissip_rho_ = deallocate1Ddbl(residualDissip_rho_);
+    residualDissip_u_ = deallocate1Ddbl(residualDissip_u_);
+    residualDissip_v_ = deallocate1Ddbl(residualDissip_v_);
+    residualDissip_p_ = deallocate1Ddbl(residualDissip_p_);
+
+
 }
 
 void Mesh_Data::write_stuff(){

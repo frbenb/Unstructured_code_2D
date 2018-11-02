@@ -4,7 +4,6 @@
 #include "arrayMemory.h"
 #include <vector>
 
-
 MeshInitializer::MeshInitializer(NSCData *iNSCData, Mesh_Data *iMeshData) :
                                     nscData_(iNSCData),
                                     meshData_(iMeshData)
@@ -56,10 +55,30 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->v_ = allocate1Ddbl(ncellstot);
     meshData_->p_ = allocate1Ddbl(ncellstot);
 
+    
     meshData_->rho_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->u_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->v_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->p_nodes_ = allocate1Ddbl(ncellstot);
+    
+    
+    //Initialize memory for spec_x_ and spec_y_
+    meshData_->spec_x_ = allocate1Ddbl(ncells);
+    meshData_->spec_y_ = allocate1Ddbl(ncells);
+
+    //Initialize memory for residual inviscid
+    meshData_->residualInviscid_rho_ = allocate1Ddbl(ncells);
+    meshData_->residualInviscid_u_ = allocate1Ddbl(ncells);
+    meshData_->residualInviscid_v_ = allocate1Ddbl(ncells);
+    meshData_->residualInviscid_p_ = allocate1Ddbl(ncells);
+
+    //Initialize memory for artificial residual
+    meshData_->residualDissip_rho_ = allocate1Ddbl(ncells);
+    meshData_->residualDissip_u_ = allocate1Ddbl(ncells);
+    meshData_->residualDissip_v_ = allocate1Ddbl(ncells);
+    meshData_->residualDissip_p_ = allocate1Ddbl(ncells);
+
+    
     
     //Display of the file name
     cout << "File name: " << meshFilename << endl;
@@ -194,8 +213,11 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         meshData_->NCellsGhost_ += nelements; 
     }
 
+
     //Closing the mesh file
     meshfile.close();
+
+
 
     meshData_->NCellsTotal_ = meshData_->NCellsGhost_ + meshData_->NCells_;
 
@@ -207,6 +229,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     //Counting the thotal number of faces
     meshData_->NFaces_ = (nFaces_double + meshData_->NCellsGhost_)/2;
 
+
     //Initialize memory for normal of faces
     meshData_->normal_x_ = allocate1Ddbl(meshData_->NFaces_);
     meshData_->normal_y_ = allocate1Ddbl(meshData_->NFaces_);
@@ -215,9 +238,8 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->FaceCenter_x_ = allocate1Ddbl(meshData_->NFaces_);
     meshData_->FaceCenter_y_ = allocate1Ddbl(meshData_->NFaces_);
 
-    //Initialize memory for spec_x_ and spec_y_
-    meshData_->spec_x_ = allocate1Ddbl(meshData_->NCells_);
-    meshData_->spec_y_ = allocate1Ddbl(meshData_->NCells_);
+    
+
 
     // NFaces allocation
 
@@ -298,6 +320,8 @@ void MeshInitializer::initializeMesh(string& meshFilename){
             meshData_->Node2Cell_[i][l] = cellFound[l];             
         }   
     }
+
+
 }
 
 void MeshInitializer::deallocateMesh(){
@@ -330,6 +354,16 @@ void MeshInitializer::deallocateMesh(){
 
     meshData_->spec_x_ = deallocate1Ddbl(meshData_->spec_x_);
     meshData_->spec_y_ = deallocate1Ddbl(meshData_->spec_y_);
+
+    meshData_->residualInviscid_rho_ = deallocate1Ddbl(meshData_->residualInviscid_rho_);
+    meshData_->residualInviscid_u_ = deallocate1Ddbl(meshData_->residualInviscid_u_);
+    meshData_->residualInviscid_v_ = deallocate1Ddbl(meshData_->residualInviscid_v_ );
+    meshData_->residualInviscid_p_ = deallocate1Ddbl(meshData_->residualInviscid_p_);
+
+    meshData_->residualDissip_rho_ = deallocate1Ddbl(meshData_->residualDissip_rho_);
+    meshData_->residualDissip_u_ = deallocate1Ddbl(meshData_->residualDissip_u_);
+    meshData_->residualDissip_v_ = deallocate1Ddbl(meshData_->residualDissip_v_);
+    meshData_->residualDissip_p_ = deallocate1Ddbl(meshData_->residualDissip_p_);
 
     meshData_->NCells_ = 0;
     meshData_->NCellsGhost_ = 0;
