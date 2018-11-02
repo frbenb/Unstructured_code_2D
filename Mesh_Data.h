@@ -41,6 +41,10 @@ class Mesh_Data{
     double* u_;
     double* v_;
     double* p_;
+    double* rho_nodes_;
+    double* u_nodes_;
+    double* v_nodes_;
+    double* p_nodes_;
 
     unsigned int itl_, itu_;      
 

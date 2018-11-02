@@ -75,7 +75,7 @@ void DataUpdater::update_boundary()
         }
         else
         {
-            std::cout << "Error: Length of vector cannot be 0";
+            std::cout << "Error: Length of vector cannot be 0" << endl;
             return;
         }
 
