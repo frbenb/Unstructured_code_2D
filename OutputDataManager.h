@@ -28,7 +28,9 @@ class OutputDataManager
         // This methos allows to show the results of storing the Mesh_Data
         // and NSCData by reading the SU2 file. Testing function read_SU2.
         void showSU2ReadingData();
-    
+
+        // Callates rho_nodes, u_nodes, v_nodes, p_nodes
+        void calculate_node_coefficients(); 
 
     private:
 
