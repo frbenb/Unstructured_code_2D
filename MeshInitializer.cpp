@@ -96,6 +96,8 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 }
 
 unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints, unsigned int ncells, unsigned int nghosts){
+    // Returns nFaces_double
+    
     unsigned int ncellstot = ncells + nghosts;
     
     //Display of the file name
@@ -109,6 +111,7 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
     if(!meshfile.is_open())
     {
         cout << "Error: " << meshFilename << " could not open." << endl;
+        meshfile.close();
         return 1;
     }
     else
@@ -127,6 +130,7 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
 
     if (meshData_->NNodes_ != npoints){
         cout << "Pre-pass and full read nNodes differ." << endl;
+        meshfile.close();
         return 1;
     }
 
@@ -140,6 +144,7 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
     meshfile >> token >> meshData_->NCells_; //Here, token = "NELEM="
     if (meshData_->NCells_ != ncells){
         cout << "Pre-pass and full read nCells differ." << endl;
+        meshfile.close();
         return 1;
     }
 
@@ -203,6 +208,7 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
         }
         else{
             cout << "Error, boundary type '" << boundarytype_string << "' unknown." << endl;
+            meshfile.close();
             return 1;
         }
 
@@ -212,6 +218,7 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
             meshfile >> shape;
             if (shape != 3){
                 cout << "Boundaries can only be line elements." << endl;
+                meshfile.close();
                 return 1;
             }
 
@@ -229,7 +236,6 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
         //For every bc, adding the number of elem. to the number of ghost faces (every element is a line in 2D)
         meshData_->NCellsGhost_ += nelements; 
     }
-
 
     //Closing the mesh file
     meshfile.close();
@@ -523,6 +529,7 @@ unsigned int* MeshInitializer::prepass(string& meshFilename){
     if(!meshfile.is_open())
     {
         cout << "Error: " << meshFilename << " could not open for pre-pass." << endl;
+        meshfile.close();
         return nullptr;
     }
     else
@@ -587,6 +594,7 @@ unsigned int* MeshInitializer::prepass(string& meshFilename){
             meshfile >> shape;
             if (shape != 3){
                 cout << "Boundaries can only be line elements." << endl;
+                meshfile.close();
                 return nullptr;
             }
 
