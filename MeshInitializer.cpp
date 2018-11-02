@@ -215,6 +215,9 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->spec_x_ = allocate1Ddbl(meshData_->NCells_);
     meshData_->spec_y_ = allocate1Ddbl(meshData_->NCells_);
 
+    //Initialize memory for residual inviscid
+    meshData_->residualInviscid_rho_ = allocate1Ddbl(meshData_->NCells_);
+
     //Closing the mesh file
     meshfile.close();
 

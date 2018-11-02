@@ -140,7 +140,34 @@ void MainSolver::spectral_radius()
 
 void MainSolver::residual()
 {
+
+    //Loop on cells domaine
+    for(unsigned int i(0);i < meshData_->NCells_;i++)
+    {
+        // Set residuals to 0.
+        meshData_->residualInviscid_rho_[i] = 0;
+        meshData_->residualInviscid_u_[i] = 0;
+        meshData_->residualInviscid_v_[i] = 0;
+        meshData_->residualDissip_p_[i] = 0;
+
+        if(nscData_->nstage_ == 0)
+        {
+            meshData_->residualDissip_rho_[i] = 0;
+            meshData_->residualDissip_u_[i] = 0;
+            meshData_->residualDissip_v_[i] = 0;
+            meshData_->residualDissip_p_[i] = 0;
+        }
+
+
+
+
+    }
+
+    // Put Residual inviscid to 0.
     
+
+
+
 }
 
 void MainSolver::residual_smoothing()
