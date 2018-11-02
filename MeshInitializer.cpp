@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "arrayMemory.h"
-
+#include <vector>
 
 MeshInitializer::MeshInitializer(NSCData *iNSCData, Mesh_Data *iMeshData) :
                                     nscData_(iNSCData),
@@ -45,6 +45,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->Cell2Face_ = allocate1Dintstar(ncellstot);
     meshData_->Cell2Cell_ = allocate1Dintstar(ncellstot);
     meshData_->Node2Cell_ = allocate1Dintstar(npoints); // 2nd level not allocated yet
+    meshData_->nodeNCell_ = allocate1Dint(npoints);
 
     meshData_->Volume_ = allocate1Ddbl(ncellstot);
     meshData_->Residu_ = allocate1Ddbl(ncellstot);
@@ -54,6 +55,13 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->v_ = allocate1Ddbl(ncellstot);
     meshData_->p_ = allocate1Ddbl(ncellstot);
 
+    
+    meshData_->rho_nodes_ = allocate1Ddbl(ncellstot);
+    meshData_->u_nodes_ = allocate1Ddbl(ncellstot);
+    meshData_->v_nodes_ = allocate1Ddbl(ncellstot);
+    meshData_->p_nodes_ = allocate1Ddbl(ncellstot);
+    
+    
     //Initialize memory for spec_x_ and spec_y_
     meshData_->spec_x_ = allocate1Ddbl(ncells);
     meshData_->spec_y_ = allocate1Ddbl(ncells);
@@ -205,8 +213,11 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         meshData_->NCellsGhost_ += nelements; 
     }
 
+
     //Closing the mesh file
     meshfile.close();
+
+
 
     meshData_->NCellsTotal_ = meshData_->NCellsGhost_ + meshData_->NCells_;
 
@@ -228,9 +239,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->FaceCenter_y_ = allocate1Ddbl(meshData_->NFaces_);
 
     
-
-    //Closing the mesh file
-    meshfile.close();
 
 
     // NFaces allocation
