@@ -85,10 +85,10 @@ void OutputDataManager::calculate_node_coefficients(){
             v += meshData_->v_[cellID];
             p += meshData_->p_[cellID];
         }
-        meshData_->rho_nodes_[cellID] = rho/meshData_->nodeNCell_[nodeID];
-        meshData_->u_nodes_[cellID] = u/meshData_->nodeNCell_[nodeID];
-        meshData_->v_nodes_[cellID] = v/meshData_->nodeNCell_[nodeID];
-        meshData_->p_nodes_[cellID] = p/meshData_->nodeNCell_[nodeID];
+        meshData_->rho_nodes_[nodeID] = rho/meshData_->nodeNCell_[nodeID];
+        meshData_->u_nodes_[nodeID] = u/meshData_->nodeNCell_[nodeID];
+        meshData_->v_nodes_[nodeID] = v/meshData_->nodeNCell_[nodeID];
+        meshData_->p_nodes_[nodeID] = p/meshData_->nodeNCell_[nodeID];
     }
 }
 
