@@ -299,13 +299,27 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         }
     }
 
+    // Node2Cell_ 
+    for (unsigned int i = 0; i < meshData_->NNodes_; i++) {
+        unsigned int counter = 0;       
+        vector<unsigned int> cellFound;
 
+        for (unsigned int j = 0; j < meshData_->NCellsTotal_; j++)  {
+            for (unsigned int k = 0; k < meshData_->CellNfaces_[j]; k++) { 
+                if (meshData_->Cell2Node_[j][k] == i) {
+                    counter++;  
+                    cellFound.push_back(j);
+                    break;  
+                }
+            }
+        } 
+        meshData_->nodeNCell_[i] = counter;
+        meshData_->Node2Cell_[i] = allocate1Dint(counter);
 
-
-    /*
-    TO DO :
-        - Node2Cell_
-    */
+        for (unsigned int l = 0; l < counter; l++) {
+            meshData_->Node2Cell_[i][l] = cellFound[l];             
+        }   
+    }
 
 
 }
@@ -314,6 +328,7 @@ void MeshInitializer::deallocateMesh(){
     meshData_->Nodes_x_ = deallocate1Ddbl(meshData_->Nodes_x_);
     meshData_->Nodes_y_ = deallocate1Ddbl(meshData_->Nodes_y_);
     meshData_->CellNfaces_ = deallocate1Dint(meshData_->CellNfaces_);
+    meshData_->nodeNCell_ = deallocate1Dint(meshData_->nodeNCell_);
     meshData_->Volume_ = deallocate1Ddbl(meshData_->Volume_);
     meshData_->Residu_ = deallocate1Ddbl(meshData_->Residu_);
     meshData_->GhostType_ = deallocate1Dint(meshData_->GhostType_);
@@ -321,6 +336,10 @@ void MeshInitializer::deallocateMesh(){
     meshData_->u_ = deallocate1Ddbl(meshData_->u_);
     meshData_->v_ = deallocate1Ddbl(meshData_->v_);
     meshData_->p_ = deallocate1Ddbl(meshData_->p_);
+    meshData_->rho_nodes_ = deallocate1Ddbl(meshData_->rho_nodes_);
+    meshData_->u_nodes_ = deallocate1Ddbl(meshData_->u_nodes_);
+    meshData_->v_nodes_ = deallocate1Ddbl(meshData_->v_nodes_);
+    meshData_->p_nodes_ = deallocate1Ddbl(meshData_->p_nodes_);
     meshData_->normal_x_ = deallocate1Ddbl(meshData_->normal_x_);
     meshData_->normal_y_ = deallocate1Ddbl(meshData_->normal_y_);
     meshData_->FaceCenter_x_ = deallocate1Ddbl(meshData_->FaceCenter_x_);
