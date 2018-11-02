@@ -55,12 +55,10 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->v_ = allocate1Ddbl(ncellstot);
     meshData_->p_ = allocate1Ddbl(ncellstot);
 
-    
     meshData_->rho_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->u_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->v_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->p_nodes_ = allocate1Ddbl(ncellstot);
-    
     
     //Initialize memory for spec_x_ and spec_y_
     meshData_->spec_x_ = allocate1Ddbl(ncells);
@@ -78,7 +76,31 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->residualDissip_v_ = allocate1Ddbl(ncells);
     meshData_->residualDissip_p_ = allocate1Ddbl(ncells);
 
-    
+    unsigned int nFaces_double = read_su2(meshFilename, npoints, ncells, nghosts);
+
+    //Counting the total number of faces
+    meshData_->NFaces_ = (nFaces_double + meshData_->NCellsGhost_)/2;
+
+    //Initialize memory for normal of faces
+    meshData_->normal_x_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->normal_y_ = allocate1Ddbl(meshData_->NFaces_);
+
+    //Initialize memory for CenterFaces coordinates vector
+    meshData_->FaceCenter_x_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->FaceCenter_y_ = allocate1Ddbl(meshData_->NFaces_);
+
+
+    // NFaces allocation
+    meshData_->Face2Node_ = allocate2Dint(meshData_->NFaces_, 2);
+    meshData_->Face2Cell_ = allocate2Dint(meshData_->NFaces_, 2);
+
+    fill_face_arrays();
+    fill_cell2cell();
+    fill_node2cell();
+}
+
+unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints, unsigned int ncells, unsigned int nghosts){
+    unsigned int ncellstot = ncells + nghosts;
     
     //Display of the file name
     cout << "File name: " << meshFilename << endl;
@@ -91,7 +113,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     if(!meshfile.is_open())
     {
         cout << "Error: " << meshFilename << " could not open." << endl;
-        return;
+        return 1;
     }
     else
     {
@@ -109,7 +131,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     if (meshData_->NNodes_ != npoints){
         cout << "Pre-pass and full read nNodes differ." << endl;
-        return;
+        return 1;
     }
 
     //To fill the vectors of x and y coordinates of the nodes
@@ -122,9 +144,8 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshfile >> token >> meshData_->NCells_; //Here, token = "NELEM="
     if (meshData_->NCells_ != ncells){
         cout << "Pre-pass and full read nCells differ." << endl;
-        return;
+        return 1;
     }
-
 
     //Array of the number of faces for each cell (CellNFaces_)
     //and array of nodes for each cell (Cell2Nodes_)
@@ -186,7 +207,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
         }
         else{
             cout << "Error, boundary type '" << boundarytype_string << "' unknown." << endl;
-            return;
+            return 1;
         }
 
         meshfile >> token >> nelements; //Here, token = "MARKER_ELEMS="
@@ -195,7 +216,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
             meshfile >> shape;
             if (shape != 3){
                 cout << "Boundaries can only be line elements." << endl;
-                return;
+                return 1;
             }
 
             meshData_->GhostType_[boundary_counter] = boundary_type;
@@ -217,35 +238,15 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     //Closing the mesh file
     meshfile.close();
 
-
-
     meshData_->NCellsTotal_ = meshData_->NCellsGhost_ + meshData_->NCells_;
 
     if (meshData_->NCellsGhost_ != nghosts){
         cout << "Pre-pass and full read nCellsGhost differ." << endl;
-        return;
+        return 1;
     }
-
-    //Counting the thotal number of faces
-    meshData_->NFaces_ = (nFaces_double + meshData_->NCellsGhost_)/2;
-
-
-    //Initialize memory for normal of faces
-    meshData_->normal_x_ = allocate1Ddbl(meshData_->NFaces_);
-    meshData_->normal_y_ = allocate1Ddbl(meshData_->NFaces_);
-
-    //Initialize memory for CenterFaces coordinates vector
-    meshData_->FaceCenter_x_ = allocate1Ddbl(meshData_->NFaces_);
-    meshData_->FaceCenter_y_ = allocate1Ddbl(meshData_->NFaces_);
-
-    
-
-
-    // NFaces allocation
-
-    meshData_->Face2Node_ = allocate2Dint(meshData_->NFaces_, 2);
-    meshData_->Face2Cell_ = allocate2Dint(meshData_->NFaces_, 2);
-
+    return nFaces_double;
+}
+void MeshInitializer::fill_face_arrays(){
     unsigned int nFacesDone = 0;
     unsigned int node1, node2, min, max, found;
 
@@ -284,11 +285,12 @@ void MeshInitializer::initializeMesh(string& meshFilename){
             meshData_->Cell2Face_[i][j] = found;
         }
     }
+}
 
+void MeshInitializer::fill_cell2cell(){
     // Cell2Cell_ 
-
     for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++){  //The cell we are checking
-        for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){   //The cell's faces we are chking, we want the cell on the other side
+        for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){   //The cell's faces we are checking, we want the cell on the other side
 
             unsigned int cell0 = meshData_->Face2Cell_[meshData_->Cell2Face_[i][j]][0];
             unsigned int cell1 = meshData_->Face2Cell_[meshData_->Cell2Face_[i][j]][1]; 
@@ -298,7 +300,9 @@ void MeshInitializer::initializeMesh(string& meshFilename){
             meshData_->Cell2Cell_[i][j] = factor * cell0 + !factor * cell1; 
         }
     }
+}
 
+void MeshInitializer::fill_node2cell(){
     // Node2Cell_ 
     for (unsigned int i = 0; i < meshData_->NNodes_; i++) {
         unsigned int counter = 0;       
@@ -320,8 +324,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
             meshData_->Node2Cell_[i][l] = cellFound[l];             
         }   
     }
-
-
 }
 
 void MeshInitializer::deallocateMesh(){

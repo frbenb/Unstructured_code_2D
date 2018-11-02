@@ -50,6 +50,10 @@ class MeshInitializer
 
         void deallocateMesh();
         void prepass(string& meshFilename, unsigned int* variables);
+        unsigned int read_su2(string meshFilename, unsigned int npoints, unsigned int ncells, unsigned int nghosts);
+        void fill_face_arrays();
+        void fill_cell2cell();
+        void fill_node2cell();
 };
 
 
