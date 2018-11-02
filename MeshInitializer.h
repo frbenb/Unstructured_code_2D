@@ -33,15 +33,15 @@ class MeshInitializer
         //cells (normals direction, areas)
         void metric();
 
-        void mesh4halos();
+        void mesh4halos(); // Make private
 
-        void calculateCellCenter();
+        void calculateCellCenter(); // Make private
 
-        void calculateFaceCenter();
+        void calculateFaceCenter(); // Make private
 
-        void calculateNormal();
+        void calculateNormal(); // Make private
 
-        void calculateCellsArea();
+        void calculateCellsArea(); // Make private
 
     private:
 
