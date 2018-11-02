@@ -97,7 +97,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
 unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints, unsigned int ncells, unsigned int nghosts){
     // Returns nFaces_double
-    
+
     unsigned int ncellstot = ncells + nghosts;
     
     //Display of the file name
@@ -503,7 +503,6 @@ void MeshInitializer::calculateCellsArea()
 {
 
 }
-
 
 unsigned int* MeshInitializer::prepass(string& meshFilename){
     //unsigned int variables[3]; // 0 is npoints, 1 is ncells, 2 is nghost
