@@ -248,6 +248,7 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
     }
     return nFaces_double;
 }
+
 void MeshInitializer::fill_face_arrays(){
     unsigned int nFacesDone = 0;
     unsigned int node1, node2, min, max, found;
@@ -376,7 +377,6 @@ void MeshInitializer::deallocateMesh(){
     meshData_->NNodes_ = 0; 
 }
 
-
 void MeshInitializer::metric()
 {
     // Calculate Cell center.
@@ -394,7 +394,6 @@ void MeshInitializer::mesh4halos()
 {
     
 }
-
 
 void MeshInitializer::calculateCellCenter()
 {
