@@ -55,6 +55,11 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->u_ = allocate1Ddbl(ncellstot);
     meshData_->v_ = allocate1Ddbl(ncellstot);
     meshData_->p_ = allocate1Ddbl(ncellstot);
+
+    meshData_->rho_nodes_ = allocate1Ddbl(ncellstot);
+    meshData_->u_nodes_ = allocate1Ddbl(ncellstot);
+    meshData_->v_nodes_ = allocate1Ddbl(ncellstot);
+    meshData_->p_nodes_ = allocate1Ddbl(ncellstot);
     
     //Display of the file name
     cout << "File name: " << meshFilename << endl;
@@ -307,6 +312,10 @@ void MeshInitializer::deallocateMesh(){
     meshData_->u_ = deallocate1Ddbl(meshData_->u_);
     meshData_->v_ = deallocate1Ddbl(meshData_->v_);
     meshData_->p_ = deallocate1Ddbl(meshData_->p_);
+    meshData_->rho_nodes_ = deallocate1Ddbl(meshData_->rho_nodes_);
+    meshData_->u_nodes_ = deallocate1Ddbl(meshData_->u_nodes_);
+    meshData_->v_nodes_ = deallocate1Ddbl(meshData_->v_nodes_);
+    meshData_->p_nodes_ = deallocate1Ddbl(meshData_->p_nodes_);
     meshData_->normal_x_ = deallocate1Ddbl(meshData_->normal_x_);
     meshData_->normal_y_ = deallocate1Ddbl(meshData_->normal_y_);
     meshData_->FaceCenter_x_ = deallocate1Ddbl(meshData_->FaceCenter_x_);
