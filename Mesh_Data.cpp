@@ -214,4 +214,15 @@ void Mesh_Data::write_stuff(){
         CellsData << i << " " << rho_[i] << " " << u_[i] << " " << v_[i] << " " << p_[i] << endl;
     }
     CellsData.close();
+
+    string FacesNormalName = "./bin/normals.txt";
+    ofstream FacesNormals;
+    FacesNormals.open(FacesNormalName);
+    FacesNormals << NNodes_ << endl;
+    FacesNormals << "FaceID     normal_x    normal_y" << endl;
+
+    for (unsigned int i = 0; i < NFaces_; i++){
+        FacesNormals << i << " " << normal_x_[i] << " " << normal_y_[i] << endl;
+    }
+    FacesNormals.close();
 }
