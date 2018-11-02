@@ -124,7 +124,7 @@ void MainSolver::spectral_radius()
     {   
         if (meshData_->rho_ != 0)
         {
-            c = g*meshData_->p_[i]/meshData_->rho_[i];
+            c = std::sqrt(g*meshData_->p_[i]/meshData_->rho_[i]);
         }
         else
         {
@@ -140,7 +140,7 @@ void MainSolver::spectral_radius()
 
 void MainSolver::residual()
 {
-
+    
 }
 
 void MainSolver::residual_smoothing()
