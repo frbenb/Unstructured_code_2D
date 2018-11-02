@@ -67,10 +67,10 @@ void OutputDataManager::showSU2ReadingData()
 }
 
 void OutputDataManager::calculate_node_coefficients(){
-    unsigned int rho;
-    unsigned int u;
-    unsigned int v;
-    unsigned int p;
+    double rho;
+    double u;
+    double v;
+    double p;
     unsigned int cellID;
 
     for (unsigned int nodeID = 0; nodeID < meshData_->NNodes_; nodeID++){
