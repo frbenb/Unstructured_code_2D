@@ -1,3 +1,5 @@
+#ifndef DEF_OUTPUTDATAMANAGER_H
+#define DEF_OUTPUTDATAMANAGER_H
 //Standard lib.
 #include <iostream>
 #include <fstream>
