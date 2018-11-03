@@ -366,7 +366,7 @@ void MeshInitializer::calculateFaceCenter()
 
     double node_at_center_coord[2]; // Index 0 stands for x value and 1 for y value.
   
-    for(unsigned int i(0); i < meshData_->NFaces_;i++)
+    for (unsigned int i(0); i < meshData_->NFaces_;i++)
     {
         nodeID[0] = meshData_->Face2Node_[i][0];
         nodeID[1] = meshData_->Face2Node_[i][1];
@@ -452,10 +452,18 @@ void MeshInitializer::calculateNormal()
     }
 }
 
-void MeshInitializer::calculateCellsArea()
-{
+    void MeshInitializer::calculateCellsArea()
+    //Formule du Blazek pour l'aire des surfaces de contrôle, p100.
+    {
+        for (unsigned int i; i < meshData_->NCellsTotal_; i++) {
 
-}
+        meshData_->cellArea_[i] = 0.5*((meshData_->Nodes_x_[meshData_->Cell2Node_[i][1]] - meshData_->Nodes_x_[meshData_->Cell2Node_[i][3]]) *
+                (meshData_->Nodes_y_[meshData_->Cell2Node_[i][2]] - meshData_->Nodes_y_[meshData_->Cell2Node_[i][4]]) + 
+                (meshData_->Nodes_x_[meshData_->Cell2Node_[i][4]] - meshData_->Nodes_x_[meshData_->Cell2Node_[i][2]]) *
+                (meshData_->Nodes_y_[meshData_->Cell2Node_[i][1]] - meshData_->Nodes_y_[meshData_->Cell2Node_[i][3]]));
+        }
+    }
+
 
 
 void MeshInitializer::prepass(string& meshFilename, unsigned int* variables){
