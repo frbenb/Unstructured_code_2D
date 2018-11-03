@@ -455,7 +455,7 @@ void MeshInitializer::calculateNormal()
     void MeshInitializer::calculateCellsArea()
     //Formule du Blazek pour l'aire des surfaces de contrôle, p100.
     {
-        for (unsigned int i; i < meshData_->NCellsTotal_; i++) {
+        for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++) {
 
         meshData_->cellArea_[i] = 0.5*((meshData_->Nodes_x_[meshData_->Cell2Node_[i][1]] - meshData_->Nodes_x_[meshData_->Cell2Node_[i][3]]) *
                 (meshData_->Nodes_y_[meshData_->Cell2Node_[i][2]] - meshData_->Nodes_y_[meshData_->Cell2Node_[i][4]]) + 
