@@ -1,7 +1,3 @@
-#ifndef DEF_OUTPUTDATAMANAGER_H
-#define DEF_OUTPUTDATAMANAGER_H
-
-
 //Standard lib.
 #include <iostream>
 #include <fstream>
@@ -25,13 +21,8 @@ class OutputDataManager
         //Default Destructor
         virtual ~OutputDataManager();
 
-        // This methos allows to show the results of storing the Mesh_Data
-        // and NSCData by reading the SU2 file. Testing function read_SU2.
-        void showSU2ReadingData();
-
-        // Visualisation of the mesh on Tecplot (includes creation of an ASCII file)
-        void showMeshTecplot();
-    
+        // This method allows to output a text file that will be input in TECPLOT to show the mesh
+        void writeOutputTecplot();    
 
     private:
 
