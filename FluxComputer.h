@@ -10,7 +10,6 @@
 
 
 //This class calculates fluxes cell centered
-
 class FluxComputer
 {
     public:
@@ -30,6 +29,7 @@ class FluxComputer
     void roeScheme();
 
     private:
+    
 }
 
 
