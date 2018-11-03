@@ -116,3 +116,30 @@ void OutputDataManager::writeOutputTecplot()
         cout << "Error: cannot create file for tecplot." << endl;
     }
 }
+
+void OutputDataManager::calculate_node_coefficients()
+{
+    double rho;
+    double u;
+    double v;
+    double p;
+    unsigned int cellID;
+
+    for (unsigned int nodeID = 0; nodeID < meshData_->NNodes_; nodeID++){
+        rho = 0;
+        u = 0;
+        v = 0;
+        p = 0;
+        for (unsigned int cellN = 0; cellN < meshData_->nodeNCell_[nodeID]; cellN++){
+            cellID = meshData_->Node2Cell_[nodeID][cellN];
+            rho += meshData_->rho_[cellID];
+            u += meshData_->u_[cellID];
+            v += meshData_->v_[cellID];
+            p += meshData_->p_[cellID];
+        }
+        meshData_->rho_nodes_[nodeID] = rho/meshData_->nodeNCell_[nodeID];
+        meshData_->u_nodes_[nodeID] = u/meshData_->nodeNCell_[nodeID];
+        meshData_->v_nodes_[nodeID] = v/meshData_->nodeNCell_[nodeID];
+        meshData_->p_nodes_[nodeID] = p/meshData_->nodeNCell_[nodeID];
+    }
+}

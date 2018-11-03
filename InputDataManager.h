@@ -40,7 +40,7 @@ class InputDataManager
 
         //This method allows to set the input filename in the database and to call the starting
         //process of data initialization
-        void manageEntryFileName(std::string iPath);
+        void manageEntryFileName(std::string& iPath);
 
         //This method allows to process to the initialization of all the data.
         // Considered as the main routine calling the private object initializer.

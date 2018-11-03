@@ -22,7 +22,7 @@ InputDataManager::~InputDataManager()
 }
 
 
-void InputDataManager::manageEntryFileName(std::string iPath)
+void InputDataManager::manageEntryFileName(std::string& iPath)
 {
     //Set ctrlfilename in data base
     nscData_->ctrlfilename_ = iPath;
@@ -44,6 +44,9 @@ void InputDataManager::doInitProcess()
 
     //2. Read mesh file. Equivalent as readmesh()
     meshInit_->initializeMesh(nscData_->meshfilename_);
+
+    //Call metric.
+    meshInit_->metric();
 
     // Initial_flow_parameters
     nscInit_->initial_flow_parameters();
@@ -70,11 +73,11 @@ void InputDataManager::readInputFile()
     ifstream inputFile(nscData_->ctrlfilename_, ios::in);
 
     string str, str1, str2;
-    int level , mglevel;
+    unsigned int level , mglevel;
     
     
 
-    if(inputFile)
+    if(inputFile.is_open())
     {
         //Reading input.
         inputFile >> nscData_->title_;
@@ -83,9 +86,9 @@ void InputDataManager::readInputFile()
         inputFile >> nscData_->topo_;
         inputFile >> str1;
 
-        inputFile >> meshData_->imax_;
+        inputFile >> str; //imax_;
         inputFile >> str;
-        inputFile >> meshData_->jmax_;
+        inputFile >> str; //jmax_;
         inputFile >> str1;
         inputFile >> meshData_->itl_;
         inputFile >> str2;
@@ -102,7 +105,17 @@ void InputDataManager::readInputFile()
 
         inputFile >> nscData_->mach_;
         inputFile >> nscData_->alpha_;
-        inputFile >> nscData_->cltarget_;    
+
+        std::string str_cl;
+        inputFile >> str_cl;
+        if (str_cl == "no"){
+            nscData_->cltarget_ = 0;
+        }
+        else{
+            nscData_->cltarget_ = std::stoi(str_cl);
+        }
+
+
         inputFile >> nscData_->dcl_;
         inputFile >> nscData_->reynolds_;
 
@@ -154,8 +167,6 @@ void InputDataManager::readInputFile()
         cout << "ERROR: Cannot open " << nscData_->ctrlfilename_ << "." << endl;
         return;
     }
-    
-
 }
 
 void InputDataManager::printDataSU2()

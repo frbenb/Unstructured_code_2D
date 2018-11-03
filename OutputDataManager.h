@@ -24,10 +24,12 @@ class OutputDataManager
         virtual ~OutputDataManager();
 
         // This method allows to output a text file that will be input in TECPLOT to show the mesh
-        void writeOutputTecplot();    
+        void writeOutputTecplot();
+
+        // Calculates rho_nodes, u_nodes, v_nodes, p_nodes
+        void calculate_node_coefficients(); 
 
     private:
-
         NSCData     *nscData_;
         Mesh_Data   *meshData_;
 };

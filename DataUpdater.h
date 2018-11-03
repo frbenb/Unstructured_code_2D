@@ -4,6 +4,7 @@
 
 //Standard lib.
 #include <iostream>
+#include <math.h>
 
 //Projet files
 #include "NSCData.h"
