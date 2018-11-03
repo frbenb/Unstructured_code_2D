@@ -160,7 +160,7 @@ void InputDataManager::readInputFile()
 
 void InputDataManager::printDataSU2()
 {
-    outputDataManager_->showSU2ReadingData();
+    outputDataManager_-> writeOutputTecplot();
 }
 
 
