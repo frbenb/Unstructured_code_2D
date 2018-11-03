@@ -333,7 +333,7 @@ void MeshInitializer::deallocateMesh(){
 void MeshInitializer::metric()
 {
     // Calculate Cell center.
-
+    calculateCellsArea();
     // Calculate face center.
     calculateFaceCenter();
 
