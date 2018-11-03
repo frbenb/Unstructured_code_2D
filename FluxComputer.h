@@ -15,7 +15,7 @@ class FluxComputer
 {
     public:
         //Default Constructor
-        FluxComputer(NSCData* nscData_, Mesh_Data* meshData_);
+        FluxComputer();
 
         //Default Destructor
         ~FluxComputer();

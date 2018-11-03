@@ -240,6 +240,8 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
     //Closing the mesh file
     meshfile.close();
 
+    cout << "Mesh file is close." << endl;
+
     meshData_->NCellsTotal_ = meshData_->NCellsGhost_ + meshData_->NCells_;
 
     if (meshData_->NCellsGhost_ != nghosts){
