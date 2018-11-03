@@ -1,6 +1,6 @@
 #include <FluxComputer.h>
 
-FluxComputer::FluxComputer()
+FluxComputer::FluxComputer(NSCData* nscData_, Mesh_Data* meshData_)
 {
 
 }
@@ -10,17 +10,23 @@ FluxComputer::~FluxComputer()
 
 }
 
-void FluxComputer::eflux()
+//eflux:
+void FluxComputer::calculateConvectiveFluxes()
 {
+    //Flux of faces from left cell and right cell
+    
+    //Flux total for each cell
+
 
 }
 
-void FluxComputer::dflux()
+//deflux (first order):
+void FluxComputer::calculateArtificialDissip()
 {
     
 }
 
 void FluxComputer::roeScheme()
 {
-    
+
 }

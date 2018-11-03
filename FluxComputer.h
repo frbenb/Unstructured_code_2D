@@ -6,6 +6,7 @@
 #include <math.h>
 
 //Project files
+#include <NSCData.h>
 #include <Mesh_Data.h>
 
 
@@ -13,26 +14,25 @@
 class FluxComputer
 {
     public:
-    //Default Constructor
-    FluxComputer();
+        //Default Constructor
+        FluxComputer(NSCData* nscData_, Mesh_Data* meshData_);
 
-    //Default Destructor
-    ~FluxComputer();
+        //Default Destructor
+        ~FluxComputer();
 
-    //This method calculates .......
-    void eflux();
+        //This method calculates fluxes at each face
+        void calculateConvectiveFluxes(); //eflux
 
-    //This method calculates .......
-    void dflux();
+        //This method calculates .......
+        void calculateArtificialDissip(); //dflux (first order)
 
-    //This method calculates .......
-    void roeScheme();
+        //This method calculates .......
+        void roeScheme();
 
     private:
+        NSCData     *nscData_;
+        Mesh_Data   *meshData_;
     
-}
-
-
-
+};
 
 #endif
