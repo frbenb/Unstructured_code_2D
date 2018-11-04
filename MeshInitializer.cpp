@@ -292,7 +292,7 @@ void MeshInitializer::fill_face_arrays(){
 
 void MeshInitializer::fill_cell2cell(){
     // Cell2Cell_ 
-    for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++){  //The cell we are checking
+    for (unsigned int i = 0; i < meshData_->NCells_; i++){  //The cell we are checking
         for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){   //The cell's faces we are checking, we want the cell on the other side
 
             unsigned int cell0 = meshData_->Face2Cell_[meshData_->Cell2Face_[i][j]][0];
@@ -302,6 +302,17 @@ void MeshInitializer::fill_cell2cell(){
 
             meshData_->Cell2Cell_[i][j] = factor * cell0 + !factor * cell1; 
         }
+    }
+
+    // For ghost cells
+    for (unsigned int i = meshData_->NCells_; i < meshData_->NCellsTotal_; i++){  //The cell we are checking
+        unsigned int cell0 = meshData_->Face2Cell_[meshData_->Cell2Face_[i][0]][0];
+        unsigned int cell1 = meshData_->Face2Cell_[meshData_->Cell2Face_[i][0]][1]; 
+
+        bool factor = cell1 == i;
+
+        meshData_->Cell2Cell_[i][0] = factor * cell0 + !factor * cell1; 
+        meshData_->Cell2Cell_[i][1] = i; 
     }
 }
 
