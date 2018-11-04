@@ -15,16 +15,15 @@ void FluxComputer::calculateConvectiveFluxes()
 {
     unsigned int cellLeft, cellRight;
     double rhoLeft, rhoRight, uLeft, uRight, vLeft, vRight, pLeft, pRight;
-    double* rhoFace, uFace, vFace, pFace;
 
-    //Initialization of fluxes (0 at each cell)
-    for (unsigned int i=0; i<meshData_->NCellsTotal_; i++)
-    {
-        meshData_-> tmp_rho_[i] = 0;
-        meshData_-> tmp_u_[i] = 0;
-        meshData_-> tmp_v_[i] = 0;
-        meshData_-> tmp_p_[i] = 0;
-    }
+    // //Initialization of fluxes (0 at each cell)
+    // for (unsigned int i=0; i<meshData_->NCellsTotal_; i++)
+    // {
+    //     meshData_-> tmp_rho_[i] = 0;
+    //     meshData_-> tmp_u_[i] = 0;
+    //     meshData_-> tmp_v_[i] = 0;
+    //     meshData_-> tmp_p_[i] = 0;
+    // }
 
     for (unsigned int i=0; i=meshData_->NFaces_; i++)
     {
@@ -43,51 +42,50 @@ void FluxComputer::calculateConvectiveFluxes()
 
 
         //Flux total for each face (fill vectors rhoFace, uFace, vFace and pFace)
-        rhoFace[i] = 0.5 * (rhoLeft + rhoRight);
-        uFace[i] = 0.5 * (uLeft + uRight);
-        vFace[i] = 0.5 * (vLeft + vRight);
-        pFace[i] = 0.5 * (pLeft + pRight);
+        meshData_->rhoFace_[i] = 0.5 * (rhoLeft + rhoRight);
+        meshData_->uFace_[i] = 0.5 * (uLeft + uRight);
+        meshData_->vFace_[i] = 0.5 * (vLeft + vRight);
+        meshData_->pFace_[i] = 0.5 * (pLeft + pRight);
 
-        for (unsigned int j=0; j<meshData_-> )
 
         //Flux total for each face
-        for(k=0; k<meshData_->NCellsTotal_; k++)
+        for(unsigned int j=0; j<meshData_->NCellsTotal_; j++)
         {
-            for (l=0; l<meshData_->CellNfaces_[k])
+            for (unsigned int k=0; k<meshData_->CellNfaces_[j]; k++)
             {
-                meshData_->rho_[k] += rhoFace[k]; 
-                meshData_->u_[k] += uFace[k];
-                meshData_->v_[k] += vFace[k];
-                meshData_->p_[k] += pFace[k];
+                meshData_->rho_[j] += meshData_->rhoFace_[j]; 
+                meshData_->u_[j] += meshData_->uFace_[j];
+                meshData_->v_[j] += meshData_->vFace_[j];
+                meshData_->p_[j] += meshData_->pFace_[j];
             }
             
-            if (meshData_->CellNfaces_[k]==4)
+            if (meshData_->CellNfaces_[j]==4)
             {
-                meshData_->rho_[k] = meshData_->rho_[k]/4;
-                meshData_->u_[k] = meshData_->u_[k]/4;
-                meshData_->v_[k] = meshData_->v_[k]/4;
-                meshData_->p_[k] = meshData_->p_[k]/4;
+                meshData_->rho_[j] = meshData_->rho_[j]/4;
+                meshData_->u_[j] = meshData_->u_[j]/4;
+                meshData_->v_[j] = meshData_->v_[j]/4;
+                meshData_->p_[j] = meshData_->p_[j]/4;
             }
-            else if (meshData_->CellNfaces_[k]==3)
+            else if (meshData_->CellNfaces_[j]==3)
             {
-                meshData_->rho[k] = meshData_->rho_[k]/3;
-                meshData_->u_[k] = meshData_->u_[k]/3;
-                meshData_->v_[k] = meshData_->v_[k]/3;
-                meshData_->p_[k] = meshData_->p_[k]/3;
+                meshData_->rho_[j] = meshData_->rho_[j]/3;
+                meshData_->u_[j] = meshData_->u_[j]/3;
+                meshData_->v_[j] = meshData_->v_[j]/3;
+                meshData_->p_[j] = meshData_->p_[j]/3;
             }
-            else if (meshData_->CellNfaces_[k]==2)
+            else if (meshData_->CellNfaces_[j]==2)
             {
-                meshData_->rho[k] = meshData_->rho_[k]/2;
-                meshData_->u_[k] = meshData_->u_[k]/2;
-                meshData_->v_[k] = meshData_->v_[k]/2;
-                meshData_->p_[k] = meshData_->p_[k]/2;
+                meshData_->rho_[j] = meshData_->rho_[j]/2;
+                meshData_->u_[j] = meshData_->u_[j]/2;
+                meshData_->v_[j] = meshData_->v_[j]/2;
+                meshData_->p_[j] = meshData_->p_[j]/2;
             }
             else
             {
-                cout << "" << endl;
+                cout << "Cells have to be a quads, triangles or a lines." << endl;
             }
         }
-    }    
+    }
 }
 
 //deflux (first order):
