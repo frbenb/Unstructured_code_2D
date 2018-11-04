@@ -13,6 +13,7 @@ Cell2Node_(nullptr), Cell2Face_(nullptr), Face2Node_(nullptr), Face2Cell_(nullpt
 CellNfaces_(nullptr), NCells_(0), NCellsGhost_(0), NFaces_(0), NNodes_(0), nodeNCell_(nullptr), Volume_(nullptr), Residu_(nullptr), GhostType_(nullptr),
 rho_(nullptr), u_(nullptr), v_(nullptr), p_(nullptr),
 rho_nodes_(nullptr), u_nodes_(nullptr), v_nodes_(nullptr), p_nodes_(nullptr),
+rhoFace_(nullptr), uFace_(nullptr), vFace_(nullptr), pFace_(nullptr),
 itl_(0), 
 itu_(0),                                      
 cellArea_(nullptr),         
@@ -42,8 +43,6 @@ spec_y_(nullptr)
 {
 }
 
-
-/************************************DESTRUCTOR BY DEFAULT****************************************/
 Mesh_Data::~Mesh_Data()
 {
     Nodes_x_ = deallocate1Ddbl(Nodes_x_);
@@ -61,6 +60,10 @@ Mesh_Data::~Mesh_Data()
     u_nodes_ = deallocate1Ddbl(u_nodes_);
     v_nodes_ = deallocate1Ddbl(v_nodes_);
     p_nodes_ = deallocate1Ddbl(p_nodes_);
+    rhoFace_ = deallocate1Ddbl(rhoFace_);
+    uFace_ = deallocate1Ddbl(uFace_);
+    vFace_ = deallocate1Ddbl(vFace_);
+    pFace_ = deallocate1Ddbl(pFace_);
     normal_x_ = deallocate1Ddbl(normal_x_);
     normal_y_ = deallocate1Ddbl(normal_y_);
 

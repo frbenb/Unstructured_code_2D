@@ -45,6 +45,10 @@ class Mesh_Data{
     double* u_nodes_;
     double* v_nodes_;
     double* p_nodes_;
+    double* rhoFace_;
+    double* uFace_;
+    double* vFace_;
+    double* pFace_;
 
     unsigned int itl_, itu_;      
 
