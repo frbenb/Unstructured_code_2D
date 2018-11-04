@@ -21,7 +21,7 @@ void OutputDataManager::writeOutputTecplot()
     string filename = "tecplot.dat";
     ofstream outputTecplot(filename, ios::out | ios::trunc);
 
-    if(outputTecplot)
+    if(outputTecplot.is_open())
     {
         cout << "File " << filename << " has been created for tecplot" << endl;
 
@@ -108,7 +108,7 @@ void OutputDataManager::writeOutputTecplot()
         cout << "Variables: written." << endl;
       
         outputTecplot.close();
-        cout << "File " << filename << " is close." << endl;
+        cout << "File " << filename << " closed." << endl;
     }
 
     else
