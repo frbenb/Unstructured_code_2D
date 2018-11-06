@@ -13,6 +13,67 @@ DataUpdater::~DataUpdater()
 {
     
 }
+
+void DataUpdater::update_solution(int iRkAlpha)
+{
+    double g, alpha, dt, ronew, unew, vnew, enew, ro, u, v, p;
+    double ro0, u0, v0, p0;
+    double Ri_ro, Ri_u, Ri_v, Ri_p;
+
+    g = nscData_->gamma_;
+    alpha = iRkAlpha;
+
+    //Loop on cells of restricted domain
+    for(unsigned int i(0);i < meshData_->NCells_;i++)
+    {
+        //Get values of solutions
+        ro = meshData_->rho_[i];
+        u = meshData_->u_[i];
+        v = meshData_->v_[i];
+        p = meshData_->p_[i];
+
+        //Get conservative variables
+        ro0 = meshData_->rho_0_[i];
+        u0 = meshData_->u_0_[i];
+        v0 = meshData_->v_0_[i];
+        p0 = meshData_->p_0_[i]; // Energy here, not pressure
+
+        //Get Inviscid residuals
+        Ri_ro = meshData_->residualInviscid_rho_[i];
+        Ri_u = meshData_->residualInviscid_u_[i];
+        Ri_v = meshData_->residualInviscid_v_[i];
+        Ri_p = meshData_->residualInviscid_p_[i];
+
+        //Get delta time
+        dt = meshData_->deltaT_[i];
+
+        //Proceed to new solution values by Euler conversion.
+        ronew = ro0 - alpha * dt * Ri_ro;
+        unew = u0 - alpha * dt *  Ri_u;
+        vnew = v0 - alpha * dt*  Ri_v;
+        enew = p0 - alpha * dt * Ri_p;
+
+        //Mapping
+        if(ronew != 0)
+        {
+            meshData_->rho_[i] = ronew;
+            meshData_->u_[i] = unew/ronew;
+            meshData_->v_[i] = vnew/ronew;
+            meshData_->p_[i] = (g - 1) * (enew - 0.5*(unew*unew + vnew*vnew)/ ronew);
+        }
+        else
+        {
+            std::cout << "Error: In update_solution, ronew cannot equal 0." << endl;
+        }
+            
+    }
+
+
+
+
+}
+
+
 void DataUpdater::update_boundary()
 {
     
