@@ -148,7 +148,7 @@ void MainSolver::residual()
         meshData_->residualInviscid_rho_[i] = 0;
         meshData_->residualInviscid_u_[i] = 0;
         meshData_->residualInviscid_v_[i] = 0;
-        meshData_->residualDissip_p_[i] = 0;
+        meshData_->residualInviscid_p_[i] = 0;
 
         if(nscData_->nstage_ == 0)
         {
@@ -157,16 +157,20 @@ void MainSolver::residual()
             meshData_->residualDissip_v_[i] = 0;
             meshData_->residualDissip_p_[i] = 0;
         }
-
-
-
-
     }
 
-    // Put Residual inviscid to 0.
-    
+     //Call eflux() here
 
 
+    //Add artificial dissip. to inviscid. by looping on cells
+    for(unsigned int i(0);i < meshData_->NCells_;i++)
+    {
+        meshData_->residualInviscid_rho_[i]+=meshData_->residualDissip_rho_[i];
+        meshData_->residualInviscid_u_[i]+=meshData_->residualDissip_u_[i];
+        meshData_->residualInviscid_v_[i]+=meshData_->residualDissip_v_[i];
+        meshData_->residualInviscid_p_[i]+=meshData_->residualDissip_p_[i];
+
+    }
 
 }
 
