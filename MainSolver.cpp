@@ -29,21 +29,33 @@ void MainSolver::computeSolution()
 {
 
     //timestep
+    timestep();
 
     // Save w0
+    saveW0();
 
     //In a loop, for nstage...
-
+    for(unsigned int i(0);i < nscData_->nstage_;i++)
+    {
         //1. spectral_radius
+        spectral_radius();
 
         //2. residual
+        residual();
 
-        //3. residual smoothing
-
+        //3. residual smoothing (for now empty)
+        if(nscData_->ressmo_ > 0)
+        {
+            residual_smoothing();
+        }
+            
         //4. Update solution
+        dataUpdater_->update_solution(nscData_->rk_alfa_[i]);
 
         //5. Update boundary
-
+        dataUpdater_->update_boundary();
+    }
+        
 }
 
 void MainSolver::timestep()
@@ -181,7 +193,6 @@ void MainSolver::residual_smoothing()
 
 void MainSolver::monitor_convergence()
 {
-
 
 }
 
