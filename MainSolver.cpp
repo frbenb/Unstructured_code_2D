@@ -18,11 +18,16 @@ MainSolver::~MainSolver()
 void MainSolver::doUpdate()
 {
     //Inside a loop, stop when convergence...
+    for(unsigned int i(0);i < nscData_->niter_; i ++)
+    {
 
         //1. Iterate_pseudo_timestep (computeSolution)
+        computeSolution();
 
-        //2. Monitor the convergence.
+        //2. Monitor the convergence (empty).
+        monitor_convergence();
 
+    }
 }
 
 void MainSolver::computeSolution()
