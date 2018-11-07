@@ -63,6 +63,8 @@ Mesh_Data::~Mesh_Data()
     p_nodes_ = deallocate1Ddbl(p_nodes_);
     normal_x_ = deallocate1Ddbl(normal_x_);
     normal_y_ = deallocate1Ddbl(normal_y_);
+    cellCenter_x_ = deallocate1Ddbl(cellCenter_x_); 
+    cellCenter_y_ = deallocate1Ddbl(cellCenter_y_); 
 
     Cell2Node_ = deallocate2Dint(Cell2Node_, NCellsTotal_);
     Cell2Face_ = deallocate2Dint(Cell2Face_, NCellsTotal_);

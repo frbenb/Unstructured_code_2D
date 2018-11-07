@@ -49,7 +49,7 @@ int main()
     //User operations here:
     eventManager->enterInputFile(inputfile);
 
-    outputDataManager->calculate_node_coefficients();
+    //outputDataManager->calculate_node_coefficients();
 
     eventManager->testSU2Function();
 
