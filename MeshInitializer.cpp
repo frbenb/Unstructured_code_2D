@@ -45,6 +45,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     meshData_->Volume_ = allocate1Ddbl(ncellstot);
     meshData_->Residu_ = allocate1Ddbl(ncellstot);
+    meshData_->cellArea_ = allocate1Ddbl(ncellstot);
 
     meshData_->rho_ = allocate1Ddbl(ncellstot);
     meshData_->u_ = allocate1Ddbl(ncellstot);
@@ -81,9 +82,11 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->normal_x_ = allocate1Ddbl(meshData_->NFaces_);
     meshData_->normal_y_ = allocate1Ddbl(meshData_->NFaces_);
 
-    //Initialize memory for CenterFaces coordinates vector
+    //Initialize memory for face centers and cell centers coordinates vector
     meshData_->FaceCenter_x_ = allocate1Ddbl(meshData_->NFaces_);
     meshData_->FaceCenter_y_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->cellCenter_x_ = allocate1Ddbl(ncellstot);
+    meshData_->cellCenter_y_ = allocate1Ddbl(ncellstot);
 
 
     // NFaces allocation
@@ -97,8 +100,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
 unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints, unsigned int ncells, unsigned int nghosts){
     // Returns nFaces_double
-
-    unsigned int ncellstot = ncells + nghosts;
     
     //Display of the file name
     cout << "File name: " << meshFilename << endl;
@@ -356,6 +357,7 @@ void MeshInitializer::deallocateMesh(){
     meshData_->u_nodes_ = deallocate1Ddbl(meshData_->u_nodes_);
     meshData_->v_nodes_ = deallocate1Ddbl(meshData_->v_nodes_);
     meshData_->p_nodes_ = deallocate1Ddbl(meshData_->p_nodes_);
+    meshData_->cellArea_ = deallocate1Ddbl(meshData_->cellArea_);
     meshData_->normal_x_ = deallocate1Ddbl(meshData_->normal_x_);
     meshData_->normal_y_ = deallocate1Ddbl(meshData_->normal_y_);
     meshData_->FaceCenter_x_ = deallocate1Ddbl(meshData_->FaceCenter_x_);
@@ -393,11 +395,13 @@ void MeshInitializer::deallocateMesh(){
 void MeshInitializer::metric()
 {
     // Calculate Cell center.
+    calculateCellCenter();
 
     // Calculate face center.
     calculateFaceCenter();
 
-    // Calculate face area.
+    // Calculate cell area.
+    calculateCellsArea();
 
     //Calculate normal on faces.
     calculateNormal();

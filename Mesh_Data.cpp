@@ -19,7 +19,9 @@ cellArea_(nullptr),
 normal_x_(nullptr), 		
 normal_y_(nullptr),
 FaceCenter_x_(nullptr),
-FaceCenter_y_(nullptr),           
+FaceCenter_y_(nullptr),  
+cellCenter_x_(nullptr),
+cellCenter_y_(nullptr),         
 rho_0_(nullptr),             
 u_0_(nullptr), 
 v_0_(nullptr), 
@@ -61,6 +63,7 @@ Mesh_Data::~Mesh_Data()
     u_nodes_ = deallocate1Ddbl(u_nodes_);
     v_nodes_ = deallocate1Ddbl(v_nodes_);
     p_nodes_ = deallocate1Ddbl(p_nodes_);
+    cellArea_ = deallocate1Ddbl(cellArea_);
     normal_x_ = deallocate1Ddbl(normal_x_);
     normal_y_ = deallocate1Ddbl(normal_y_);
     cellCenter_x_ = deallocate1Ddbl(cellCenter_x_); 
@@ -221,7 +224,7 @@ void Mesh_Data::write_stuff(){
     string CellsDataName = "./bin/cells_data.txt";
     ofstream CellsData;
     CellsData.open(CellsDataName);
-    CellsData << NNodes_ << endl;
+    CellsData << NCellsTotal_ << endl;
     CellsData << "CellID     rho    u    v    p" << endl;
 
     for (unsigned int i = 0; i < NCellsTotal_; i++){
@@ -232,11 +235,43 @@ void Mesh_Data::write_stuff(){
     string FacesNormalName = "./bin/normals.txt";
     ofstream FacesNormals;
     FacesNormals.open(FacesNormalName);
-    FacesNormals << NNodes_ << endl;
+    FacesNormals << NFaces_ << endl;
     FacesNormals << "FaceID     normal_x    normal_y" << endl;
 
     for (unsigned int i = 0; i < NFaces_; i++){
         FacesNormals << i << " " << normal_x_[i] << " " << normal_y_[i] << endl;
     }
     FacesNormals.close();
+
+    string FacesCenterName = "./bin/face_centers.txt";
+    ofstream FacesCenters;
+    FacesCenters.open(FacesCenterName);
+    FacesCenters << NFaces_ << endl;
+    FacesCenters << "FaceID     center_x    center_y" << endl;
+
+    for (unsigned int i = 0; i < NFaces_; i++){
+        FacesCenters << i << " " << FaceCenter_x_[i] << " " << FaceCenter_y_[i] << endl;
+    }
+    FacesCenters.close();
+
+    string CellsCenterName = "./bin/cell_centers.txt";
+    ofstream CellsCenters;
+    CellsCenters.open(CellsCenterName);
+    CellsCenters << NCellsTotal_ << endl;
+    CellsCenters << "CellID     center_x    center_y" << endl;
+
+    for (unsigned int i = 0; i < NCellsTotal_; i++){
+        CellsCenters << i << " " << cellCenter_x_[i] << " " << cellCenter_x_[i] << endl;
+    }
+    CellsCenters.close();
+
+    string cellAreaName = "./bin/cell_area.txt";
+    ofstream cellAreaFile;
+    cellAreaFile.open(cellAreaName);
+    cellAreaFile << NCellsTotal_ << endl;
+    cellAreaFile << "CellID     Area" << endl;
+     for (unsigned int i = 0; i < NFaces_; i++){
+        cellAreaFile << i << " " << cellArea_[i] << endl;
+    }
+    cellAreaFile.close();
 }
