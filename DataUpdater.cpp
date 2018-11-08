@@ -21,7 +21,7 @@ void DataUpdater::update_solution(int iRkAlpha)
     double Ri_ro, Ri_u, Ri_v, Ri_p;
 
     g = nscData_->gamma_;
-    alpha = iRkAlpha;
+    alpha = iRkAlpha; // What is this cast?
 
     //Loop on cells of restricted domain
     for(unsigned int i(0);i < meshData_->NCells_;i++)
@@ -54,7 +54,7 @@ void DataUpdater::update_solution(int iRkAlpha)
         enew = p0 - alpha * dt * Ri_p;
 
         //Mapping
-        if(ronew != 0)
+        if(ronew != 0) // Should only be in debut version
         {
             meshData_->rho_[i] = ronew;
             meshData_->u_[i] = unew/ronew;
