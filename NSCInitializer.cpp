@@ -43,7 +43,7 @@ void NSCInitializer::initial_field()
 {
 
     //Loop on every cells
-    for (unsigned i=0;i<=meshData_->NCells_;i++)
+    for (unsigned int i=0;i<=meshData_->NCells_;i++)
     {
         meshData_->rho_[i] = nscData_->rhoInfini_;
         meshData_->u_[i] = nscData_->uInfini_;
