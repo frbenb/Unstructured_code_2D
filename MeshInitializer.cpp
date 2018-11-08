@@ -349,6 +349,8 @@ void MeshInitializer::deallocateMesh(){
     meshData_->normal_y_ = deallocate1Ddbl(meshData_->normal_y_);
     meshData_->FaceCenter_x_ = deallocate1Ddbl(meshData_->FaceCenter_x_);
     meshData_->FaceCenter_y_ = deallocate1Ddbl(meshData_->FaceCenter_y_);
+    meshData_->cellCenter_x_ = deallocate1Ddbl(meshData_->cellCenter_x_);
+    meshData_->cellCenter_y_ = deallocate1Ddbl(meshData_->cellCenter_y_);
 
     meshData_->Cell2Node_ = deallocate2Dint(meshData_->Cell2Node_, meshData_->NCellsTotal_);
     meshData_->Cell2Face_ = deallocate2Dint(meshData_->Cell2Face_, meshData_->NCellsTotal_);
