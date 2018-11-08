@@ -22,7 +22,7 @@ class NSCData
         std::string ctrlfilename_;
         std::string meshfilename_;
         std::string title_;
-        int topo_;
+        unsigned int topo_;
 
         double gamma_;
         double alpha_;
@@ -60,8 +60,8 @@ class NSCData
         
         double* rk_alfa_;
         double* rk_beta_;
-        int rk_;
-        int nstage_;
+        unsigned int rk_;
+        unsigned int nstage_;
         
         /* constants from "input file" */
         unsigned int nbiter_;

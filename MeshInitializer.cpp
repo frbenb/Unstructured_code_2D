@@ -441,8 +441,6 @@ void MeshInitializer::calculateFaceCenter()
     double node2_x = 0;
     double node2_y = 0;
 
-    double node_at_center_coord[2]; // Index 0 stands for x value and 1 for y value.
-  
     for(unsigned int i(0); i < meshData_->NFaces_;i++)
     {
         nodeID[0] = meshData_->Face2Node_[i][0];

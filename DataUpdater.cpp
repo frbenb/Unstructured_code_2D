@@ -21,7 +21,7 @@ void DataUpdater::update_solution(int iRkAlpha)
     double Ri_ro, Ri_u, Ri_v, Ri_p;
 
     g = nscData_->gamma_;
-    alpha = iRkAlpha;
+    alpha = iRkAlpha; // What is this cast?
 
     //Loop on cells of restricted domain
     for(unsigned int i(0);i < meshData_->NCells_;i++)
@@ -54,7 +54,7 @@ void DataUpdater::update_solution(int iRkAlpha)
         enew = p0 - alpha * dt * Ri_p;
 
         //Mapping
-        if(ronew != 0)
+        if(ronew != 0) // Should only be in debut version
         {
             meshData_->rho_[i] = ronew;
             meshData_->u_[i] = unew/ronew;
@@ -82,28 +82,28 @@ void DataUpdater::update_boundary()
 
     double cfree = std::sqrt(g*nscData_->pInfini_/nscData_->rhoInfini_);
 
-    int nbCells = meshData_->NCells_;
-    int nbCellsTotal = meshData_->NCellsTotal_;
+    unsigned int nbCells = meshData_->NCells_;
+    unsigned int nbCellsTotal = meshData_->NCellsTotal_;
 
     double ro_wall, u_wall, v_wall, p_wall;
     double ro_farField, u_farField, v_farField, p_farField;
     double normal_x, normal_y, normal_length;
     double robc, ubc, vbc, pbc;
 
-    int ghostType;
-    int cellDomainID;
-    int farFieldCellID;
-    int faceID;
+    unsigned int ghostType;
+    unsigned int cellDomainID;
+    unsigned int farFieldCellID;
+    unsigned int faceID;
 
     double ro1, uu1, vv1, pp1, cc1, un1;
     double uubc, vvbc, ppbc;
     double unf, chav_in, R4e, R4f, R4, chav_out, R5e, R5f, R5, unbc, ccbc, dun;
     double uubc_inlet, vvbc_inlet, ssbc_inlet, uubc_outlet, vvbc_outlet, ssbc_outlet;
     double ela, elb, ssbc, cc2;
-    int el;
+    int el; // should be unsigned?
 
     //Loop on ghost cells
-    for(int i = nbCells; i < nbCellsTotal; i++)
+    for(unsigned int i = nbCells; i < nbCellsTotal; i++)
     {   
 
         //1. Get the Cell ID for the domain cell next to the ghost (index at 0)
