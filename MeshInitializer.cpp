@@ -400,7 +400,8 @@ void MeshInitializer::metric()
     // Calculate face center.
     calculateFaceCenter();
 
-    // Calculate face area.
+    // Calculate cell area.
+    calculateCellsArea();
 
     //Calculate normal on faces.
     calculateNormal();
