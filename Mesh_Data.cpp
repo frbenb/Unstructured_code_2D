@@ -264,4 +264,14 @@ void Mesh_Data::write_stuff(){
         CellsCenters << i << " " << cellCenter_x_[i] << " " << cellCenter_x_[i] << endl;
     }
     CellsCenters.close();
+
+    string cellAreaName = "./bin/cell_area.txt";
+    ofstream cellAreaFile;
+    cellAreaFile.open(cellAreaName);
+    cellAreaFile << NCellsTotal_ << endl;
+    cellAreaFile << "CellID     Area" << endl;
+     for (unsigned int i = 0; i < NFaces_; i++){
+        cellAreaFile << i << " " << cellArea_[i] << endl;
+    }
+    cellAreaFile.close();
 }
