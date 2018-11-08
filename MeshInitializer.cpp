@@ -97,8 +97,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
 unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints, unsigned int ncells, unsigned int nghosts){
     // Returns nFaces_double
-
-    unsigned int ncellstot = ncells + nghosts;
     
     //Display of the file name
     cout << "File name: " << meshFilename << endl;
