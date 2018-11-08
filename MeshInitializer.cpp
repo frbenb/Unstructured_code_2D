@@ -392,12 +392,26 @@ void MeshInitializer::metric()
 
 void MeshInitializer::mesh4halos()
 {
-    
+
+     
 }
 
 void MeshInitializer::calculateCellCenter()
 {
+ for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++) {
+    
+        double sum_x = 0;
+        double sum_y = 0;
 
+        for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++) {
+
+            sum_x += meshData_->Nodes_x_[meshData_->Cell2Node_[i][j]];
+            sum_y += meshData_->Nodes_y_[meshData_->Cell2Node_[i][j]];
+        }
+
+        meshData_->cellCenter_x_[i] = sum_x/meshData_->CellNfaces_[i];
+        meshData_->cellCenter_y_[i] = sum_y/meshData_->CellNfaces_[i];
+    }  
 }
 
 void MeshInitializer::calculateFaceCenter()
