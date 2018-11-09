@@ -491,8 +491,8 @@ void MeshInitializer::calculateNormal()
 
         //1.3 Get coordinateds x and y for each nodeID
         node1_x = meshData_->Nodes_x_[nodeID[0]];
-        node1_y = meshData_->Nodes_x_[nodeID[0]];
-        node2_x = meshData_->Nodes_y_[nodeID[1]];
+        node1_y = meshData_->Nodes_y_[nodeID[0]];
+        node2_x = meshData_->Nodes_x_[nodeID[1]];
         node2_y = meshData_->Nodes_y_[nodeID[1]];
 
         //1.4 Get vector connecting the two nodes.
@@ -508,10 +508,10 @@ void MeshInitializer::calculateNormal()
         rightCellID = meshData_->Face2Cell_[i][1];
 
         //Get Coordinates of cells at centers (To do here) with ID defined previously
-        rightCellCoord[0] = 0; // Coord. x of right cell
-        rightCellCoord[1] = 0; // Coord. y of right cell
-        leftCellCoord[0] = 0; // Coord. x
-        leftCellCoord[1] = 0; // Coord. y
+        rightCellCoord[0] = meshData_->cellCenter_x_[rightCellID]; // Coord. x of right cell
+        rightCellCoord[1] = meshData_->cellCenter_y_[rightCellID]; // Coord. y of right cell
+        leftCellCoord[0] =  meshData_->cellCenter_x_[leftCellID]; // Coord. x
+        leftCellCoord[1] =  meshData_->cellCenter_y_[leftCellID]; // Coord. y
 
         //Calculate vector between centers of cells right + left
         vector_center_cells[0] = rightCellCoord[0] - leftCellCoord[0];

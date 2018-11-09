@@ -31,7 +31,7 @@ class DataUpdater
         void update_boundary();
 
         // This method allows to update the solution in the computation loop.
-        void update_solution(int iStage);
+        void update_solution(double iStage);
 
         
 
