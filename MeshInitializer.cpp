@@ -407,11 +407,6 @@ void MeshInitializer::metric()
     calculateNormal();
 }
 
-void MeshInitializer::mesh4halos()
-{
-
-     
-}
 
 void MeshInitializer::calculateCellCenter()
 {
@@ -529,7 +524,25 @@ void MeshInitializer::calculateNormal()
 
 void MeshInitializer::calculateCellsArea()
 {
+    double area;
+    double Ax, Ay, Bx, By, Cx, Cy;
 
+    for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++) {
+
+        area = 0; //Init pour les ghost dans le doute
+
+        //triangularisation des polygones
+        for (unsigned int j = 0; j < meshData_->CellNfaces_[i] - 2; j++){
+           Ax = meshData_->Nodes_x_[meshData_->Cell2Node_[i][0]];
+           Ay = meshData_->Nodes_y_[meshData_->Cell2Node_[i][0]];
+           Bx = meshData_->Nodes_x_[meshData_->Cell2Node_[i][j + 1]];
+           By = meshData_->Nodes_y_[meshData_->Cell2Node_[i][j + 1]];
+           Cx = meshData_->Nodes_x_[meshData_->Cell2Node_[i][j + 2]];
+           Cy = meshData_->Nodes_y_[meshData_->Cell2Node_[i][j + 2]];
+           area += abs((Ax * (By - Cy) + Bx * (Cy - Ay) + Cx * (Ay - By))/2); //addition des aires des triangles
+        } 
+        meshData_->cellArea_[i] = area;
+    }   
 }
 
 unsigned int* MeshInitializer::prepass(string& meshFilename){

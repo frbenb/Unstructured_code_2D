@@ -13,7 +13,6 @@
 // Takes the roles of the following functions:
 // topo4grids()
 // mesh4grids()
-// mesh4halos()
 // metric()
 
 class MeshInitializer
@@ -32,8 +31,6 @@ class MeshInitializer
         //This method allows to define some properties beonging to faces and 
         //cells (normals direction, areas)
         void metric();
-
-        void mesh4halos(); // Make private
 
         void calculateCellCenter(); // Make private
 
