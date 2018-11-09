@@ -270,7 +270,7 @@ void Mesh_Data::write_stuff(){
     cellAreaFile.open(cellAreaName);
     cellAreaFile << NCellsTotal_ << endl;
     cellAreaFile << "CellID     Area" << endl;
-     for (unsigned int i = 0; i < NFaces_; i++){
+    for (unsigned int i = 0; i < NFaces_; i++){
         cellAreaFile << i << " " << cellArea_[i] << endl;
     }
     cellAreaFile.close();
