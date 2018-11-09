@@ -407,11 +407,6 @@ void MeshInitializer::metric()
     calculateNormal();
 }
 
-void MeshInitializer::mesh4halos()
-{
-
-     
-}
 
 void MeshInitializer::calculateCellCenter()
 {
