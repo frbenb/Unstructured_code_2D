@@ -261,7 +261,7 @@ void Mesh_Data::write_stuff(){
     CellsCenters << "CellID     center_x    center_y" << endl;
 
     for (unsigned int i = 0; i < NCellsTotal_; i++){
-        CellsCenters << i << " " << cellCenter_x_[i] << " " << cellCenter_x_[i] << endl;
+        CellsCenters << i << " " << cellCenter_x_[i] << " " << cellCenter_y_[i] << endl;
     }
     CellsCenters.close();
 
