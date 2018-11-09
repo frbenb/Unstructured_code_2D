@@ -45,10 +45,11 @@ class Mesh_Data{
     double* u_nodes_;
     double* v_nodes_;
     double* p_nodes_;
-    double* rhoFace_;
-    double* uFace_;
-    double* vFace_;
-    double* pFace_;
+
+    double* convectiveFlux0_;
+    double* convectiveFlux1_;
+    double* convectiveFlux2_;
+    double* convectiveFlux3_;
 
     unsigned int itl_, itu_;      
 
