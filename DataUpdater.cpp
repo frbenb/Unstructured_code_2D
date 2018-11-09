@@ -14,14 +14,14 @@ DataUpdater::~DataUpdater()
     
 }
 
-void DataUpdater::update_solution(int iRkAlpha)
+void DataUpdater::update_solution(double iRkAlpha)
 {
     double g, alpha, dt, ronew, unew, vnew, enew, ro, u, v, p;
     double ro0, u0, v0, p0;
     double Ri_ro, Ri_u, Ri_v, Ri_p;
 
     g = nscData_->gamma_;
-    alpha = iRkAlpha; // What is this cast?
+    alpha = iRkAlpha;
 
     //Loop on cells of restricted domain
     for(unsigned int i(0);i < meshData_->NCells_;i++)
