@@ -24,7 +24,7 @@ class FluxComputer
         void calculateConvectiveFluxes(); //eflux
 
         //This method calculates .......
-        void calculateArtificialDissip(); //dflux (first order)
+        void calculateArtificialDissipRoe(); //dflux (first order)
 
         //This method calculates .......
         void roeScheme();
