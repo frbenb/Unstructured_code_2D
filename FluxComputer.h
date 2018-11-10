@@ -26,9 +26,6 @@ class FluxComputer
         //This method calculates .......
         void calculateArtificialDissipRoe(); //dflux (first order)
 
-        //This method calculates .......
-        void roeScheme();
-
     private:
         NSCData     *nscData_;
         Mesh_Data   *meshData_;
