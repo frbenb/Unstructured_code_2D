@@ -56,10 +56,10 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->v_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->p_nodes_ = allocate1Ddbl(ncellstot);
 
-    meshData_->convectiveFlux0_ = allocate1Ddbl(meshData_->NFaces_);
-    meshData_->convectiveFlux1_ = allocate1Ddbl(meshData_->NFaces_);
-    meshData_->convectiveFlux2_ = allocate1Ddbl(meshData_->NFaces_);
-    meshData_->convectiveFlux3_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux0Faces_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux1Faces_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux2Faces_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux3Faces_ = allocate1Ddbl(meshData_->NFaces_);
     
     //Initialize memory for spec_x_ and spec_y_
     meshData_->spec_x_ = allocate1Ddbl(ncells);
@@ -353,10 +353,10 @@ void MeshInitializer::deallocateMesh(){
     meshData_->v_nodes_ = deallocate1Ddbl(meshData_->v_nodes_);
     meshData_->p_nodes_ = deallocate1Ddbl(meshData_->p_nodes_);
 
-    meshData_->convectiveFlux0_ = deallocate1Ddbl(meshData_->convectiveFlux0_);
-    meshData_->convectiveFlux1_ = deallocate1Ddbl(meshData_->convectiveFlux1_);
-    meshData_->convectiveFlux2_ = deallocate1Ddbl(meshData_->convectiveFlux2_);
-    meshData_->convectiveFlux3_ = deallocate1Ddbl(meshData_->convectiveFlux3_);
+    meshData_->convectiveFlux0Faces_ = deallocate1Ddbl(meshData_->convectiveFlux0Faces_);
+    meshData_->convectiveFlux1Faces_ = deallocate1Ddbl(meshData_->convectiveFlux1Faces_);
+    meshData_->convectiveFlux2Faces_ = deallocate1Ddbl(meshData_->convectiveFlux2Faces_);
+    meshData_->convectiveFlux3Faces_ = deallocate1Ddbl(meshData_->convectiveFlux3Faces_);
 
     meshData_->normal_x_ = deallocate1Ddbl(meshData_->normal_x_);
     meshData_->normal_y_ = deallocate1Ddbl(meshData_->normal_y_);
