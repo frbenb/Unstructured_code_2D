@@ -101,8 +101,10 @@ void FluxComputer::calculateArtificialDissipRoe()
     double rhoLeft, rhoRight, uLeft, uRight, vLeft, vRight, pLeft, pRight;
     double rhoRoe, uRoe, vRoe, pRoe, qSquaredRoe, cRoe, enthalpyLeft, enthalpyRight, enthalpyRoe, VcontravariantRoe;
     double VcontravariantLeft, VcontravariantRight;
-    double deltaF1Flux0, deltaF1Flux1,  deltaF1Flux2, deltaF1Flux3, deltaF234, deltaF5, radicalF1; 
-    unsigned int face;
+    double deltaF1Flux0, deltaF1Flux1,  deltaF1Flux2, deltaF1Flux3, radicalF1, radicalF23, radicalF5; 
+    double deltaF5Flux0, deltaF5Flux1,  deltaF5Flux2, deltaF5Flux3;
+    double deltaF23Flux0, deltaF23Flux1,  deltaF23Flux2, deltaF23Flux3;
+    double dissipRoeFlux0, dissipRoeFlux1, dissipRoeFlux2, dissipRoeFlux3;
 
    for (unsigned int i=0; i=meshData_->NFaces_; i++)
     {
@@ -138,14 +140,38 @@ void FluxComputer::calculateArtificialDissipRoe()
         qSquaredRoe = uRoe*uRoe + vRoe*vRoe;
         cRoe = sqrt((nscData_->gamma_ - 1)*(enthalpyRoe - qSquaredRoe/2));
 
-        //Dissipation calculations (3 termes à calculer)
+        //Dissipation calculations first term deltaF1 (4.89 p107)
         radicalF1 = abs(VcontravariantRoe - cRoe)*((pRight - pLeft - rhoRoe*cRoe*(VcontravariantRight - VcontravariantLeft))/(2*cRoe*cRoe));
         deltaF1Flux0 = radicalF1*1;
         deltaF1Flux1 = radicalF1*(uRoe - cRoe*meshData_->normal_x_[i]);
         deltaF1Flux2 = radicalF1*(vRoe - cRoe*meshData_->normal_y_[i]);
         deltaF1Flux3 = radicalF1*(enthalpyRoe - cRoe*VcontravariantRoe);
 
+        //Dissipation calculations second term deltaF23 (4.90 p107)
+        radicalF23 = rhoRight - rhoLeft - (pRight - pLeft)/(cRoe*cRoe);
+        deltaF23Flux0 = abs(VcontravariantRoe)*(radicalF23 * 1 + rhoRoe * 0);
+        deltaF23Flux1 = abs(VcontravariantRoe)*(radicalF23 * uRoe + rhoRoe * ((uRight - uLeft) - (VcontravariantRight - VcontravariantLeft)*meshData_->normal_x_[i]));
+        deltaF23Flux2 = abs(VcontravariantRoe)*(radicalF23 * vRoe + rhoRoe * ((vRight - vLeft) - (VcontravariantRight - VcontravariantLeft)*meshData_->normal_y_[i]));
+        deltaF23Flux3 = abs(VcontravariantRoe)*(radicalF23 * qSquaredRoe/2 + rhoRoe*((uRoe*(uRight - uLeft)) + vRoe*(vRight - vLeft) 
+                         - VcontravariantRoe*(VcontravariantRight - VcontravariantLeft)));
 
 
-    
+        //Dissipation calculations THIRD term deltaF5 (4.90 p107)
+        radicalF5 = abs(VcontravariantRoe - cRoe)*((pRight - pLeft + rhoRoe*cRoe*(VcontravariantRight - VcontravariantLeft))/(2*cRoe*cRoe));
+        deltaF5Flux0 = radicalF5*1;
+        deltaF5Flux1 = radicalF5*(uRoe + cRoe*meshData_->normal_x_[i]);
+        deltaF5Flux2 = radicalF5*(vRoe + cRoe*meshData_->normal_y_[i]);
+        deltaF5Flux3 = radicalF5*(enthalpyRoe + cRoe*VcontravariantRoe);
+
+        /*Calcul du terme de dissipation Matthieu a bien précisé de multiplier par les faces, donc je pense que 
+        je devrai normaliser les normales. Par contre, étant donné qu'on boucle sur les faces, je ne sais pas de quelle
+        cellule exactement on parle, j'ai choisi la premiere du vecteur face2cell pour l'instant
+        Nous essaierons de rencontrer Matthieu dans la semaine pour valider eflux et dflux
+        */
+        dissipRoeFlux0 = (deltaF1Flux0 + deltaF23Flux0 + deltaF5Flux0)*meshData_->cellArea_[meshData_->Face2Cell_[i][0]];
+        dissipRoeFlux1 = (deltaF1Flux1 + deltaF23Flux1 + deltaF5Flux1)*meshData_->cellArea_[meshData_->Face2Cell_[i][0]];
+        dissipRoeFlux2 = (deltaF1Flux2 + deltaF23Flux2 + deltaF5Flux2)*meshData_->cellArea_[meshData_->Face2Cell_[i][0]];
+        dissipRoeFlux3 = (deltaF1Flux3 + deltaF23Flux3 + deltaF5Flux3)*meshData_->cellArea_[meshData_->Face2Cell_[i][0]];
+    }
+  
 }
