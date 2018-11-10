@@ -24,8 +24,8 @@ void FluxComputer::calculateConvectiveFluxes()
     for (unsigned int i=0; i=meshData_->NFaces_; i++)
     {
         //Convective flux for each face of left cell and right cell
-        cellLeft = meshData_->Face2Cell_[i][1];
-        cellRight = meshData_->Face2Cell_[i][2];
+        cellLeft = meshData_->Face2Cell_[i][0];
+        cellRight = meshData_->Face2Cell_[i][1];
 
         //Primitive variables for left and right cells
         rhoLeft = meshData_->rho_[cellLeft];
@@ -74,8 +74,8 @@ void FluxComputer::calculateConvectiveFluxes()
     //         face = meshData_->Cell2Face_[i][j];
 
     //         //Cells associated with the face
-    //         cellLeft = meshData_->Face2Cell_[face][1];
-    //         cellRight = meshData_->Face2Cell_[face][2];
+    //         cellLeft = meshData_->Face2Cell_[face][0];
+    //         cellRight = meshData_->Face2Cell_[face][1];
 
     //         //For each CELL:
     //         meshData_->residualDissip_rho_[i] -= 
