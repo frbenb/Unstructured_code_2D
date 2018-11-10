@@ -99,9 +99,9 @@ void FluxComputer::calculateArtificialDissipRoe()
 
     unsigned int cellLeft, cellRight;
     double rhoLeft, rhoRight, uLeft, uRight, vLeft, vRight, pLeft, pRight;
-    double rhoRoe, uRoe, vRoe, pRoe, enthalpyLeft, enthalpyRight, enthalpyRoe, VcontravariantRoe;
+    double rhoRoe, uRoe, vRoe, pRoe, qSquaredRoe, cRoe, enthalpyLeft, enthalpyRight, enthalpyRoe, VcontravariantRoe;
     double VcontravariantLeft, VcontravariantRight;
-    double rightFlux0, rightFlux1, rightFlux2, rightFlux3;
+    double deltaF1Flux0, deltaF1Flux1,  deltaF1Flux2, deltaF1Flux3, deltaF234, deltaF5, radicalF1; 
     unsigned int face;
 
    for (unsigned int i=0; i=meshData_->NFaces_; i++)
@@ -135,9 +135,15 @@ void FluxComputer::calculateArtificialDissipRoe()
         vRoe = (vLeft*sqrt(rhoLeft) + vRight*sqrt(rhoRight))/(sqrt(rhoLeft) + sqrt(rhoRight));
         enthalpyRoe = (enthalpyLeft*sqrt(rhoLeft) + enthalpyRight*sqrt(rhoRight))/(sqrt(rhoLeft) + sqrt(rhoRight));
         VcontravariantRoe = uRoe * meshData_->normal_x_[i] + vRoe * meshData_->normal_y_[i];
+        qSquaredRoe = uRoe*uRoe + vRoe*vRoe;
+        cRoe = sqrt((nscData_->gamma_ - 1)*(enthalpyRoe - qSquaredRoe/2));
 
-        //Dissipation calculations
-        
+        //Dissipation calculations (3 termes à calculer)
+        radicalF1 = abs(VcontravariantRoe - cRoe)*((pRight - pLeft - rhoRoe*cRoe*(VcontravariantRight - VcontravariantLeft))/(2*cRoe*cRoe));
+        deltaF1Flux0 = radicalF1*1;
+        deltaF1Flux1 = radicalF1*(uRoe - cRoe*meshData_->normal_x_[i]);
+        deltaF1Flux2 = radicalF1*(vRoe - cRoe*meshData_->normal_y_[i]);
+        deltaF1Flux3 = radicalF1*(enthalpyRoe - cRoe*VcontravariantRoe);
 
 
 
