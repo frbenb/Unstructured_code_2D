@@ -56,6 +56,11 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->u_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->v_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->p_nodes_ = allocate1Ddbl(ncellstot);
+
+    meshData_->convectiveFlux0Faces_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux1Faces_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux2Faces_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux3Faces_ = allocate1Ddbl(meshData_->NFaces_);
     
     //Initialize memory for spec_x_ and spec_y_
     meshData_->spec_x_ = allocate1Ddbl(ncells);
@@ -241,6 +246,8 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
     //Closing the mesh file
     meshfile.close();
 
+    cout << "Mesh file is close." << endl;
+
     meshData_->NCellsTotal_ = meshData_->NCellsGhost_ + meshData_->NCells_;
 
     if (meshData_->NCellsGhost_ != nghosts){
@@ -357,6 +364,10 @@ void MeshInitializer::deallocateMesh(){
     meshData_->u_nodes_ = deallocate1Ddbl(meshData_->u_nodes_);
     meshData_->v_nodes_ = deallocate1Ddbl(meshData_->v_nodes_);
     meshData_->p_nodes_ = deallocate1Ddbl(meshData_->p_nodes_);
+    meshData_->convectiveFlux0Faces_ = deallocate1Ddbl(meshData_->convectiveFlux0Faces_);
+    meshData_->convectiveFlux1Faces_ = deallocate1Ddbl(meshData_->convectiveFlux1Faces_);
+    meshData_->convectiveFlux2Faces_ = deallocate1Ddbl(meshData_->convectiveFlux2Faces_);
+    meshData_->convectiveFlux3Faces_ = deallocate1Ddbl(meshData_->convectiveFlux3Faces_);
     meshData_->cellArea_ = deallocate1Ddbl(meshData_->cellArea_);
     meshData_->normal_x_ = deallocate1Ddbl(meshData_->normal_x_);
     meshData_->normal_y_ = deallocate1Ddbl(meshData_->normal_y_);
