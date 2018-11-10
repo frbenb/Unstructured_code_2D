@@ -30,6 +30,9 @@ class DataUpdater
         // Update wall and far field.
         void update_boundary();
 
+        // This method allows to update the solution in the computation loop.
+        void update_solution(double iStage);
+
         
 
     private:

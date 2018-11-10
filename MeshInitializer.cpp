@@ -45,6 +45,7 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
     meshData_->Volume_ = allocate1Ddbl(ncellstot);
     meshData_->Residu_ = allocate1Ddbl(ncellstot);
+    meshData_->cellArea_ = allocate1Ddbl(ncellstot);
 
     meshData_->rho_ = allocate1Ddbl(ncellstot);
     meshData_->u_ = allocate1Ddbl(ncellstot);
@@ -86,9 +87,11 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->normal_x_ = allocate1Ddbl(meshData_->NFaces_);
     meshData_->normal_y_ = allocate1Ddbl(meshData_->NFaces_);
 
-    //Initialize memory for CenterFaces coordinates vector
+    //Initialize memory for face centers and cell centers coordinates vector
     meshData_->FaceCenter_x_ = allocate1Ddbl(meshData_->NFaces_);
     meshData_->FaceCenter_y_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->cellCenter_x_ = allocate1Ddbl(ncellstot);
+    meshData_->cellCenter_y_ = allocate1Ddbl(ncellstot);
 
 
     // NFaces allocation
@@ -102,8 +105,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
 
 unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints, unsigned int ncells, unsigned int nghosts){
     // Returns nFaces_double
-
-    unsigned int ncellstot = ncells + nghosts;
     
     //Display of the file name
     cout << "File name: " << meshFilename << endl;
@@ -299,7 +300,7 @@ void MeshInitializer::fill_face_arrays(){
 
 void MeshInitializer::fill_cell2cell(){
     // Cell2Cell_ 
-    for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++){  //The cell we are checking
+    for (unsigned int i = 0; i < meshData_->NCells_; i++){  //The cell we are checking
         for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++){   //The cell's faces we are checking, we want the cell on the other side
 
             unsigned int cell0 = meshData_->Face2Cell_[meshData_->Cell2Face_[i][j]][0];
@@ -309,6 +310,17 @@ void MeshInitializer::fill_cell2cell(){
 
             meshData_->Cell2Cell_[i][j] = factor * cell0 + !factor * cell1; 
         }
+    }
+
+    // For ghost cells
+    for (unsigned int i = meshData_->NCells_; i < meshData_->NCellsTotal_; i++){  //The cell we are checking
+        unsigned int cell0 = meshData_->Face2Cell_[meshData_->Cell2Face_[i][0]][0];
+        unsigned int cell1 = meshData_->Face2Cell_[meshData_->Cell2Face_[i][0]][1]; 
+
+        bool factor = cell1 == i;
+
+        meshData_->Cell2Cell_[i][0] = factor * cell0 + !factor * cell1; 
+        meshData_->Cell2Cell_[i][1] = i; 
     }
 }
 
@@ -352,16 +364,17 @@ void MeshInitializer::deallocateMesh(){
     meshData_->u_nodes_ = deallocate1Ddbl(meshData_->u_nodes_);
     meshData_->v_nodes_ = deallocate1Ddbl(meshData_->v_nodes_);
     meshData_->p_nodes_ = deallocate1Ddbl(meshData_->p_nodes_);
-
     meshData_->convectiveFlux0Faces_ = deallocate1Ddbl(meshData_->convectiveFlux0Faces_);
     meshData_->convectiveFlux1Faces_ = deallocate1Ddbl(meshData_->convectiveFlux1Faces_);
     meshData_->convectiveFlux2Faces_ = deallocate1Ddbl(meshData_->convectiveFlux2Faces_);
     meshData_->convectiveFlux3Faces_ = deallocate1Ddbl(meshData_->convectiveFlux3Faces_);
-
+    meshData_->cellArea_ = deallocate1Ddbl(meshData_->cellArea_);
     meshData_->normal_x_ = deallocate1Ddbl(meshData_->normal_x_);
     meshData_->normal_y_ = deallocate1Ddbl(meshData_->normal_y_);
     meshData_->FaceCenter_x_ = deallocate1Ddbl(meshData_->FaceCenter_x_);
     meshData_->FaceCenter_y_ = deallocate1Ddbl(meshData_->FaceCenter_y_);
+    meshData_->cellCenter_x_ = deallocate1Ddbl(meshData_->cellCenter_x_);
+    meshData_->cellCenter_y_ = deallocate1Ddbl(meshData_->cellCenter_y_);
 
     meshData_->Cell2Node_ = deallocate2Dint(meshData_->Cell2Node_, meshData_->NCellsTotal_);
     meshData_->Cell2Face_ = deallocate2Dint(meshData_->Cell2Face_, meshData_->NCellsTotal_);
@@ -393,24 +406,35 @@ void MeshInitializer::deallocateMesh(){
 void MeshInitializer::metric()
 {
     // Calculate Cell center.
+    calculateCellCenter();
 
     // Calculate face center.
     calculateFaceCenter();
 
-    // Calculate face area.
+    // Calculate cell area.
+    calculateCellsArea();
 
     //Calculate normal on faces.
     calculateNormal();
 }
 
-void MeshInitializer::mesh4halos()
-{
-    
-}
 
 void MeshInitializer::calculateCellCenter()
 {
+ for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++) {
+    
+        double sum_x = 0;
+        double sum_y = 0;
 
+        for (unsigned int j = 0; j < meshData_->CellNfaces_[i]; j++) {
+
+            sum_x += meshData_->Nodes_x_[meshData_->Cell2Node_[i][j]];
+            sum_y += meshData_->Nodes_y_[meshData_->Cell2Node_[i][j]];
+        }
+
+        meshData_->cellCenter_x_[i] = sum_x/meshData_->CellNfaces_[i];
+        meshData_->cellCenter_y_[i] = sum_y/meshData_->CellNfaces_[i];
+    }  
 }
 
 void MeshInitializer::calculateFaceCenter()
@@ -423,8 +447,6 @@ void MeshInitializer::calculateFaceCenter()
     double node2_x = 0;
     double node2_y = 0;
 
-    double node_at_center_coord[2]; // Index 0 stands for x value and 1 for y value.
-  
     for(unsigned int i(0); i < meshData_->NFaces_;i++)
     {
         nodeID[0] = meshData_->Face2Node_[i][0];
@@ -475,8 +497,8 @@ void MeshInitializer::calculateNormal()
 
         //1.3 Get coordinateds x and y for each nodeID
         node1_x = meshData_->Nodes_x_[nodeID[0]];
-        node1_y = meshData_->Nodes_x_[nodeID[0]];
-        node2_x = meshData_->Nodes_y_[nodeID[1]];
+        node1_y = meshData_->Nodes_y_[nodeID[0]];
+        node2_x = meshData_->Nodes_x_[nodeID[1]];
         node2_y = meshData_->Nodes_y_[nodeID[1]];
 
         //1.4 Get vector connecting the two nodes.
@@ -492,10 +514,10 @@ void MeshInitializer::calculateNormal()
         rightCellID = meshData_->Face2Cell_[i][1];
 
         //Get Coordinates of cells at centers (To do here) with ID defined previously
-        rightCellCoord[0] = 0; // Coord. x of right cell
-        rightCellCoord[1] = 0; // Coord. y of right cell
-        leftCellCoord[0] = 0; // Coord. x
-        leftCellCoord[1] = 0; // Coord. y
+        rightCellCoord[0] = meshData_->cellCenter_x_[rightCellID]; // Coord. x of right cell
+        rightCellCoord[1] = meshData_->cellCenter_y_[rightCellID]; // Coord. y of right cell
+        leftCellCoord[0] =  meshData_->cellCenter_x_[leftCellID]; // Coord. x
+        leftCellCoord[1] =  meshData_->cellCenter_y_[leftCellID]; // Coord. y
 
         //Calculate vector between centers of cells right + left
         vector_center_cells[0] = rightCellCoord[0] - leftCellCoord[0];
@@ -513,7 +535,25 @@ void MeshInitializer::calculateNormal()
 
 void MeshInitializer::calculateCellsArea()
 {
+    double area;
+    double Ax, Ay, Bx, By, Cx, Cy;
 
+    for (unsigned int i = 0; i < meshData_->NCellsTotal_; i++) {
+
+        area = 0; //Init pour les ghost dans le doute
+
+        //triangularisation des polygones
+        for (unsigned int j = 0; j < meshData_->CellNfaces_[i] - 2; j++){
+           Ax = meshData_->Nodes_x_[meshData_->Cell2Node_[i][0]];
+           Ay = meshData_->Nodes_y_[meshData_->Cell2Node_[i][0]];
+           Bx = meshData_->Nodes_x_[meshData_->Cell2Node_[i][j + 1]];
+           By = meshData_->Nodes_y_[meshData_->Cell2Node_[i][j + 1]];
+           Cx = meshData_->Nodes_x_[meshData_->Cell2Node_[i][j + 2]];
+           Cy = meshData_->Nodes_y_[meshData_->Cell2Node_[i][j + 2]];
+           area += abs((Ax * (By - Cy) + Bx * (Cy - Ay) + Cx * (Ay - By))/2); //addition des aires des triangles
+        } 
+        meshData_->cellArea_[i] = area;
+    }   
 }
 
 unsigned int* MeshInitializer::prepass(string& meshFilename){

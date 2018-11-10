@@ -13,6 +13,67 @@ DataUpdater::~DataUpdater()
 {
     
 }
+
+void DataUpdater::update_solution(double iRkAlpha)
+{
+    double g, alpha, dt, ronew, unew, vnew, enew, ro, u, v, p;
+    double ro0, u0, v0, p0;
+    double Ri_ro, Ri_u, Ri_v, Ri_p;
+
+    g = nscData_->gamma_;
+    alpha = iRkAlpha;
+
+    //Loop on cells of restricted domain
+    for(unsigned int i(0);i < meshData_->NCells_;i++)
+    {
+        //Get values of solutions
+        ro = meshData_->rho_[i];
+        u = meshData_->u_[i];
+        v = meshData_->v_[i];
+        p = meshData_->p_[i];
+
+        //Get conservative variables
+        ro0 = meshData_->rho_0_[i];
+        u0 = meshData_->u_0_[i];
+        v0 = meshData_->v_0_[i];
+        p0 = meshData_->p_0_[i]; // Energy here, not pressure
+
+        //Get Inviscid residuals
+        Ri_ro = meshData_->residualInviscid_rho_[i];
+        Ri_u = meshData_->residualInviscid_u_[i];
+        Ri_v = meshData_->residualInviscid_v_[i];
+        Ri_p = meshData_->residualInviscid_p_[i];
+
+        //Get delta time
+        dt = meshData_->deltaT_[i];
+
+        //Proceed to new solution values by Euler conversion.
+        ronew = ro0 - alpha * dt * Ri_ro;
+        unew = u0 - alpha * dt *  Ri_u;
+        vnew = v0 - alpha * dt*  Ri_v;
+        enew = p0 - alpha * dt * Ri_p;
+
+        //Mapping
+        if(ronew != 0) // Should only be in debut version
+        {
+            meshData_->rho_[i] = ronew;
+            meshData_->u_[i] = unew/ronew;
+            meshData_->v_[i] = vnew/ronew;
+            meshData_->p_[i] = (g - 1) * (enew - 0.5*(unew*unew + vnew*vnew)/ ronew);
+        }
+        else
+        {
+            std::cout << "Error: In update_solution, ronew cannot equal 0." << endl;
+        }
+            
+    }
+
+
+
+
+}
+
+
 void DataUpdater::update_boundary()
 {
     
@@ -21,28 +82,28 @@ void DataUpdater::update_boundary()
 
     double cfree = std::sqrt(g*nscData_->pInfini_/nscData_->rhoInfini_);
 
-    int nbCells = meshData_->NCells_;
-    int nbCellsTotal = meshData_->NCellsTotal_;
+    unsigned int nbCells = meshData_->NCells_;
+    unsigned int nbCellsTotal = meshData_->NCellsTotal_;
 
     double ro_wall, u_wall, v_wall, p_wall;
     double ro_farField, u_farField, v_farField, p_farField;
     double normal_x, normal_y, normal_length;
     double robc, ubc, vbc, pbc;
 
-    int ghostType;
-    int cellDomainID;
-    int farFieldCellID;
-    int faceID;
+    unsigned int ghostType;
+    unsigned int cellDomainID;
+    unsigned int farFieldCellID;
+    unsigned int faceID;
 
     double ro1, uu1, vv1, pp1, cc1, un1;
     double uubc, vvbc, ppbc;
     double unf, chav_in, R4e, R4f, R4, chav_out, R5e, R5f, R5, unbc, ccbc, dun;
     double uubc_inlet, vvbc_inlet, ssbc_inlet, uubc_outlet, vvbc_outlet, ssbc_outlet;
     double ela, elb, ssbc, cc2;
-    int el;
+    int el; // should be unsigned?
 
     //Loop on ghost cells
-    for(int i = nbCells; i < nbCellsTotal; i++)
+    for(unsigned int i = nbCells; i < nbCellsTotal; i++)
     {   
 
         //1. Get the Cell ID for the domain cell next to the ghost (index at 0)

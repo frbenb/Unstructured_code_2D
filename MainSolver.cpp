@@ -18,32 +18,49 @@ MainSolver::~MainSolver()
 void MainSolver::doUpdate()
 {
     //Inside a loop, stop when convergence...
+    for(unsigned int i(0);i < nscData_->niter_; i ++)
+    {
 
         //1. Iterate_pseudo_timestep (computeSolution)
+        computeSolution();
 
-        //2. Monitor the convergence.
+        //2. Monitor the convergence (empty).
+        monitor_convergence();
 
+    }
 }
 
 void MainSolver::computeSolution()
 {
 
     //timestep
+    timestep();
 
     // Save w0
+    saveW0();
 
     //In a loop, for nstage...
-
+    for(unsigned int i(0);i < nscData_->nstage_;i++)
+    {
         //1. spectral_radius
+        spectral_radius();
 
         //2. residual
+        residual();
 
-        //3. residual smoothing
-
+        //3. residual smoothing (for now empty)
+        if(nscData_->ressmo_ > 0)
+        {
+            residual_smoothing();
+        }
+            
         //4. Update solution
+        dataUpdater_->update_solution(nscData_->rk_alfa_[i]);
 
         //5. Update boundary
-
+        dataUpdater_->update_boundary();
+    }
+        
 }
 
 void MainSolver::timestep()
@@ -148,7 +165,7 @@ void MainSolver::residual()
         meshData_->residualInviscid_rho_[i] = 0;
         meshData_->residualInviscid_u_[i] = 0;
         meshData_->residualInviscid_v_[i] = 0;
-        meshData_->residualDissip_p_[i] = 0;
+        meshData_->residualInviscid_p_[i] = 0;
 
         if(nscData_->nstage_ == 0)
         {
@@ -157,16 +174,20 @@ void MainSolver::residual()
             meshData_->residualDissip_v_[i] = 0;
             meshData_->residualDissip_p_[i] = 0;
         }
-
-
-
-
     }
 
-    // Put Residual inviscid to 0.
-    
+     //Call eflux() here
 
 
+    //Add artificial dissip. to inviscid. by looping on cells
+    for(unsigned int i(0);i < meshData_->NCells_;i++)
+    {
+        meshData_->residualInviscid_rho_[i]+=meshData_->residualDissip_rho_[i];
+        meshData_->residualInviscid_u_[i]+=meshData_->residualDissip_u_[i];
+        meshData_->residualInviscid_v_[i]+=meshData_->residualDissip_v_[i];
+        meshData_->residualInviscid_p_[i]+=meshData_->residualDissip_p_[i];
+
+    }
 
 }
 
@@ -177,7 +198,6 @@ void MainSolver::residual_smoothing()
 
 void MainSolver::monitor_convergence()
 {
-
 
 }
 

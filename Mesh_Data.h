@@ -59,6 +59,9 @@ class Mesh_Data{
     double* normal_y_;      //y value of normal vector for every faces
     double* FaceCenter_x_;
     double* FaceCenter_y_; 
+    double* cellCenter_x_; //x value of cell center
+    double* cellCenter_y_; //y value of cell center
+
     
     // How to define the normal on the faces
     double* rho_0_;            //ro0, ru0, rv0, re0 - conservative variables rk(0)
