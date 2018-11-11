@@ -78,6 +78,9 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->residualDissip_v_ = allocate1Ddbl(ncells);
     meshData_->residualDissip_p_ = allocate1Ddbl(ncells);
 
+    //Initialize memory fo delta time 
+    meshData_->deltaT_ = allocate1Ddbl(ncells);
+
     unsigned int nFaces_double = read_su2(meshFilename, npoints, ncells, nghosts);
 
     //Counting the total number of faces
@@ -395,6 +398,8 @@ void MeshInitializer::deallocateMesh(){
     meshData_->residualDissip_u_ = deallocate1Ddbl(meshData_->residualDissip_u_);
     meshData_->residualDissip_v_ = deallocate1Ddbl(meshData_->residualDissip_v_);
     meshData_->residualDissip_p_ = deallocate1Ddbl(meshData_->residualDissip_p_);
+
+    meshData_->deltaT_ = deallocate1Ddbl(meshData_->deltaT_);
 
     meshData_->NCells_ = 0;
     meshData_->NCellsGhost_ = 0;
