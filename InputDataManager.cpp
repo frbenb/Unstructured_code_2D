@@ -67,7 +67,7 @@ void InputDataManager::doInitProcess()
 void InputDataManager::solve()
 {
     //Here is called the method of MainSolver to solve problem 
-    
+    mainSolver_->doUpdate();
 
 }
 

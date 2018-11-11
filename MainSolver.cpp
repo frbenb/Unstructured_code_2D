@@ -98,7 +98,6 @@ void MainSolver::timestep()
 void MainSolver::saveW0()
 {
     double g = nscData_->gamma_;
-    double ro,u,v,p; // What are thoooose
 
     //Loop on cells
     for(unsigned int i(0);i < meshData_->NCellsTotal_; i++)

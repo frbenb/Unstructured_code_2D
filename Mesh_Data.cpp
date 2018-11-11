@@ -91,6 +91,11 @@ Mesh_Data::~Mesh_Data()
 
     deltaT_ = deallocate1Ddbl(deltaT_);
 
+    rho_0_ = deallocate1Ddbl(rho_0_);
+    u_0_ = deallocate1Ddbl(u_0_);
+    v_0_ = deallocate1Ddbl(v_0_);
+    p_0_ = deallocate1Ddbl(p_0_);
+
 }
 
 void Mesh_Data::write_stuff(){
