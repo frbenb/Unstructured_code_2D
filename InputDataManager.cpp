@@ -30,6 +30,8 @@ void InputDataManager::manageEntryFileName(std::string& iPath)
     //Call of Do init.
     doInitProcess();
 
+    //Solve
+    solve();
 
 }
 
@@ -65,6 +67,8 @@ void InputDataManager::doInitProcess()
 void InputDataManager::solve()
 {
     //Here is called the method of MainSolver to solve problem 
+    
+
 }
 
 void InputDataManager::readInputFile()
