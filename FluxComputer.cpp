@@ -1,6 +1,7 @@
 #include <FluxComputer.h>
 
-FluxComputer::FluxComputer()
+FluxComputer::FluxComputer(NSCData *iNSCData, Mesh_Data *iMeshData) : nscData_(iNSCData),
+                                    meshData_(iMeshData)
 {
     //TBD
 }
