@@ -21,7 +21,7 @@ void FluxComputer::calculateConvectiveFluxes()
     unsigned int face;
     
     //Calculation of the convective fluxes:
-    for (unsigned int i=0; i=meshData_->NFaces_; i++)
+    for (unsigned int i=0; i<meshData_->NFaces_; i++)
     {
         //Convective flux for each face of left cell and right cell
         cellLeft = meshData_->Face2Cell_[i][0];
@@ -64,33 +64,33 @@ void FluxComputer::calculateConvectiveFluxes()
         meshData_->convectiveFlux1Faces_[i] = 0.5 * (leftFlux1 + rightFlux1);
         meshData_->convectiveFlux2Faces_[i] = 0.5 * (leftFlux2 + rightFlux2);
         meshData_->convectiveFlux3Faces_[i] = 0.5 * (leftFlux3 + rightFlux3);
+    
+
+        //Calculation of the inviscid residuals:
+        meshData_->residualDissip_rho_[cellLeft] -= meshData_->convectiveFlux0Faces_[i];
+        meshData_->residualDissip_rho_[cellRight] += meshData_->convectiveFlux0Faces_[i];
+
+        meshData_->residualDissip_u_[cellLeft] -= meshData_->convectiveFlux1Faces_[i];
+        meshData_->residualDissip_u_[cellRight] += meshData_->convectiveFlux1Faces_[i];
+
+        meshData_->residualDissip_v_[cellLeft] -= meshData_->convectiveFlux2Faces_[i];
+        meshData_->residualDissip_v_[cellRight] += meshData_->convectiveFlux2Faces_[i];
+
+        meshData_->residualDissip_p_[cellLeft] -= meshData_->convectiveFlux3Faces_[i];
+        meshData_->residualDissip_p_[cellRight] += meshData_->convectiveFlux3Faces_[i];
+
+        meshData_->residualDissip_rho_[cellLeft] = meshData_->residualDissip_rho_[cellLeft]/meshData_->cellArea_[i];
+        meshData_->residualDissip_rho_[cellRight] = meshData_->residualDissip_rho_[cellLeft]/meshData_->cellArea_[i];
+
+        meshData_->residualDissip_rho_[cellLeft] = meshData_->residualDissip_rho_[cellLeft]/meshData_->cellArea_[i];
+        meshData_->residualDissip_rho_[cellRight] = meshData_->residualDissip_rho_[cellLeft]/meshData_->cellArea_[i];
+        
+        meshData_->residualDissip_rho_[cellLeft] = meshData_->residualDissip_rho_[cellLeft]/meshData_->cellArea_[i];
+        meshData_->residualDissip_rho_[cellRight] = meshData_->residualDissip_rho_[cellLeft]/meshData_->cellArea_[i];
+
+        meshData_->residualDissip_rho_[cellLeft] = meshData_->residualDissip_rho_[cellLeft]/meshData_->cellArea_[i];
+        meshData_->residualDissip_rho_[cellRight] = meshData_->residualDissip_rho_[cellLeft]/meshData_->cellArea_[i];
     }
-
-    //Calculation of the inviscid residuals at each cell:
-    // for (unsigned int i=0; i<meshData_->NCells_; i++) //for each cell...
-    // {
-    //     for (unsigned int j=0; j<meshData_->CellNfaces_[i]; j++) //...we parcour each face...
-    //     {
-    //         face = meshData_->Cell2Face_[i][j];
-
-    //         //Cells associated with the face
-    //         cellLeft = meshData_->Face2Cell_[face][0];
-    //         cellRight = meshData_->Face2Cell_[face][1];
-
-    //         //For each CELL:
-    //         meshData_->residualDissip_rho_[i] -= 
-    //         meshData_->residualDissip_rho_[i] +=
-
-    //         meshData_->residualDissip_u_[i] -=
-    //         meshData_->residualDissip_u_[i] +=
-
-    //         meshData_->residualDissip_v_[i] -=
-    //         meshData_->residualDissip_v_[i] +=
-
-    //         meshData_->residualDissip_p_[i] -=
-    //         meshData_->residualDissip_p_[i] += 
-    //     }
-    // }
 }
 
 //deflux for a roe scheme and of first order:
