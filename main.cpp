@@ -13,6 +13,7 @@ using namespace std;
 #include "MeshInitializer.h"
 #include "NSCInitializer.h"
 #include "MainSolver.h"
+#include "FluxComputer.h"
 
 #include "OutputDataManager.h"
 
@@ -36,9 +37,13 @@ int main()
     FluxComputer* fluxComputer = new FluxComputer(nscData, meshData);
     cout << "Main, Attach data, Done!" << endl;
 
+    //Create the flux computer object.
+    FluxComputer* fluxComputer = new FluxComputer();
+
     //Solver objects
     MainSolver* solver = new MainSolver(nscData, meshData, dataUpdater);
     cout << "Main, Solver, Done!" << endl;
+
 
     //Attach object to outputData
     OutputDataManager* outputDataManager = new OutputDataManager(nscData, meshData);

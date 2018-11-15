@@ -52,6 +52,11 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->v_ = allocate1Ddbl(ncellstot);
     meshData_->p_ = allocate1Ddbl(ncellstot);
 
+    meshData_->rho_0_ = allocate1Ddbl(ncellstot);
+    meshData_->u_0_ = allocate1Ddbl(ncellstot);
+    meshData_->v_0_ = allocate1Ddbl(ncellstot);
+    meshData_->p_0_ = allocate1Ddbl(ncellstot);
+
     meshData_->rho_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->u_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->v_nodes_ = allocate1Ddbl(ncellstot);
@@ -77,6 +82,9 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->residualDissip_u_ = allocate1Ddbl(ncells);
     meshData_->residualDissip_v_ = allocate1Ddbl(ncells);
     meshData_->residualDissip_p_ = allocate1Ddbl(ncells);
+
+    //Initialize memory fo delta time 
+    meshData_->deltaT_ = allocate1Ddbl(ncells);
 
     unsigned int nFaces_double = read_su2(meshFilename, npoints, ncells, nghosts);
 
@@ -395,6 +403,13 @@ void MeshInitializer::deallocateMesh(){
     meshData_->residualDissip_u_ = deallocate1Ddbl(meshData_->residualDissip_u_);
     meshData_->residualDissip_v_ = deallocate1Ddbl(meshData_->residualDissip_v_);
     meshData_->residualDissip_p_ = deallocate1Ddbl(meshData_->residualDissip_p_);
+
+    meshData_->deltaT_ = deallocate1Ddbl(meshData_->deltaT_);
+
+    meshData_->rho_0_ = deallocate1Ddbl(meshData_->rho_0_);
+    meshData_->u_0_ = deallocate1Ddbl(meshData_->u_0_);
+    meshData_->v_0_ = deallocate1Ddbl(meshData_->v_0_);
+    meshData_->p_0_ = deallocate1Ddbl(meshData_->p_0_);
 
     meshData_->NCells_ = 0;
     meshData_->NCellsGhost_ = 0;
