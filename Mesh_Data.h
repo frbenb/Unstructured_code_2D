@@ -69,6 +69,7 @@ class Mesh_Data{
     double* v_0_;
     double* p_0_;
 
+    
     double* residualInviscid_rho_; //Ri_ro, Ri_uu, Ri_vv, Ri_pp - inviscid Residual
     double* residualInviscid_u_;
     double* residualInviscid_v_;

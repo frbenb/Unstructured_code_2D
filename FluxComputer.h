@@ -15,7 +15,7 @@ class FluxComputer
 {
     public:
         //Default Constructor
-        FluxComputer();
+        FluxComputer(NSCData *iNSCData, Mesh_Data *iMeshData);
 
         //Default Destructor
         ~FluxComputer();
@@ -23,10 +23,10 @@ class FluxComputer
         //This method calculates fluxes at each face
         void calculateConvectiveFluxes(); //eflux
 
-        //This method calculates .......
+        //This method stabilizes the fluxes calculation (based on Roe's Scheme)
         void calculateArtificialDissipRoe(); //dflux (first order)
 
-        //This method calculates .......
+       
         void roeScheme();
 
     private:
