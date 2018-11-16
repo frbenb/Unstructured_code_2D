@@ -38,10 +38,10 @@ int main()
     cout << "Main, Attach data, Done!" << endl;
 
     //Create the flux computer object.
-    FluxComputer* fluxComputer = new FluxComputer();
+    FluxComputer* fluxComputer = new FluxComputer(nscData, meshData);
 
     //Solver objects
-    MainSolver* solver = new MainSolver(nscData, meshData, dataUpdater);
+    MainSolver* solver = new MainSolver(nscData, meshData, dataUpdater, fluxComputer);
     cout << "Main, Solver, Done!" << endl;
 
 
