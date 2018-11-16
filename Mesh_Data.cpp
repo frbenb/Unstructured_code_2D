@@ -280,4 +280,14 @@ void Mesh_Data::write_stuff(){
         cellAreaFile << i << " " << cellArea_[i] << endl;
     }
     cellAreaFile.close();
+
+    string dFluxName = "./bin/dflux.txt";
+    ofstream dFluxFile;
+    dFluxFile.open(dFluxName);
+    dFluxFile << NCellsTotal_ << endl;
+    dFluxFile << "CellID     DissipResRho      DissipResU     DissipResV      DissipResP " << endl;
+    for (unsigned int i = 0; i < NCellsTotal_; i++){
+        dFluxFile << i << " " << residualDissip_rho_[i] << " " << residualDissip_u_[i] << " " << residualDissip_v_[i] << " " << residualDissip_p_[i] << endl;
+    }
+    dFluxFile.close();
 }
