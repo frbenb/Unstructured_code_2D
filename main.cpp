@@ -20,6 +20,8 @@ using namespace std;
 #include "DataUpdater.h"
 #include "FluxComputer.h"
 
+#include "FluxComputer.h"
+
 int main()
 {
 
@@ -35,6 +37,7 @@ int main()
     NSCInitializer* nscInit = new NSCInitializer(nscData, meshData);
     DataUpdater* dataUpdater = new DataUpdater(nscData, meshData);
     FluxComputer* fluxComputer = new FluxComputer(nscData, meshData);
+
     cout << "Main, Attach data, Done!" << endl;
 
     //Solver objects

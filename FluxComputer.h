@@ -26,9 +26,6 @@ class FluxComputer
         //This method stabilizes the fluxes calculation (based on Roe's Scheme)
         void calculateArtificialDissipRoe(); //dflux (first order)
 
-       
-        void roeScheme();
-
     private:
         NSCData     *nscData_;
         Mesh_Data   *meshData_;
