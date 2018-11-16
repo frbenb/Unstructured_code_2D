@@ -96,8 +96,8 @@ void FluxComputer::calculateArtificialDissipRoe()
     {
         //1. Convective flux for each face of left cell and right cell
         cellLeft = meshData_->Face2Cell_[i][0];
-        cellRight = meshData_->Face2Cell_[i][1];  
-
+        cellRight = meshData_->Face2Cell_[i][1]; 
+         
         //1.1 Primitive variables for left and right cells
         rhoLeft = meshData_->rho_[cellLeft];
         rhoRight = meshData_->rho_[cellRight];
@@ -112,9 +112,8 @@ void FluxComputer::calculateArtificialDissipRoe()
         pRight = meshData_->p_[cellRight];
 
         //1.2 Normalised normal : nécessaire pour le calcul des variables de Roe
-
         vector_normal_x = meshData_->Nodes_x_[meshData_->Face2Node_[i][1]] - meshData_->Nodes_x_[meshData_->Face2Node_[i][0]];
-        vector_normal_y = meshData_->Nodes_y_[meshData_->Face2Node_[i][1]] - meshData_->Nodes_y_[meshData_->Face2Node_[i][0]];
+        vector_normal_y = meshData_->Nodes_y_[meshData_->Face2Node_[i][1]] - meshData_->Nodes_y_[meshData_->Face2Node_[i][0]]; 
 
         normalised_x = meshData_->normal_x_[i]/vector_normal_x;
         normalised_y = meshData_->normal_y_[i]/vector_normal_y;
@@ -123,9 +122,7 @@ void FluxComputer::calculateArtificialDissipRoe()
         VcontravariantRight = uRight * normalised_x + vRight * normalised_y;
 
         enthalpyLeft = 0.5 * (uLeft * uLeft + vLeft * vLeft) + nscData_->gamma_/(nscData_->gamma_ - 1) * pLeft/rhoLeft;
-        enthalpyRight = 0.5 * (uRight * uRight + vRight * vRight) + nscData_->gamma_/(nscData_->gamma_ - 1) * pRight/rhoRight;
-
-        
+        enthalpyRight = 0.5 * (uRight * uRight + vRight * vRight) + nscData_->gamma_/(nscData_->gamma_ - 1) * pRight/rhoRight; 
 
         //2. Calculation of Roe's variables (ones with tilde)
         rhoRoe = sqrt(rhoLeft + rhoRight);
@@ -142,6 +139,7 @@ void FluxComputer::calculateArtificialDissipRoe()
         deltaF1Flux1 = radicalF1*(uRoe - cRoe*normalised_x);
         deltaF1Flux2 = radicalF1*(vRoe - cRoe*normalised_y);
         deltaF1Flux3 = radicalF1*(enthalpyRoe - cRoe*VcontravariantRoe); 
+        cout << radicalF1 << endl;
 
         //Dissipation calculations second term deltaF23 (4.90 p107)
         radicalF23 = rhoRight - rhoLeft - (pRight - pLeft)/(cRoe*cRoe);
@@ -158,7 +156,6 @@ void FluxComputer::calculateArtificialDissipRoe()
         deltaF5Flux1 = radicalF5*(uRoe + cRoe*normalised_x);
         deltaF5Flux2 = radicalF5*(vRoe + cRoe*normalised_y);
         deltaF5Flux3 = radicalF5*(enthalpyRoe + cRoe*VcontravariantRoe); 
-
      
         //Calcul des flux
         dissipRoeFlux0 = (deltaF1Flux0 + deltaF23Flux0 + deltaF5Flux0)*0.5*sqrt(pow(normalised_x,2) + pow(normalised_y,2));
@@ -176,6 +173,7 @@ void FluxComputer::calculateArtificialDissipRoe()
         meshData_->residualDissip_u_[cellRight] -= -dissipRoeFlux1;
         meshData_->residualDissip_v_[cellRight] -= -dissipRoeFlux2;
         meshData_->residualDissip_p_[cellRight] -= -dissipRoeFlux3;
+
     
     }
     cout << "dflux DDDDDDOONNNE" << endl;

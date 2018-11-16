@@ -48,10 +48,10 @@ void DataUpdater::update_solution(double iRkAlpha)
         dt = meshData_->deltaT_[i];
 
         //Proceed to new solution values by Euler conversion.
-        ronew = ro0 - alpha * dt * Ri_ro;
-        unew = u0 - alpha * dt *  Ri_u;
-        vnew = v0 - alpha * dt*  Ri_v;
-        enew = p0 - alpha * dt * Ri_p;
+        ronew = ro0 - (alpha * dt * Ri_ro)/meshData_->cellArea_[i];
+        unew = u0 - (alpha * dt *  Ri_u)/meshData_->cellArea_[i];
+        vnew = v0 - (alpha * dt*  Ri_v)/meshData_->cellArea_[i];
+        enew = p0 - (alpha * dt * Ri_p)/meshData_->cellArea_[i];
 
         //Mapping
         if(ronew != 0) // Should only be in debut version
