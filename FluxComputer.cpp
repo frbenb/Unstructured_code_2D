@@ -108,6 +108,8 @@ void FluxComputer::calculateArtificialDissipRoe()
     double deltaF23Flux0, deltaF23Flux1,  deltaF23Flux2, deltaF23Flux3;
     double dissipRoeFlux0, dissipRoeFlux1, dissipRoeFlux2, dissipRoeFlux3;
 
+    double vector_length;
+
    for (unsigned int i = 0; i < meshData_->NFaces_; i++)
     {
         //1. Convective flux for each face of left cell and right cell
@@ -129,11 +131,16 @@ void FluxComputer::calculateArtificialDissipRoe()
 
         //1.2 Normalised normal : nécessaire pour le calcul des variables de Roe
 
-        vector_normal_x = meshData_->Nodes_x_[meshData_->Face2Node_[i][1]] - meshData_->Nodes_x_[meshData_->Face2Node_[i][0]];
-        vector_normal_y = meshData_->Nodes_y_[meshData_->Face2Node_[i][1]] - meshData_->Nodes_y_[meshData_->Face2Node_[i][0]];
+        //vector_normal_x = meshData_->Nodes_x_[meshData_->Face2Node_[i][1]] - meshData_->Nodes_x_[meshData_->Face2Node_[i][0]];
+        //vector_normal_y = meshData_->Nodes_y_[meshData_->Face2Node_[i][1]] - meshData_->Nodes_y_[meshData_->Face2Node_[i][0]];
+        vector_normal_x = meshData_->normal_x_[i];
+        vector_normal_y = meshData_->normal_y_[i];
 
-        normalised_x = meshData_->normal_x_[i]/vector_normal_x;
-        normalised_y = meshData_->normal_y_[i]/vector_normal_y;
+        vector_length = std::sqrt(vector_normal_x*vector_normal_x + vector_normal_y*vector_normal_y);
+
+
+        normalised_x = vector_normal_x/vector_length;
+        normalised_y = vector_normal_y/vector_length;
 
         VcontravariantLeft = uLeft * normalised_x + vLeft * normalised_y;
         VcontravariantRight = uRight * normalised_x + vRight * normalised_y;
