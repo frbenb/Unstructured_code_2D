@@ -75,18 +75,6 @@ void FluxComputer::calculateConvectiveFluxes()
 
         meshData_->residualDissip_p_[cellLeft] -= meshData_->convectiveFlux3Faces_[i];
         meshData_->residualDissip_p_[cellRight] += meshData_->convectiveFlux3Faces_[i];
-
-        meshData_->residualDissip_rho_[cellLeft] = meshData_->residualDissip_rho_[cellLeft]/meshData_->cellArea_[i];
-        meshData_->residualDissip_rho_[cellRight] = meshData_->residualDissip_rho_[cellLeft]/meshData_->cellArea_[i];
-
-        meshData_->residualDissip_u_[cellLeft] = meshData_->residualDissip_u_[cellLeft]/meshData_->cellArea_[i];
-        meshData_->residualDissip_u_[cellRight] = meshData_->residualDissip_u_[cellLeft]/meshData_->cellArea_[i];
-        
-        meshData_->residualDissip_v_[cellLeft] = meshData_->residualDissip_v_[cellLeft]/meshData_->cellArea_[i];
-        meshData_->residualDissip_v_[cellRight] = meshData_->residualDissip_v_[cellLeft]/meshData_->cellArea_[i];
-
-        meshData_->residualDissip_p_[cellLeft] = meshData_->residualDissip_p_[cellLeft]/meshData_->cellArea_[i];
-        meshData_->residualDissip_p_[cellRight] = meshData_->residualDissip_p_[cellLeft]/meshData_->cellArea_[i];
     }
     cout << "Inviscid residuals calculated" << endl;
 }
