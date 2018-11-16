@@ -89,6 +89,12 @@ Mesh_Data::~Mesh_Data()
     residualDissip_v_ = deallocate1Ddbl(residualDissip_v_);
     residualDissip_p_ = deallocate1Ddbl(residualDissip_p_);
 
+    deltaT_ = deallocate1Ddbl(deltaT_);
+
+    rho_0_ = deallocate1Ddbl(rho_0_);
+    u_0_ = deallocate1Ddbl(u_0_);
+    v_0_ = deallocate1Ddbl(v_0_);
+    p_0_ = deallocate1Ddbl(p_0_);
 
 }
 

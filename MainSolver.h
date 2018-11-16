@@ -9,6 +9,7 @@
 #include "NSCData.h"
 #include "Mesh_Data.h"
 #include "DataUpdater.h"
+#include "FluxComputer.h"
 
 
 // This class allows to store the data according to NSC structure presented in the
@@ -21,7 +22,7 @@ class MainSolver
 
     public:
         //Default Constructor
-        MainSolver(NSCData *iNSCData, Mesh_Data *iMeshData, DataUpdater *iDataUpdater);
+        MainSolver(NSCData *iNSCData, Mesh_Data *iMeshData, DataUpdater *iDataUpdater, FluxComputer *iFluxComputer);
 
         //Default Destructor
         virtual ~MainSolver();
@@ -59,6 +60,7 @@ class MainSolver
         Mesh_Data   *meshData_;
 
         DataUpdater *dataUpdater_; 
+        FluxComputer *fluxComputer_;
         
 
 };
