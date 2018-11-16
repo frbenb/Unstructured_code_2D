@@ -1,9 +1,7 @@
 #include <FluxComputer.h>
 
-FluxComputer::FluxComputer()
-{
-    //TBD
-}
+FluxComputer::FluxComputer(NSCData *iNSCData, Mesh_Data *iMeshData):nscData_(iNSCData),meshData_(iMeshData)
+{}
 
 FluxComputer::~FluxComputer()
 {
@@ -91,6 +89,7 @@ void FluxComputer::calculateConvectiveFluxes()
         meshData_->residualDissip_rho_[cellLeft] = meshData_->residualDissip_rho_[cellLeft]/meshData_->cellArea_[i];
         meshData_->residualDissip_rho_[cellRight] = meshData_->residualDissip_rho_[cellLeft]/meshData_->cellArea_[i];
     }
+    cout << "Inviscid residuals calculated" << endl;
 }
 
 //deflux for a roe scheme and of first order:
