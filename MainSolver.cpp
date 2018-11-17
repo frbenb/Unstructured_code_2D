@@ -177,7 +177,7 @@ void MainSolver::residual()
     }
 
      //Call eflux() here
-
+    fluxComputer_->calculateArtificialDissipRoe(); 
 
     //Add artificial dissip. to inviscid. by looping on cells
     for(unsigned int i(0);i < meshData_->NCells_;i++)

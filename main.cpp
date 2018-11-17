@@ -71,7 +71,6 @@ int main()
     meshData->write_stuff();
     cout << "Main, writestuff, Done!" << endl;
     
-    fluxComputer->calculateArtificialDissipRoe(); 
 
     cout << "Done!" << endl;
     return 0;
