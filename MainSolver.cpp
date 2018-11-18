@@ -47,7 +47,7 @@ void MainSolver::computeSolution()
         spectral_radius();
 
         //2. residual
-        residual();
+        residual(nscData_->rk_beta_[i]);
 
         //3. residual smoothing (for now empty)
         if(nscData_->ressmo_ > 0)
@@ -155,7 +155,7 @@ void MainSolver::spectral_radius()
     
 }
 
-void MainSolver::residual()
+void MainSolver::residual(double iRk_beta)
 {
 
     //Loop on cells domaine
@@ -176,9 +176,13 @@ void MainSolver::residual()
         }
     }
 
-     //Call eflux() here
-    fluxComputer_->calculateArtificialDissipRoe(); 
+     
+    fluxComputer_->calculateConvectiveFluxes(); //eflux
 
+    if(iRk_beta  >  nscData_->epsilon_) // Call dissipation dflux if dissip is indicated
+    {
+        fluxComputer_->calculateArtificialDissipRoe(); //dflux
+    }
     //Add artificial dissip. to inviscid. by looping on cells
     for(unsigned int i(0);i < meshData_->NCells_;i++)
     {
