@@ -82,7 +82,7 @@ RELEASEFLAGS += -O3 -fopenmp
 #---------------------------------------------------------------------------------------------------+
 # Targets
 
-all : debug $(DebugObjectFiles)
+all : release $(ReleaseObjectFiles)
 
 debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)
 	@printf '   Linking Debug...'
