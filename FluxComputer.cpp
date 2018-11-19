@@ -76,7 +76,7 @@ void FluxComputer::calculateConvectiveFluxes()
         meshData_->residualDissip_p_[cellLeft] -= meshData_->convectiveFlux3Faces_[i];
         meshData_->residualDissip_p_[cellRight] += meshData_->convectiveFlux3Faces_[i];
     }
-    cout << "Inviscid residuals calculated" << endl;
+    //cout << "Inviscid residuals calculated" << endl;
 }
 
 //deflux for a roe scheme and of first order:
@@ -144,7 +144,7 @@ void FluxComputer::calculateArtificialDissipRoe()
         deltaF1Flux1 = radicalF1*(uRoe - cRoe*normalised_x);
         deltaF1Flux2 = radicalF1*(vRoe - cRoe*normalised_y);
         deltaF1Flux3 = radicalF1*(enthalpyRoe - cRoe*VcontravariantRoe); 
-        cout << radicalF1 << endl;
+        //cout << radicalF1 << endl;
 
         //Dissipation calculations second term deltaF23 (4.90 p107)
         radicalF23 = rhoRight - rhoLeft - (pRight - pLeft)/(cRoe*cRoe);
@@ -181,5 +181,5 @@ void FluxComputer::calculateArtificialDissipRoe()
 
     
     }
-    cout << "dflux DDDDDDOONNNE" << endl;
+    //cout << "dflux DDDDDDOONNNE" << endl;
 }

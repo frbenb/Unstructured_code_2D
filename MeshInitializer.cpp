@@ -62,10 +62,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->v_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->p_nodes_ = allocate1Ddbl(ncellstot);
 
-    meshData_->convectiveFlux0Faces_ = allocate1Ddbl(meshData_->NFaces_);
-    meshData_->convectiveFlux1Faces_ = allocate1Ddbl(meshData_->NFaces_);
-    meshData_->convectiveFlux2Faces_ = allocate1Ddbl(meshData_->NFaces_);
-    meshData_->convectiveFlux3Faces_ = allocate1Ddbl(meshData_->NFaces_);
     
     //Initialize memory for spec_x_ and spec_y_
     meshData_->spec_x_ = allocate1Ddbl(ncells);
@@ -94,6 +90,11 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     //Initialize memory for normal of faces
     meshData_->normal_x_ = allocate1Ddbl(meshData_->NFaces_);
     meshData_->normal_y_ = allocate1Ddbl(meshData_->NFaces_);
+
+    meshData_->convectiveFlux0Faces_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux1Faces_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux2Faces_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux3Faces_ = allocate1Ddbl(meshData_->NFaces_);
 
     //Initialize memory for face centers and cell centers coordinates vector
     meshData_->FaceCenter_x_ = allocate1Ddbl(meshData_->NFaces_);
