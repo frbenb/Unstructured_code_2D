@@ -20,13 +20,12 @@ void EventManager::startExecution()
     do
     {
         //1. Display User Choices.
-        cout << "Bienvenue dans NSCode++!" << endl;
-        cout << "Veuillez choisir parmis les options suivantes:" << endl << endl;
-        cout << "1. Initialiser la solution." << endl;
-        cout << "2. Initialiser et resoudre la solution." << endl;
-        cout << "3. Generer un fichier ASCII de Tecplot." << endl;
-        cout << "4. Afficher les valeurs d'entrees." << endl;
-        cout << "5. Quitter" << endl;
+        cout << endl << "Welcome to NSCode++!" << endl;
+        cout << "Please choose one of the following options:" << endl << endl;
+        cout << "1. Initialize solution." << endl;
+        cout << "2. Initialize and solve solution." << endl;
+        cout << "3. Generate ASCII for Tecplot Visualization." << endl;
+        cout << "4. Quit." << endl;
         cin >> userChoice_;
 
         logicChoice(userChoice_);
@@ -34,14 +33,14 @@ void EventManager::startExecution()
     }
     while(!isProgramEnded_);
 
-    cout << "Au revoir!" << endl;
+    cout << "Goodbye!" << endl;
 
 }
 
 void EventManager::logicChoice(int iUserChoice)
 {
     //1. Enumration in order of display in startExectution method
-    enum TypesChoices {INIT, INIT_SOLVE, GEN_TECPLOT, QUIT};
+    enum TypesChoices {dummy, INIT, INIT_SOLVE, GEN_TECPLOT, QUIT};
 
 
     switch(iUserChoice)
@@ -67,7 +66,7 @@ void EventManager::logicChoice(int iUserChoice)
         break;
 
         default:
-            cout << "Veuillez entrer un nombre entier positif valide." << endl;
+            cout << "Please enter a positive integer value." << endl;
         break;
 
     };
