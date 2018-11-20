@@ -33,14 +33,14 @@ class EventManager
         //This method allows the user to trigger the event of printing data.
         void testSU2Function();
 
-        bool logicChoice(int userChoice);
+        void logicChoice(int userChoice);
 
         
     private:
 
 
         int userChoice_;
-        bool isProgramEnded; // Quit -> True, Stay -> False
+        bool isProgramEnded_; // Quit -> True, Stay -> False
 
         InputDataManager    *inputDataManager_;
         
