@@ -118,7 +118,7 @@ void FluxComputer::calculateArtificialDissipRoe()
         faceArea = sqrt(meshData_->normal_x_[i]*meshData_->normal_x_[i] + meshData_->normal_y_[i]*meshData_->normal_y_[i]);
 
         normalised_x = meshData_->normal_x_[i]/faceArea;
-        normalised_y = meshData_->normal_y_[i]/faceArea
+        normalised_y = meshData_->normal_y_[i]/faceArea;
 
         VcontravariantLeft = uLeft * normalised_x + vLeft * normalised_y;
         VcontravariantRight = uRight * normalised_x + vRight * normalised_y;

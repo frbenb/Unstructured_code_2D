@@ -20,7 +20,7 @@ using namespace std;
 #include "FluxComputer.h"
 #include "FluxComputer.h"
 
-int main(int argc, char *argv[])
+int main()
 {
 
     //Entry point. run program from here.
