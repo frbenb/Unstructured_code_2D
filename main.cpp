@@ -16,10 +16,8 @@ using namespace std;
 #include "FluxComputer.h"
 
 #include "OutputDataManager.h"
-
 #include "DataUpdater.h"
 #include "FluxComputer.h"
-
 #include "FluxComputer.h"
 
 int main()
@@ -71,8 +69,8 @@ int main()
     meshData->write_stuff();
     cout << "Main, writestuff, Done!" << endl;
     
-    fluxComputer->calculateArtificialDissipRoe(); 
+    
 
-    cout << "Done!" << endl;
+    cout << "Done main!" << endl;
     return 0;
 }

@@ -176,11 +176,12 @@ void MainSolver::residual()
         }
     }
 
-     //Call eflux() here
+     fluxComputer_->calculateConvectiveFluxes();
+     fluxComputer_->calculateArtificialDissipRoe();
 
 
     //Add artificial dissip. to inviscid. by looping on cells
-    for(unsigned int i(0);i < meshData_->NCells_;i++)
+    for (unsigned int i(0);i < meshData_->NCells_;i++)
     {
         meshData_->residualInviscid_rho_[i]+=meshData_->residualDissip_rho_[i];
         meshData_->residualInviscid_u_[i]+=meshData_->residualDissip_u_[i];
