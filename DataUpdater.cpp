@@ -128,8 +128,8 @@ void DataUpdater::update_boundary()
             normal_x/=(normal_length);
             normal_y/=(normal_length);
 
-            normal_x*=(-1);
-            normal_y*=(-1);
+            //normal_x*=(-1);
+            //normal_y*=(-1);
 
             un1 = uu1*normal_x + vv1*normal_y;
 
@@ -147,16 +147,16 @@ void DataUpdater::update_boundary()
         {
             //4. Set right parameters to ghost cell by calculation (Blazek)
             robc = ro1;
-            uubc = uu1 - un1*normal_x;
-            vvbc = vv1 - un1*normal_y;
+            uubc = uu1 - 2.0 * un1*normal_x;
+            vvbc = vv1 - 2.0 * un1*normal_y;
             ppbc = pp1;
 
             meshData_->rho_[i] = robc;
             meshData_->p_[i] = ppbc;
-            meshData_->u_[i] = 2*uubc - uu1;
-            meshData_->v_[i] = 2*vvbc - vv1;
+            meshData_->u_[i] = uubc;
+            meshData_->v_[i] = vvbc;
         }
-        else if (ghostType == 1) // Far-field
+        else if (ghostType == 2) // Far-field
         {
             
             cc1 = std::sqrt(g * pp1/ro1);
@@ -199,8 +199,41 @@ void DataUpdater::update_boundary()
             meshData_->u_[i] = 2*uubc - uu1;
             meshData_->v_[i] = 2*vvbc - vv1;
             meshData_->p_[i] = 2*ppbc - pp1;
+        }
+
+        else if (ghostType == 1) {
+        
+        double pInf = nscData_->pInfini_;
+        double uInf = nscData_->uInfini_;
+        double vInf = nscData_->vInfini_;
+        double rhoInf = nscData_->rhoInfini_;
+        double gammaSqrt = sqrt(nscData_->gamma_);
+        double localSpeedOfSound = gammaSqrt*sqrt(pp1/ro1); //pp1, ro1 donnée à l'intérieur du domaine
+        double roC0 = ro1*localSpeedOfSound;
+        double p_face, rho_face, u_face, v_face;
+
+            //si écoule entre (produit scalaire negatif), on suppose ghost cell à droite
+            if (uu1 <= 0) { 
+                p_face = 0.5*(pInf + pp1 - roC0*(normal_x*(uInf - uu1) + normal_y*(vInf-vv1)));
+                rho_face = rhoInf - (p_face - pInf)/(localSpeedOfSound*localSpeedOfSound);
+                u_face = uInf - normal_x*(pInf - p_face)/roC0;
+                u_face = vInf - normal_y*(pInf - p_face)/roC0;
+            }
+            
+            else {
+                p_face = pInf;
+                rho_face = ro1 + (p_face - pp1)/(localSpeedOfSound*localSpeedOfSound);
+                u_face = uu1 + normal_x*(pp1 - p_face)/roC0;
+                u_face = vv1 + normal_y*(pp1 - p_face)/roC0;
+            }
+
+            meshData_->rho_[i] = 2*rho_face - ro1;
+            meshData_->u_[i] = 2*u_face- uu1;
+            meshData_->v_[i] = 2*v_face - vv1;
+            meshData_->p_[i] = 2*p_face - pp1;
 
         }
+
         else
         {
             cout << "Error: Cannot regnonize type of ghost." << endl;

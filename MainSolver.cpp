@@ -176,15 +176,15 @@ void MainSolver::residual(double iRk_beta)
         }
     }
 
-     
-    fluxComputer_->calculateConvectiveFluxes(); //eflux
+     fluxComputer_->calculateConvectiveFluxes();
+     fluxComputer_->calculateArtificialDissipRoe();
 
     if(iRk_beta  >  nscData_->epsilon_) // Call dissipation dflux if dissip is indicated
     {
         fluxComputer_->calculateArtificialDissipRoe(); //dflux
     }
     //Add artificial dissip. to inviscid. by looping on cells
-    for(unsigned int i(0);i < meshData_->NCells_;i++)
+    for (unsigned int i(0);i < meshData_->NCells_;i++)
     {
         meshData_->residualInviscid_rho_[i]+=meshData_->residualDissip_rho_[i];
         meshData_->residualInviscid_u_[i]+=meshData_->residualDissip_u_[i];

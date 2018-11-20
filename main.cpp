@@ -16,10 +16,8 @@ using namespace std;
 #include "FluxComputer.h"
 
 #include "OutputDataManager.h"
-
 #include "DataUpdater.h"
 #include "FluxComputer.h"
-
 #include "FluxComputer.h"
 
 int main()
@@ -72,6 +70,6 @@ int main()
     cout << "Main, writestuff, Done!" << endl;
     
 
-    cout << "Done!" << endl;
+    cout << "Done main!" << endl;
     return 0;
 }

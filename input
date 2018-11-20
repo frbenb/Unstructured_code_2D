@@ -9,11 +9,11 @@ xref yref cmac
 dissip vis2 vis4
 2       1.0  1.0
 residual smoothing (0-no 1-yes)
-1
+0
 itc
 1
 level iter mglevel rk cfl
-    0  300     1 5 7.5
+    0  500     1 1 0.5
 
 
 
