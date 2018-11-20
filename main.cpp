@@ -22,7 +22,7 @@ using namespace std;
 
 #include "FluxComputer.h"
 
-int main()
+int main(int argc, char *argv[])
 {
 
     //Entry point. run program from here.
@@ -57,19 +57,22 @@ int main()
     EventManager* eventManager = new EventManager(inputDataManager);
     cout << "Main, inputManager, Done!" << endl;
 
+
+    //User operations here:
     string inputfile = "input";
     
-    //User operations here:
-    eventManager->enterInputFile(inputfile);
-    cout << "Main, entreInputFile, Done!" << endl;
+    eventManager->startExecution();
+
+    //eventManager->enterInputFile(inputfile);
+    //cout << "Main, entreInputFile, Done!" << endl;
 
     //outputDataManager->calculate_node_coefficients();
 
-    eventManager->testSU2Function();
-    cout << "Main, eventManager, Done!" << endl;
+    //eventManager->testSU2Function();
+    //cout << "Main, eventManager, Done!" << endl;
 
-    meshData->write_stuff();
-    cout << "Main, writestuff, Done!" << endl;
+    //meshData->write_stuff();
+    //cout << "Main, writestuff, Done!" << endl;
     
 
     cout << "Done!" << endl;
