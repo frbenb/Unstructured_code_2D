@@ -41,7 +41,7 @@ void EventManager::startExecution()
 void EventManager::logicChoice(int iUserChoice)
 {
     //1. Enumration in order of display in startExectution method
-    enum TypesChoices {INIT, INIT_SOLVE, GEN_TECPLOT, DISPLAY_VAR, QUIT};
+    enum TypesChoices {INIT, INIT_SOLVE, GEN_TECPLOT, QUIT};
 
 
     switch(iUserChoice)
@@ -60,10 +60,6 @@ void EventManager::logicChoice(int iUserChoice)
 
          case GEN_TECPLOT:
             inputDataManager_->printDataSU2();
-         break;
-
-         case DISPLAY_VAR:
-
          break;
 
         case QUIT:
