@@ -23,6 +23,8 @@ class EventManager
         //Default Destructor
         virtual ~EventManager();
 
+        //This method allows to interface with the entry point (main.cpp)
+        void startExecution();
 
         //This method allows to send the input path from user entry.
         // it contains all the routine to run when is called
@@ -31,8 +33,14 @@ class EventManager
         //This method allows the user to trigger the event of printing data.
         void testSU2Function();
 
+        void logicChoice(int userChoice);
+
         
     private:
+
+
+        int userChoice_;
+        bool isProgramEnded_; // Quit -> True, Stay -> False
 
         InputDataManager    *inputDataManager_;
         
