@@ -69,7 +69,6 @@ int main()
     meshData->write_stuff();
     cout << "Main, writestuff, Done!" << endl;
     
-    
 
     cout << "Done main!" << endl;
     return 0;

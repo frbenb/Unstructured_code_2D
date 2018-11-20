@@ -76,7 +76,7 @@ void FluxComputer::calculateConvectiveFluxes()
         meshData_->residualDissip_p_[cellLeft] += meshData_->convectiveFlux3Faces_[i];
         meshData_->residualDissip_p_[cellRight] -= meshData_->convectiveFlux3Faces_[i];
     }
-    cout << "Inviscid residuals calculated" << endl;
+    //cout << "Inviscid residuals calculated" << endl;
 }
 
 //deflux for a roe scheme and of first order:
@@ -91,6 +91,8 @@ void FluxComputer::calculateArtificialDissipRoe()
     double deltaF5Flux0, deltaF5Flux1,  deltaF5Flux2, deltaF5Flux3;
     double deltaF23Flux0, deltaF23Flux1,  deltaF23Flux2, deltaF23Flux3;
     double dissipRoeFlux0, dissipRoeFlux1, dissipRoeFlux2, dissipRoeFlux3;
+
+    double vector_length;
 
    for (unsigned int i = 0; i < meshData_->NFaces_; i++)
     {
@@ -112,10 +114,11 @@ void FluxComputer::calculateArtificialDissipRoe()
         pRight = meshData_->p_[cellRight];
 
         //1.2 Normalised normal : nécessaire pour le calcul des variables de Roe
+
         faceArea = sqrt(meshData_->normal_x_[i]*meshData_->normal_x_[i] + meshData_->normal_y_[i]*meshData_->normal_y_[i]);
 
         normalised_x = meshData_->normal_x_[i]/faceArea;
-        normalised_y = meshData_->normal_y_[i]/faceArea;
+        normalised_y = meshData_->normal_y_[i]/faceArea
 
         VcontravariantLeft = uLeft * normalised_x + vLeft * normalised_y;
         VcontravariantRight = uRight * normalised_x + vRight * normalised_y;
@@ -174,5 +177,5 @@ void FluxComputer::calculateArtificialDissipRoe()
 
     
     }
-    cout << "dflux DDDDDDOONNNE" << endl;
+    //cout << "dflux DDDDDDOONNNE" << endl;
 }
