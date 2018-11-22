@@ -1,7 +1,6 @@
 
 #include "MainSolver.h"
 
-
 MainSolver::MainSolver(NSCData *iNSCData, Mesh_Data *iMeshData, DataUpdater *iDataUpdater, FluxComputer *iFluxComputer) :
                                     nscData_(iNSCData),
                                     meshData_(iMeshData),
@@ -198,8 +197,60 @@ void MainSolver::residual_smoothing()
 
 void MainSolver::monitor_convergence()
 {
+    unsigned int iter;
+    double res;
+    double* R0, R;
+    double RMSR0, RMSR; //Root mean square for R0 and for R
 
+    iter = 0;
+
+    R0 = new double[meshData_->NCells_];
+    R0 = meshData_->residualInviscid_rho_;
+
+    R = new double[meshData_->NCells_];
+    R = meshData_->residualInviscid_rho_;
+
+    for (unsigned int i=0; i<meshData_->NCells_; i++)
+    {
+        RMSR0 += R0[i];
+        RMSR += R[i];
+    }
+    RMSR0 = std::sqrt(RMSR0/meshData_->NCells_);
+    RMSR = std::sqrt(RMSR/meshData_->NCells_);
+
+    res = log(RMSR) - log(RMSR0);
+
+    //Loop until convergence or until we get the number of itereations max 
+    while(iter < nscData_->niter_ && res > 10^-6)
+    {
+        R0 = meshData_->residualInviscid_rho_;
+        for (unsigned int i=0; i<meshData_->NCells_; i++)
+        {
+            RMSR0 += R0[i];
+        }
+        RMSR0 = std::sqrt(RMSR0/meshData_->NCells_);
+
+        residual();
+
+        R = meshData_->residualInviscid_rho_;
+        for (unsigned int i=0; i<meshData_->NCells_; i++)
+        {
+            RMSR += RMSR[i];
+        }
+        RMSR = std::sqrt(RMSR/meshData_->NCells_);
+
+        res = log(RMSR) - log(RMSR0);
+        iter ++;
+    }
+
+    if (R0 != nullptr)
+    {
+        delete R0;
+    }
+
+    if (R != nullptr)
+    {
+        delete R;
+    }
 }
-
-
 
