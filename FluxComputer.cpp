@@ -165,7 +165,7 @@ void FluxComputer::calculateArtificialDissipRoe()
         dissipRoeFlux3 = (deltaF1Flux3 + deltaF23Flux3 + deltaF5Flux3)*0.5*faceArea;
 
         //Calcul du résidu dissip (négatif car R = InviscidResidual - residualDissip et dans le calcul de residual on a mis +)
-        meshData_->residualDissip_rho_[cellLeft] += -dissipRoeFlux0; 
+        meshData_->residualDissip_rho_[cellLeft] += -dissipRoeFlux0; //- dissip
         meshData_->residualDissip_u_[cellLeft] += -dissipRoeFlux1;
         meshData_->residualDissip_v_[cellLeft] += -dissipRoeFlux2;
         meshData_->residualDissip_p_[cellLeft] += -dissipRoeFlux3;
