@@ -209,12 +209,9 @@ void MainSolver::monitor_convergence()
   // if iter == 0 else
     iter = 0;
 
-<<<<<<< HEAD
     double* R0 = new double[meshData_->NCells_];
-=======
     R0 = new double[meshData_->NCells_]; //pas besoin (un double) mais enregistrer RMS0 une fois
   //RMS0 dans la structure de donnée avec les variables de field
->>>>>>> 76aa52fd028052dd2188e6bc4463226014adabf6
     R0 = meshData_->residualInviscid_rho_;
 
     double* R = new double[meshData_->NCells_];
