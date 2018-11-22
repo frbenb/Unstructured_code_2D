@@ -196,15 +196,20 @@ void MainSolver::residual_smoothing()
 }
 
 void MainSolver::monitor_convergence()
-{
+{ 
+
     unsigned int iter;
     double res;
     double* R0, R;
     double RMSR0, RMSR; //Root mean square for R0 and for R
-
+//faire une vérification, si on est à la premiere itération. Si c'est le cas, tu enregistres. le RMS0 est enregistre qu'une seule fois
+  // et ne change jamais. Toujours la référence
+  //log (RMS) - log(RMS0) //courbe descendante, jusqu'à précision machine
+  // if iter == 0 else
     iter = 0;
 
-    R0 = new double[meshData_->NCells_];
+    R0 = new double[meshData_->NCells_]; //pas besoin (un double) mais enregistrer RMS0 une fois
+  //RMS0 dans la structure de donnée avec les variables de field
     R0 = meshData_->residualInviscid_rho_;
 
     R = new double[meshData_->NCells_];
@@ -212,9 +217,11 @@ void MainSolver::monitor_convergence()
 
     for (unsigned int i=0; i<meshData_->NCells_; i++)
     {
-        RMSR0 += R0[i];
-        RMSR += R[i];
+        RMSR += R[i]*R[i]; //r², car le RMS residu a la deux, la moyenne et sqrt de tout //AJOUT ISA
     }
+  
+  //for sur le nombre d'itérations
+  //faire un if de vérification sur le résidu, break
     RMSR0 = std::sqrt(RMSR0/meshData_->NCells_);
     RMSR = std::sqrt(RMSR/meshData_->NCells_);
 
