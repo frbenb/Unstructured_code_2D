@@ -195,71 +195,17 @@ void MainSolver::residual_smoothing()
 
 }
 
+//This function calculates the root mean square of the inviscid residual of rho. In doUpdate(), 
+//you can find the other part of the monitor_convergence()
 void MainSolver::monitor_convergence()
 { 
-
-    unsigned int iter;
-    double res;
-    double* R0;
-    double* R;
-    double RMSR0, RMSR; //Root mean square for R0 and for R
-//faire une vérification, si on est à la premiere itération. Si c'est le cas, tu enregistres. le RMS0 est enregistre qu'une seule fois
-  // et ne change jamais. Toujours la référence
-  //log (RMS) - log(RMS0) //courbe descendante, jusqu'à précision machine
-  // if iter == 0 else
-    iter = 0;
-
-    double* R0 = new double[meshData_->NCells_];
-    R0 = new double[meshData_->NCells_]; //pas besoin (un double) mais enregistrer RMS0 une fois
-  //RMS0 dans la structure de donnée avec les variables de field
-    R0 = meshData_->residualInviscid_rho_;
-
-    double* R = new double[meshData_->NCells_];
-    R = meshData_->residualInviscid_rho_;
+    double RMSR; //Root mean square of R elements (from inviscid residual of rho)
 
     for (unsigned int i=0; i<meshData_->NCells_; i++)
     {
-        RMSR += R[i]*R[i]; //r², car le RMS residu a la deux, la moyenne et sqrt de tout //AJOUT ISA
+        RMSR += meshData_->residualInviscid_rho_[i] * meshData_->residualInviscid_rho_[i];
     }
-  
-  //for sur le nombre d'itérations
-  //faire un if de vérification sur le résidu, break
-    RMSR0 = std::sqrt(RMSR0/meshData_->NCells_);
+
     RMSR = std::sqrt(RMSR/meshData_->NCells_);
-
-    res = log(RMSR) - log(RMSR0);
-
-    //Loop until convergence or until we get the number of itereations max 
-    while(iter < nscData_->niter_ && res > 10^-6)
-    {
-        R0 = meshData_->residualInviscid_rho_;
-        for (unsigned int i=0; i<meshData_->NCells_; i++)
-        {
-            RMSR0 += R0[i];
-        }
-        RMSR0 = std::sqrt(RMSR0/meshData_->NCells_);
-
-        residual();
-
-        R = meshData_->residualInviscid_rho_;
-        for (unsigned int i=0; i<meshData_->NCells_; i++)
-        {
-            RMSR += RMSR[i];
-        }
-        RMSR = std::sqrt(RMSR/meshData_->NCells_);
-
-        res = log(RMSR) - log(RMSR0);
-        iter ++;
-    }
-
-    if (R0 != nullptr)
-    {
-        delete R0;
-    }
-
-    if (R != nullptr)
-    {
-        delete R;
-    }
 }
 
