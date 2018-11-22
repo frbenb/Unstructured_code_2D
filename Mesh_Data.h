@@ -85,10 +85,6 @@ class Mesh_Data{
     double* deltaT_;                //dt
     double* spec_x_;                //speci, specj, variables for spectral radius.
     double* spec_y_;
-
-  // Methods
-  public:
-    void write_stuff();
 };
 
 #endif

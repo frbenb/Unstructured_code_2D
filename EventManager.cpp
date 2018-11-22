@@ -59,6 +59,7 @@ void EventManager::logicChoice(int iUserChoice)
 
          case GEN_TECPLOT:
             inputDataManager_->printDataSU2();
+            inputDataManager_->printMeshData();
          break;
 
         case QUIT:
