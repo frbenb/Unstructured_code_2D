@@ -34,7 +34,7 @@ class Mesh_Data{
     unsigned int* nodeNCell_;
     double* Volume_;
     double* Residu_;
-    unsigned int* GhostType_; // 0 is airfoil, 1 is far field
+    unsigned int* GhostType_; // 0 is airfoil, 1 is far field, 2 is supersonic outlet
 
     //Output
     double* rho_;

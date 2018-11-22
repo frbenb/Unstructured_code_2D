@@ -221,6 +221,9 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
         else if(boundarytype_string.compare("farfield")){
             boundary_type = 1;
         }
+        else if(boundarytype_string.compare("suo")){
+            boundary_type = 2;
+        }
         else{
             cout << "Error, boundary type '" << boundarytype_string << "' unknown." << endl;
             meshfile.close();
