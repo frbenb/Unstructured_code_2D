@@ -53,7 +53,7 @@ class MainSolver
         void residual_smoothing();
 
         // This method allows to monitor convergence
-        void monitor_convergence();
+        double monitor_convergence();
 
     private:
 

@@ -17,16 +17,39 @@ MainSolver::~MainSolver()
 
 void MainSolver::doUpdate()
 {
-    //Inside a loop, stop when convergence...
+    double RMSR0, RMSR; //Root mean square of R or R0 elements (from inviscid residual of rho)
+    double result; //Result for the soustraction of the two logarithms
+
+    //This loop has to be outside of the loop on the number of iterations, because RMSR0 stays 
+    //the same throughout the iterations
+    for (unsigned int i=0; i<meshData_->NCells_; i++)
+    {
+        RMSR0 += meshData_->residualInviscid_rho_[i] * meshData_->residualInviscid_rho_[i];
+    }
+    RMSR0 = std::sqrt(RMSR0/meshData_->NCells_);
+    
+    //Inside a loop, stop when and if convergence...
     for(unsigned int i(0);i < nscData_->niter_; i ++)
     {
+        if (i==0)
+        {
+            RMSR = RMSR0; //If it is the first iteration, R=R0 and result=0
+        }
+        else
+        {
+            RMSR = monitor_convergence();
+        }
 
-        //1. Iterate_pseudo_timestep (computeSolution)
+        result = log(RMSR) - log(RMSR0);
+
+        //If we have convergence, we stop the iterations
+        if (result < 10^-6)
+        {
+            break;
+        }
+
+        //Iterate_pseudo_timestep (computeSolution)
         computeSolution();
-
-        //2. Monitor the convergence (empty).
-        monitor_convergence();
-
     }
 }
 
@@ -197,7 +220,7 @@ void MainSolver::residual_smoothing()
 
 //This function calculates the root mean square of the inviscid residual of rho. In doUpdate(), 
 //you can find the other part of the monitor_convergence()
-void MainSolver::monitor_convergence()
+double MainSolver::monitor_convergence()
 { 
     double RMSR; //Root mean square of R elements (from inviscid residual of rho)
 
@@ -207,5 +230,7 @@ void MainSolver::monitor_convergence()
     }
 
     RMSR = std::sqrt(RMSR/meshData_->NCells_);
+
+    return RMSR;
 }
 
