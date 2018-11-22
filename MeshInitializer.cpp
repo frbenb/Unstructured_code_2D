@@ -255,7 +255,7 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
     //Closing the mesh file
     meshfile.close();
 
-    cout << "Mesh file is close." << endl;
+    cout << "Mesh file closed." << endl;
 
     meshData_->NCellsTotal_ = meshData_->NCellsGhost_ + meshData_->NCells_;
 
