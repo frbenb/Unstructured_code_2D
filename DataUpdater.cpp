@@ -102,7 +102,7 @@ void DataUpdater::update_boundary()
     double ela, elb, ssbc, cc2;
     int el; // should be unsigned?
 
-    //Loop on ghost cells
+    //Loop on ghost cells //Normale qui pointe vers l'extérieure du domaine toujours mieux
     for(unsigned int i = nbCells; i < nbCellsTotal; i++)
     {   
 
@@ -156,7 +156,7 @@ void DataUpdater::update_boundary()
             meshData_->u_[i] = uubc;
             meshData_->v_[i] = vvbc;
         }
-        else if (ghostType == 2) // Far-field
+        else if (ghostType == 3) // Far-field (on ne va pas dans cette boucle ==2)
         {
             
             cc1 = std::sqrt(g * pp1/ro1);
@@ -201,7 +201,7 @@ void DataUpdater::update_boundary()
             meshData_->p_[i] = 2*ppbc - pp1;
         }
 
-        else if (ghostType == 1) {
+        else if (ghostType == 1) { //farfield avec matthieu, dans le blazek
         
         double pInf = nscData_->pInfini_;
         double uInf = nscData_->uInfini_;
@@ -213,8 +213,13 @@ void DataUpdater::update_boundary()
         double p_face, rho_face, u_face, v_face;
 
             //si écoule entre (produit scalaire negatif), on suppose ghost cell à droite
-            if (uu1 <= 0) { 
-                p_face = 0.5*(pInf + pp1 - roC0*(normal_x*(uInf - uu1) + normal_y*(vInf-vv1)));
+            // enlever runge kutta, alpha = 1, un seul stage, une itération par avancement, cfl < 1
+            // faire une itération de ça 
+            // remettre le meme if else, 
+
+            if (uu1 <= 0) {  //entre
+                
+                0.5*(pInf + pp1 - roC0*(normal_x*(uInf - uu1) + normal_y*(vInf-vv1)));
                 rho_face = rhoInf - (p_face - pInf)/(localSpeedOfSound*localSpeedOfSound);
                 u_face = uInf - normal_x*(pInf - p_face)/roC0;
                 u_face = vInf - normal_y*(pInf - p_face)/roC0;
@@ -225,6 +230,7 @@ void DataUpdater::update_boundary()
                 rho_face = ro1 + (p_face - pp1)/(localSpeedOfSound*localSpeedOfSound);
                 u_face = uu1 + normal_x*(pp1 - p_face)/roC0;
                 u_face = vv1 + normal_y*(pp1 - p_face)/roC0;
+
             }
 
             meshData_->rho_[i] = 2*rho_face - ro1;
@@ -234,6 +240,48 @@ void DataUpdater::update_boundary()
 
         }
 
+        else if (ghostType == 2) { ///suo
+        
+        double pInf = nscData_->pInfini_;
+        double uInf = nscData_->uInfini_;
+        double vInf = nscData_->vInfini_;
+        double rhoInf = nscData_->rhoInfini_;
+        double gammaSqrt = sqrt(nscData_->gamma_);
+        double localSpeedOfSound = gammaSqrt*sqrt(pp1/ro1); //pp1, ro1 donnée à l'intérieur du domaine
+        double roC0 = ro1*localSpeedOfSound;
+        double p_face, rho_face, u_face, v_face;
+
+            //si écoule entre (produit scalaire negatif), on suppose ghost cell à droite
+            // enlever runge kutta, alpha = 1, un seul stage, une itération par avancement, cfl < 1
+            // faire une itération de ça 
+            // remettre le meme if else, 
+
+            if (uu1 <= 0) {  //entre
+                p_face = pInf;
+                u_face = uInf;
+                v_face = vInf;
+                rho_face = rhoInf;
+
+            }
+            
+            else {
+
+                p_face = pp1;
+                u_face = uu1;
+                v_face = vv1;
+                rho_face = ro1;
+
+            }
+
+            meshData_->rho_[i] = 2*rho_face - ro1;
+            meshData_->u_[i] = 2*u_face- uu1;
+            meshData_->v_[i] = 2*v_face - vv1;
+            meshData_->p_[i] = 2*p_face - pp1;
+
+        }
+
+
+        
         else
         {
             cout << "Error: Cannot regnonize type of ghost." << endl;
