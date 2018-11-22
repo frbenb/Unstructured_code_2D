@@ -199,15 +199,16 @@ void MainSolver::monitor_convergence()
 {
     unsigned int iter;
     double res;
-    double* R0, R;
+    double* R0;
+    double* R;
     double RMSR0, RMSR; //Root mean square for R0 and for R
 
     iter = 0;
 
-    R0 = new double[meshData_->NCells_];
+    double* R0 = new double[meshData_->NCells_];
     R0 = meshData_->residualInviscid_rho_;
 
-    R = new double[meshData_->NCells_];
+    double* R = new double[meshData_->NCells_];
     R = meshData_->residualInviscid_rho_;
 
     for (unsigned int i=0; i<meshData_->NCells_; i++)
