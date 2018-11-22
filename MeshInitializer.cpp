@@ -215,13 +215,13 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
         meshfile >> token >> boundarytype_string; //Here, token = "MARKER_TAG="
         cout << "Boundary condition " << i+1 << ": " << boundarytype_string << endl;
 
-        if (boundarytype_string.compare("airfoil")){
+        if (!boundarytype_string.compare("airfoil")){
             boundary_type = 0;
         }
-        else if(boundarytype_string.compare("farfield")){
+        else if(!boundarytype_string.compare("farfield")){
             boundary_type = 1;
         }
-        else if(boundarytype_string.compare("suo")){
+        else if(!boundarytype_string.compare("suo")){
             boundary_type = 2;
         }
         else{
