@@ -29,6 +29,9 @@ class OutputDataManager
         // Calculates rho_nodes, u_nodes, v_nodes, p_nodes
         void calculate_node_coefficients(); 
 
+        // Outputs the content of meshData
+        void writeMeshContent(); 
+
     private:
         NSCData     *nscData_;
         Mesh_Data   *meshData_;

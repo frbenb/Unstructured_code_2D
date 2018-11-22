@@ -182,6 +182,11 @@ void InputDataManager::printDataSU2()
     outputDataManager_-> writeOutputTecplot();
 }
 
+void InputDataManager::printMeshData()
+{
+    outputDataManager_-> writeMeshContent();
+}
+
 
 
 

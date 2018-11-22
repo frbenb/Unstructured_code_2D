@@ -58,6 +58,8 @@ class InputDataManager
         // the SU2 reading method in Mesh_Data.
         void printDataSU2();
 
+        // Prints the content of MeshData to text files
+        void printMeshData();
 
     private:
 
