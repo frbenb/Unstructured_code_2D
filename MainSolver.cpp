@@ -79,7 +79,6 @@ void MainSolver::doUpdate()
     //}
     //cout<< endl;
 
-    }
 }
 
 void MainSolver::computeSolution()
