@@ -544,7 +544,7 @@ void MeshInitializer::calculateNormal()
 
         //Dot product between Normal and center-vector to get sign
         dot_product = vector_center_cells[0]*vector_normal[0] + vector_center_cells[1]*vector_normal[1];
-        sign_orientation = dot_product / std::abs(dot_product); // Get -1 or 1.
+        sign_orientation = dot_product / std::fabs(dot_product); // Get -1 or 1.
 
         //Final normal Result of the face[j] in  cell[i] and final mapping.
         meshData_->normal_x_[i] = (sign_orientation * vector_normal[0]);
@@ -569,7 +569,7 @@ void MeshInitializer::calculateCellsArea()
            By = meshData_->Nodes_y_[meshData_->Cell2Node_[i][j + 1]];
            Cx = meshData_->Nodes_x_[meshData_->Cell2Node_[i][j + 2]];
            Cy = meshData_->Nodes_y_[meshData_->Cell2Node_[i][j + 2]];
-           area += abs((Ax * (By - Cy) + Bx * (Cy - Ay) + Cx * (Ay - By))/2); //addition des aires des triangles
+           area += fabs((Ax * (By - Cy) + Bx * (Cy - Ay) + Cx * (Ay - By))/2); //addition des aires des triangles
         } 
         meshData_->cellArea_[i] = area;
     }   
