@@ -38,12 +38,18 @@ void FluxComputer::calculateConvectiveFluxes()
         pLeft = meshData_->p_[cellLeft];
         pRight = meshData_->p_[cellRight];
 
+        double  rhoFace     = 0.5 * (rhoLeft + rhoRight);
+        double  uFace       = 0.5 * (uLeft + uRight);
+        double  vFace       = 0.5 * (vLeft + vRight);
+        double  pFace       = 0.5 * (pLeft + pRight);
+#if 0
         //Contravariant speed (V) and enthalpy (H) for left and right cells
         VcontravariantLeft = uLeft * meshData_->normal_x_[i] + vLeft * meshData_->normal_y_[i];
         VcontravariantRight = uRight * meshData_->normal_x_[i] + vRight * meshData_->normal_y_[i];
 
         enthalpyLeft = 0.5 * (uLeft * uLeft + vLeft * vLeft) + nscData_->gamma_/(nscData_->gamma_ - 1) * pLeft/rhoLeft;
         enthalpyRight = 0.5 * (uRight * uRight + vRight * vRight) + nscData_->gamma_/(nscData_->gamma_ - 1) * pRight/rhoRight;
+
 
         //Convective fluxes (Fc) at the left cell
         leftFlux0 = rhoLeft * VcontravariantLeft;
@@ -62,6 +68,27 @@ void FluxComputer::calculateConvectiveFluxes()
         meshData_->convectiveFlux1Faces_[i] = 0.5 * (leftFlux1 + rightFlux1);
         meshData_->convectiveFlux2Faces_[i] = 0.5 * (leftFlux2 + rightFlux2);
         meshData_->convectiveFlux3Faces_[i] = 0.5 * (leftFlux3 + rightFlux3);    
+#else
+
+        double VcontravariantFace = uFace * meshData_->normal_x_[i] + vFace * meshData_->normal_y_[i];
+       
+        double enthalpyFace = 0.5 * (uFace * uFace + vFace * vFace) + nscData_->gamma_/(nscData_->gamma_ - 1.0) * pFace/rhoFace;
+        
+        //Convective fluxes (Fc) at the right cell
+        double faceFlux0 = rhoFace * VcontravariantFace;
+        double faceFlux1 = rhoFace * VcontravariantFace * uFace + pFace * meshData_->normal_x_[i];
+        double faceFlux2 = rhoFace * VcontravariantFace * vFace + pFace * meshData_->normal_y_[i];
+        double faceFlux3 = rhoFace * VcontravariantFace * enthalpyFace;
+
+
+        meshData_->convectiveFlux0Faces_[i] = faceFlux0;
+        meshData_->convectiveFlux1Faces_[i] = faceFlux1;
+        meshData_->convectiveFlux2Faces_[i] = faceFlux2;
+        meshData_->convectiveFlux3Faces_[i] = faceFlux3;
+
+        
+
+#endif
 
         //Calculation of the inviscid residuals:
         meshData_->residualDissip_rho_[cellLeft] += meshData_->convectiveFlux0Faces_[i];
