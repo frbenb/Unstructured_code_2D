@@ -4,6 +4,7 @@
 
 //Standard lib.
 #include <iostream>
+#include <fstream>
 #include <math.h>
 
 //Projet files

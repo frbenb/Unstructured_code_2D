@@ -20,6 +20,20 @@ void MainSolver::doUpdate()
     double RMSR0, RMSR; //Root mean square of R or R0 elements (from inviscid residual of rho)
     double result; //Result for the soustraction of the two logarithms
 
+    string filename = "convergence.txt";
+    ofstream outputConvergence(filename, ios::out | ios::trunc);
+
+    if(outputConvergence.is_open())
+    {
+        cout << "File " << filename << " has been created." << endl;
+
+    }
+    else
+    {
+        cout << "File " << filename << " has not been created." << endl;
+    }
+
+
     //This loop has to be outside of the loop on the number of iterations, because RMSR0 stays 
     //the same throughout the iterations
     for (unsigned int i=0; i<meshData_->NCells_; i++)
@@ -42,6 +56,8 @@ void MainSolver::doUpdate()
 
         result = log(RMSR) - log(RMSR0);
 
+        outputConvergence << i << " " << result << endl;
+
         //If we have convergence, we stop the iterations
         if (result < 10^-6)
         {
@@ -51,6 +67,10 @@ void MainSolver::doUpdate()
         //Iterate_pseudo_timestep (computeSolution)
         computeSolution();
     }
+
+    outputConvergence.close();
+    cout << "File " << filename << " is close." << endl;
+
 }
 
 void MainSolver::computeSolution()
