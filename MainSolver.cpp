@@ -70,39 +70,49 @@ void MainSolver::doUpdate()
 
     outputConvergence.close();
     cout << "File " << filename << " is close." << endl;
+  
+    //cout << endl << "Iteration:" << i << endl;
+    //for(unsigned int j(0); j < meshData_->NCellsTotal_; j++)
+    //{
+    //   cout << meshData_->rho_[j]  << endl;
+            
+    //}
+    //cout<< endl;
 
+    }
 }
 
 void MainSolver::computeSolution()
 {
 
-    //timestep
-    timestep();
 
     // Save w0
     saveW0();
 
     //In a loop, for nstage...
-    for(unsigned int i(0);i < nscData_->nstage_;i++)
-    {
+    //for(unsigned int i(0);i < nscData_->nstage_;i++)
+    //{
         //1. spectral_radius
-        spectral_radius();
+        //timestep
+         timestep();
 
         //2. residual
-        residual();
+        //residual(nscData_->rk_beta_[i]);
+        residual(1.0);
 
         //3. residual smoothing (for now empty)
-        if(nscData_->ressmo_ > 0)
-        {
-            residual_smoothing();
-        }
+        //if(nscData_->ressmo_ > 0)
+        //{
+         //   residual_smoothing();
+       // }
             
         //4. Update solution
-        dataUpdater_->update_solution(nscData_->rk_alfa_[i]);
+        //dataUpdater_->update_solution(nscData_->rk_alfa_[i]);
+        dataUpdater_->update_solution(1.0);
 
         //5. Update boundary
         dataUpdater_->update_boundary();
-    }
+    //}
         
 }
 
@@ -123,7 +133,7 @@ void MainSolver::timestep()
         specj = meshData_->spec_y_[i];
 
         // Apply formula of delta time
-        if((speci + specj) != 0)
+        if((speci + specj) != 0.)
         {
             meshData_->deltaT_[i] = cfl*area/(speci+specj);
         }
@@ -147,17 +157,7 @@ void MainSolver::saveW0()
         meshData_->rho_0_[i] = meshData_->rho_[i];
         meshData_->u_0_[i] = meshData_->rho_[i] * meshData_->u_[i];
         meshData_->v_0_[i] = meshData_->rho_[i] * meshData_->v_[i];
-
-        meshData_->p_0_[i] = 0.5 * meshData_->rho_[i] * (meshData_->u_[i]*meshData_->u_[i] + meshData_->v_[i]*meshData_->v_[i]);
-        if(meshData_->p_[i] != 0)
-        {
-            meshData_->p_0_[i] += 1/(g - 1)*meshData_->p_[i];
-        }
-        else
-        {
-            std::cout << "Error: p_ should be different than 0" << endl;
-            return;
-        }
+        meshData_->p_0_[i] = 0.5 * meshData_->rho_[i] * (meshData_->u_[i]*meshData_->u_[i] + meshData_->v_[i]*meshData_->v_[i]) + 1/(g - 1)*meshData_->p_[i];
 
     }
 
@@ -165,39 +165,35 @@ void MainSolver::saveW0()
 
 void MainSolver::spectral_radius()
 {
-    double delta_S_x = 0;
-    double delta_S_y = 0;
+    double delta_S_x;
+    double delta_S_y;
 
     double g = nscData_->gamma_;
     double c; // Speed of sound.
+    unsigned int faceindex;
 
     //Loop on all faces
-    for(unsigned int i(0);i<meshData_->NFaces_;i++)
-    {
-        delta_S_x += 0.5*std::abs(meshData_->normal_x_[i]); 
-        delta_S_y += 0.5*std::abs(meshData_->normal_y_[i]);
-    }
+    
 
     //Loop on cells
     for (unsigned int i(0);i < meshData_->NCells_;i++)
     {   
-        if (meshData_->rho_ != 0)
-        {
-            c = std::sqrt(g*meshData_->p_[i]/meshData_->rho_[i]);
-        }
-        else
-        {
-            std::cout << "Error: Rho should be different than 0." << endl;
-            return;
+        delta_S_x = 0.;
+        delta_S_y = 0.;
+        for(unsigned int j(0);j<meshData_->CellNfaces_[i];j++){
+            faceindex = meshData_->Cell2Face_[i][j];
+            delta_S_x += 0.5*std::fabs(meshData_->normal_x_[faceindex]); 
+            delta_S_y += 0.5*std::fabs(meshData_->normal_y_[faceindex]);
         }
 
-        meshData_->spec_x_[i] = (meshData_->u_[i] + c )*delta_S_x;
-        meshData_->spec_y_[i] = (meshData_->v_[i] + c ) *delta_S_y;
+        c = std::sqrt(g*meshData_->p_[i]/meshData_->rho_[i]);
+
+        meshData_->spec_x_[i] = (fabs(meshData_->u_[i]) + c)*delta_S_x;
+        meshData_->spec_y_[i] = (fabs(meshData_->v_[i]) + c) *delta_S_y;
     }
-    
 }
 
-void MainSolver::residual()
+void MainSolver::residual(double iRk_beta)
 {
 
     //Loop on cells domaine
@@ -209,20 +205,26 @@ void MainSolver::residual()
         meshData_->residualInviscid_v_[i] = 0;
         meshData_->residualInviscid_p_[i] = 0;
 
-        if(nscData_->nstage_ == 0)
-        {
+        /// Current stage not total stage
+        //if(nscData_->nstage_ == 0)
+        //{
             meshData_->residualDissip_rho_[i] = 0;
             meshData_->residualDissip_u_[i] = 0;
             meshData_->residualDissip_v_[i] = 0;
             meshData_->residualDissip_p_[i] = 0;
-        }
+       // }
     }
 
-     //Call eflux() here
+     fluxComputer_->calculateConvectiveFluxes();
+
+    if(iRk_beta  >  nscData_->epsilon_) // Call dissipation dflux if dissip is indicated
+    {
+        fluxComputer_->calculateArtificialDissipRoe(); //dflux
+    }
 
 
     //Add artificial dissip. to inviscid. by looping on cells
-    for(unsigned int i(0);i < meshData_->NCells_;i++)
+    for (unsigned int i(0);i < meshData_->NCells_;i++)
     {
         meshData_->residualInviscid_rho_[i]+=meshData_->residualDissip_rho_[i];
         meshData_->residualInviscid_u_[i]+=meshData_->residualDissip_u_[i];
@@ -237,6 +239,7 @@ void MainSolver::residual_smoothing()
 {
 
 }
+
 
 //This function calculates the root mean square of the inviscid residual of rho. In doUpdate(), 
 //you can find the other part of the monitor_convergence()

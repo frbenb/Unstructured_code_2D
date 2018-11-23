@@ -62,10 +62,6 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     meshData_->v_nodes_ = allocate1Ddbl(ncellstot);
     meshData_->p_nodes_ = allocate1Ddbl(ncellstot);
 
-    meshData_->convectiveFlux0Faces_ = allocate1Ddbl(meshData_->NFaces_);
-    meshData_->convectiveFlux1Faces_ = allocate1Ddbl(meshData_->NFaces_);
-    meshData_->convectiveFlux2Faces_ = allocate1Ddbl(meshData_->NFaces_);
-    meshData_->convectiveFlux3Faces_ = allocate1Ddbl(meshData_->NFaces_);
     
     //Initialize memory for spec_x_ and spec_y_
     meshData_->spec_x_ = allocate1Ddbl(ncells);
@@ -94,6 +90,11 @@ void MeshInitializer::initializeMesh(string& meshFilename){
     //Initialize memory for normal of faces
     meshData_->normal_x_ = allocate1Ddbl(meshData_->NFaces_);
     meshData_->normal_y_ = allocate1Ddbl(meshData_->NFaces_);
+
+    meshData_->convectiveFlux0Faces_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux1Faces_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux2Faces_ = allocate1Ddbl(meshData_->NFaces_);
+    meshData_->convectiveFlux3Faces_ = allocate1Ddbl(meshData_->NFaces_);
 
     //Initialize memory for face centers and cell centers coordinates vector
     meshData_->FaceCenter_x_ = allocate1Ddbl(meshData_->NFaces_);
@@ -214,11 +215,14 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
         meshfile >> token >> boundarytype_string; //Here, token = "MARKER_TAG="
         cout << "Boundary condition " << i+1 << ": " << boundarytype_string << endl;
 
-        if (boundarytype_string.compare("airfoil")){
+        if (!boundarytype_string.compare("airfoil")){
             boundary_type = 0;
         }
-        else if(boundarytype_string.compare("farfield")){
+        else if(!boundarytype_string.compare("farfield")){
             boundary_type = 1;
+        }
+        else if(!boundarytype_string.compare("suo")){
+            boundary_type = 2;
         }
         else{
             cout << "Error, boundary type '" << boundarytype_string << "' unknown." << endl;
@@ -254,7 +258,7 @@ unsigned int MeshInitializer::read_su2(string meshFilename, unsigned int npoints
     //Closing the mesh file
     meshfile.close();
 
-    cout << "Mesh file is close." << endl;
+    cout << "Mesh file closed." << endl;
 
     meshData_->NCellsTotal_ = meshData_->NCellsGhost_ + meshData_->NCells_;
 
@@ -540,7 +544,7 @@ void MeshInitializer::calculateNormal()
 
         //Dot product between Normal and center-vector to get sign
         dot_product = vector_center_cells[0]*vector_normal[0] + vector_center_cells[1]*vector_normal[1];
-        sign_orientation = dot_product / std::abs(dot_product); // Get -1 or 1.
+        sign_orientation = dot_product / std::fabs(dot_product); // Get -1 or 1.
 
         //Final normal Result of the face[j] in  cell[i] and final mapping.
         meshData_->normal_x_[i] = (sign_orientation * vector_normal[0]);
@@ -565,7 +569,7 @@ void MeshInitializer::calculateCellsArea()
            By = meshData_->Nodes_y_[meshData_->Cell2Node_[i][j + 1]];
            Cx = meshData_->Nodes_x_[meshData_->Cell2Node_[i][j + 2]];
            Cy = meshData_->Nodes_y_[meshData_->Cell2Node_[i][j + 2]];
-           area += abs((Ax * (By - Cy) + Bx * (Cy - Ay) + Cx * (Ay - By))/2); //addition des aires des triangles
+           area += fabs((Ax * (By - Cy) + Bx * (Cy - Ay) + Cx * (Ay - By))/2); //addition des aires des triangles
         } 
         meshData_->cellArea_[i] = area;
     }   

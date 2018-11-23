@@ -48,7 +48,7 @@ class MainSolver
         void spectral_radius();
 
         //This method allows to compute the residual value in each cell.
-        void residual();
+        void residual(double iRk_beta);
 
         // This method allows to smooth the residual values.
         void residual_smoothing();

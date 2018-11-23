@@ -38,6 +38,10 @@ void InputDataManager::manageEntryFileName(std::string& iPath)
 
 void InputDataManager::doInitProcess()
 {
+    //Every time the data is initialize, the input file will be taken.
+    nscData_->ctrlfilename_ = "input";
+
+
     // initial system
     nscInit_->initial_system();
 
@@ -176,6 +180,11 @@ void InputDataManager::readInputFile()
 void InputDataManager::printDataSU2()
 {
     outputDataManager_-> writeOutputTecplot();
+}
+
+void InputDataManager::printMeshData()
+{
+    outputDataManager_-> writeMeshContent();
 }
 
 

@@ -16,10 +16,8 @@ using namespace std;
 #include "FluxComputer.h"
 
 #include "OutputDataManager.h"
-
 #include "DataUpdater.h"
 #include "FluxComputer.h"
-
 #include "FluxComputer.h"
 
 int main()
@@ -57,22 +55,24 @@ int main()
     EventManager* eventManager = new EventManager(inputDataManager);
     cout << "Main, inputManager, Done!" << endl;
 
+
+    //User operations here:
     string inputfile = "input";
     
-    //User operations here:
-    eventManager->enterInputFile(inputfile);
-    cout << "Main, entreInputFile, Done!" << endl;
+    eventManager->startExecution();
+
+    //eventManager->enterInputFile(inputfile);
+    //cout << "Main, entreInputFile, Done!" << endl;
 
     //outputDataManager->calculate_node_coefficients();
 
-    eventManager->testSU2Function();
-    cout << "Main, eventManager, Done!" << endl;
+    //eventManager->testSU2Function();
+    //cout << "Main, eventManager, Done!" << endl;
 
-    meshData->write_stuff();
-    cout << "Main, writestuff, Done!" << endl;
+    //meshData->write_stuff();
+    //cout << "Main, writestuff, Done!" << endl;
     
-    fluxComputer->calculateArtificialDissipRoe(); 
 
-    cout << "Done!" << endl;
+    cout << "Done main!" << endl;
     return 0;
 }

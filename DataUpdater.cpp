@@ -48,31 +48,19 @@ void DataUpdater::update_solution(double iRkAlpha)
         dt = meshData_->deltaT_[i];
 
         //Proceed to new solution values by Euler conversion.
-        ronew = ro0 - alpha * dt * Ri_ro;
-        unew = u0 - alpha * dt *  Ri_u;
-        vnew = v0 - alpha * dt*  Ri_v;
-        enew = p0 - alpha * dt * Ri_p;
+        ronew = ro0 - (alpha * dt * Ri_ro)/meshData_->cellArea_[i];
+        unew = u0 - (alpha * dt *  Ri_u)/meshData_->cellArea_[i];
+        vnew = v0 - (alpha * dt*  Ri_v)/meshData_->cellArea_[i];
+        enew = p0 - (alpha * dt * Ri_p)/meshData_->cellArea_[i];
 
-        //Mapping
-        if(ronew != 0) // Should only be in debut version
-        {
-            meshData_->rho_[i] = ronew;
-            meshData_->u_[i] = unew/ronew;
-            meshData_->v_[i] = vnew/ronew;
-            meshData_->p_[i] = (g - 1) * (enew - 0.5*(unew*unew + vnew*vnew)/ ronew);
-        }
-        else
-        {
-            std::cout << "Error: In update_solution, ronew cannot equal 0." << endl;
-        }
-            
+
+        meshData_->rho_[i] = ronew;
+        meshData_->u_[i] = unew/ronew;
+        meshData_->v_[i] = vnew/ronew;
+        
+        meshData_->p_[i] = (g - 1.0) * (enew - 0.5*(unew*unew + vnew*vnew)/ ronew);       
     }
-
-
-
-
 }
-
 
 void DataUpdater::update_boundary()
 {
@@ -102,10 +90,10 @@ void DataUpdater::update_boundary()
     double ela, elb, ssbc, cc2;
     int el; // should be unsigned?
 
-    //Loop on ghost cells
+    //Loop on ghost cells //Normale qui pointe vers l'extérieure du domaine toujours mieux
     for(unsigned int i = nbCells; i < nbCellsTotal; i++)
     {   
-
+        double p_face, rho_face, u_face, v_face;
         //1. Get the Cell ID for the domain cell next to the ghost (index at 0)
         cellDomainID = meshData_->Cell2Cell_[i][0];
 
@@ -122,23 +110,15 @@ void DataUpdater::update_boundary()
         normal_length = std::sqrt(normal_x*normal_x + normal_y*normal_y);
 
         //3. Calculate normal and normalize
-        if (normal_length != 0)
-        {
             //Normalizing vectors x and y.
-            normal_x/=(normal_length);
-            normal_y/=(normal_length);
+        normal_x/=(normal_length);
+        normal_y/=(normal_length);
 
-            normal_x*=(-1);
-            normal_y*=(-1);
+            //normal_x*=(-1);
+            //normal_y*=(-1);
 
-            un1 = uu1*normal_x + vv1*normal_y;
+        un1 = uu1*normal_x + vv1*normal_y;
 
-        }
-        else
-        {
-            std::cout << "Error: Length of vector cannot be 0" << endl;
-            return;
-        }
 
         // (arfoil = 0, farfield = 1)
         ghostType = meshData_->GhostType_[i - nbCells];
@@ -146,34 +126,35 @@ void DataUpdater::update_boundary()
         if(ghostType == 0) // Wall
         {
             //4. Set right parameters to ghost cell by calculation (Blazek)
+            
             robc = ro1;
-            uubc = uu1 - un1*normal_x;
-            vvbc = vv1 - un1*normal_y;
+            uubc = uu1 - 2.0 * un1*normal_x;
+            vvbc = vv1 - 2.0 * un1*normal_y;
             ppbc = pp1;
 
             meshData_->rho_[i] = robc;
             meshData_->p_[i] = ppbc;
-            meshData_->u_[i] = 2*uubc - uu1;
-            meshData_->v_[i] = 2*vvbc - vv1;
+            meshData_->u_[i] = uubc;
+            meshData_->v_[i] = vvbc;
         }
-        else if (ghostType == 1) // Far-field
+        else if (ghostType == 1) // Far-field Riemann
         {
-            
+           
             cc1 = std::sqrt(g * pp1/ro1);
             unf = nscData_->uInfini_*normal_x + nscData_->vInfini_*normal_y;
             chav_in = unf+cfree;
-            el = chav_in / std::abs(chav_in);
+            el = chav_in / std::fabs(chav_in);
             R4e = un1+2*cc1/gm1;
             R4f = unf+2.*cfree/gm1;
             R4=0.5*((1+el)*R4f+(1.-el)*R4e);
             chav_out = un1 - cc1;
-            el = chav_out/std::abs(chav_out);
+            el = chav_out/std::fabs(chav_out);
             R5e = un1 - 2*cc1/gm1;
             R5f = unf - 2*cfree/gm1;
             R5 = 0.5*((1+el)*R5f+(1-el)*R5e);
             unbc = 0.5*(R4+R5);
             ccbc = 0.25*(R4-R5)*gm1;
-            el = unbc / std::abs(unbc);
+            el = unbc / std::fabs(unbc);
             dun = unbc-unf;
             uubc_inlet = nscData_->uInfini_ + dun*normal_x;
             vvbc_inlet = nscData_->vInfini_ + dun*normal_y;
@@ -199,8 +180,83 @@ void DataUpdater::update_boundary()
             meshData_->u_[i] = 2*uubc - uu1;
             meshData_->v_[i] = 2*vvbc - vv1;
             meshData_->p_[i] = 2*ppbc - pp1;
+        }
+        else if (ghostType == 99) {
+            // Blazek wall
+
+            double pInf = nscData_->pInfini_;
+            double uInf = nscData_->uInfini_;
+            double vInf = nscData_->vInfini_;
+            double rhoInf = nscData_->rhoInfini_;
+            double gammaSqrt = sqrt(nscData_->gamma_);
+            double localSpeedOfSound = gammaSqrt*sqrt(pp1/ro1); //pp1, ro1 donnée à l'intérieur du domaine
+            double roC0 = ro1*localSpeedOfSound        
+
+            //si écoule entre (produit scalaire negatif), on suppose ghost cell à droite
+            if (un1 <= 0.0) { 
+                p_face = 0.5*(pInf + pp1 - roC0*(normal_x*(uInf - uu1) + normal_y*(vInf-vv1)));
+                rho_face = rhoInf + (p_face - pInf)/(localSpeedOfSound*localSpeedOfSound);
+                u_face = uInf - normal_x*(pInf - p_face)/roC0;
+                u_face = vInf - normal_y*(pInf - p_face)/roC0;
+            }
+            
+            else {
+                p_face = pInf;
+                rho_face = ro1 + (p_face - pp1)/(localSpeedOfSound*localSpeedOfSound);
+                u_face = uu1 + normal_x*(pp1 - p_face)/roC0;
+                u_face = vv1 + normal_y*(pp1 - p_face)/roC0;
+
+            }
+
+            meshData_->rho_[i] = 2*rho_face - ro1;
+            meshData_->u_[i] = 2*u_face- uu1;
+            meshData_->v_[i] = 2*v_face - vv1;
+            meshData_->p_[i] = 2*p_face - pp1;
 
         }
+
+        else if (ghostType == 2) { ///suo
+        
+        double pInf = nscData_->pInfini_;
+        double uInf = nscData_->uInfini_;
+        double vInf = nscData_->vInfini_;
+        double rhoInf = nscData_->rhoInfini_;
+        double gammaSqrt = sqrt(nscData_->gamma_);
+        double localSpeedOfSound = gammaSqrt*sqrt(pp1/ro1); //pp1, ro1 donnée à l'intérieur du domaine
+        double roC0 = ro1*localSpeedOfSound;
+        double p_face, rho_face, u_face, v_face;
+
+            //si écoule entre (produit scalaire negatif), on suppose ghost cell à droite
+            // enlever runge kutta, alpha = 1, un seul stage, une itération par avancement, cfl < 1
+            // faire une itération de ça 
+            // remettre le meme if else, 
+
+            if (uu1 <= 0) {  //entre
+                p_face = pInf;
+                u_face = uInf;
+                v_face = vInf;
+                rho_face = rhoInf;
+
+            }
+            
+            else {
+
+                p_face = pp1;
+                u_face = uu1;
+                v_face = vv1;
+                rho_face = ro1;
+
+            }
+
+            meshData_->rho_[i] = 2.0*rho_face - ro1;
+            meshData_->u_[i] = 2.0*u_face- uu1;
+            meshData_->v_[i] = 2.0*v_face - vv1;
+            meshData_->p_[i] = 2.0*p_face - pp1;
+
+        }
+
+
+        
         else
         {
             cout << "Error: Cannot regnonize type of ghost." << endl;
