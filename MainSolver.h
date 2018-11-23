@@ -4,6 +4,8 @@
 
 //Standard lib.
 #include <iostream>
+#include <fstream>
+#include <math.h>
 
 //Projet files
 #include "NSCData.h"
@@ -52,7 +54,7 @@ class MainSolver
         void residual_smoothing();
 
         // This method allows to monitor convergence
-        void monitor_convergence();
+        double monitor_convergence();
 
     private:
 

@@ -1,7 +1,6 @@
 
 #include "MainSolver.h"
 
-
 MainSolver::MainSolver(NSCData *iNSCData, Mesh_Data *iMeshData, DataUpdater *iDataUpdater, FluxComputer *iFluxComputer) :
                                     nscData_(iNSCData),
                                     meshData_(iMeshData),
@@ -18,29 +17,69 @@ MainSolver::~MainSolver()
 
 void MainSolver::doUpdate()
 {
-    //Inside a loop, stop when convergence...
-    for(unsigned int i(0);i < nscData_->niter_; i ++)
+    double RMSR0, RMSR; //Root mean square of R or R0 elements (from inviscid residual of rho)
+    double result; //Result for the soustraction of the two logarithms
+
+    string filename = "convergence.txt";
+    ofstream outputConvergence(filename, ios::out | ios::trunc);
+
+    if(outputConvergence.is_open())
     {
-
-        //1. Iterate_pseudo_timestep (computeSolution)
-        computeSolution();
-
-        //2. Monitor the convergence (empty).
-        monitor_convergence();
-
-        //cout << endl << "Iteration:" << i << endl;
-        //for(unsigned int j(0); j < meshData_->NCellsTotal_; j++)
-        //{
-         //   cout << meshData_->rho_[j]  << endl;
-            
-        //}
-        //cout<< endl;
+        cout << "File " << filename << " has been created." << endl;
 
     }
+    else
+    {
+        cout << "File " << filename << " has not been created." << endl;
+    }
 
+
+    //This loop has to be outside of the loop on the number of iterations, because RMSR0 stays 
+    //the same throughout the iterations
+    for (unsigned int i=0; i<meshData_->NCells_; i++)
+    {
+        RMSR0 += meshData_->residualInviscid_rho_[i] * meshData_->residualInviscid_rho_[i];
+    }
+    RMSR0 = std::sqrt(RMSR0/meshData_->NCells_);
     
+    //Inside a loop, stop when and if convergence...
+    for(unsigned int i(0);i < nscData_->niter_; i ++)
+    {
+        if (i==0)
+        {
+            RMSR = RMSR0; //If it is the first iteration, R=R0 and result=0
+        }
+        else
+        {
+            RMSR = monitor_convergence();
+        }
 
+        result = log(RMSR) - log(RMSR0);
 
+        outputConvergence << i << " " << result << endl;
+
+        //If we have convergence, we stop the iterations
+        if (result < 10^-6)
+        {
+            break;
+        }
+
+        //Iterate_pseudo_timestep (computeSolution)
+        computeSolution();
+    }
+
+    outputConvergence.close();
+    cout << "File " << filename << " is close." << endl;
+  
+    //cout << endl << "Iteration:" << i << endl;
+    //for(unsigned int j(0); j < meshData_->NCellsTotal_; j++)
+    //{
+    //   cout << meshData_->rho_[j]  << endl;
+            
+    //}
+    //cout<< endl;
+
+    }
 }
 
 void MainSolver::computeSolution()
@@ -201,10 +240,20 @@ void MainSolver::residual_smoothing()
 
 }
 
-void MainSolver::monitor_convergence()
-{
 
+//This function calculates the root mean square of the inviscid residual of rho. In doUpdate(), 
+//you can find the other part of the monitor_convergence()
+double MainSolver::monitor_convergence()
+{ 
+    double RMSR; //Root mean square of R elements (from inviscid residual of rho)
+
+    for (unsigned int i=0; i<meshData_->NCells_; i++)
+    {
+        RMSR += meshData_->residualInviscid_rho_[i] * meshData_->residualInviscid_rho_[i];
+    }
+
+    RMSR = std::sqrt(RMSR/meshData_->NCells_);
+
+    return RMSR;
 }
-
-
 
