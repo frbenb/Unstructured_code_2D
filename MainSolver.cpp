@@ -33,6 +33,7 @@ void MainSolver::doUpdate()
         cout << "File " << filename << " has not been created." << endl;
     }
 
+    outputConvergence << " Iteration log(error) RMSR" << endl;
 
     //This loop has to be outside of the loop on the number of iterations, because RMSR0 stays 
     //the same throughout the iterations
@@ -40,26 +41,31 @@ void MainSolver::doUpdate()
     {
         RMSR0 += meshData_->residualInviscid_rho_[i] * meshData_->residualInviscid_rho_[i];
     }
-    RMSR0 = std::sqrt(RMSR0/meshData_->NCells_);
+    RMSR0 = std::sqrt(RMSR0/nscData_->niter_);
     
+    cout << "RMSR0: " << RMSR0 << endl;
+
     //Inside a loop, stop when and if convergence...
     for(unsigned int i(0);i < nscData_->niter_; i ++)
     {
         if (i==0)
         {
             RMSR = RMSR0; //If it is the first iteration, R=R0 and result=0
+            result = 0;
         }
         else
         {
             RMSR = monitor_convergence();
+            result = log10(RMSR - RMSR0); //Error calculation
         }
 
-        result = log(RMSR) - log(RMSR0);
+        outputConvergence << i << " " << result << " " << RMSR << endl;
 
-        outputConvergence << i << " " << result << endl;
+        cout << "RMSR: " << RMSR << endl;
+        cout << "Result: " << result << endl;
 
         //If we have convergence, we stop the iterations
-        if (result < 10^-6)
+        if (result < -16)
         {
             break;
         }
@@ -251,7 +257,7 @@ double MainSolver::monitor_convergence()
         RMSR += meshData_->residualInviscid_rho_[i] * meshData_->residualInviscid_rho_[i];
     }
 
-    RMSR = std::sqrt(RMSR/meshData_->NCells_);
+    RMSR = std::sqrt(RMSR/nscData_->niter_);
 
     return RMSR;
 }
