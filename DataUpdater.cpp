@@ -190,7 +190,7 @@ void DataUpdater::update_boundary()
             double rhoInf = nscData_->rhoInfini_;
             double gammaSqrt = sqrt(nscData_->gamma_);
             double localSpeedOfSound = gammaSqrt*sqrt(pp1/ro1); //pp1, ro1 donnée à l'intérieur du domaine
-            double roC0 = ro1*localSpeedOfSound;        
+            double roC0 = ro1*localSpeedOfSound;     
 
             //si écoule entre (produit scalaire negatif), on suppose ghost cell à droite
             if (un1 <= 0.0) { 
